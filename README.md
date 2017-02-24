@@ -1,5 +1,9 @@
 # Oops/WebpackNetteAdapter
 
+[![Build Status](https://img.shields.io/travis/o2ps/WebpackNetteAdapter.svg)](https://travis.org/o2ps/WebpackNetteAdapter)
+[![Downloads this Month](https://img.shields.io/packagist/dm/oops/webpack-nette-adapter.svg)](https://packagist.org/packages/oops/webpack-nette-adapter)
+[![Latest stable](https://img.shields.io/packagist/v/oops/webpack-nette-adapter.svg)](https://packagist.org/packages/oops/webpack-nette-adapter)
+
 WebpackNetteAdapter is a tool that helps integrate your Nette Framework application with assets built via Webpack.
 
 
