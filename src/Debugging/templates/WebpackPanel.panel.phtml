@@ -1,0 +1,88 @@
+<?php
+
+namespace Oops\WebpackNetteAdapter\Debugging;
+
+use Tracy;
+use Tracy\Dumper;
+
+?>
+
+<style class="tracy-debug">
+	#tracy-debug .webpackPanel .devServer .availability::before {
+		content: '';
+		display: inline-block;
+		margin-right: 2px;
+		width: 10px;
+		height: 10px;
+		vertical-align: middle;
+		border-radius: 50%;
+	}
+
+	#tracy-debug .webpackPanel .devServer .disabled::before {
+		background-color: #C6C6C6;
+	}
+
+	#tracy-debug .webpackPanel .devServer .available::before {
+		background-color: #BDE678;
+	}
+
+	#tracy-debug .webpackPanel .devServer .unavailable::before {
+		background-color: #EE4040;
+	}
+
+	#tracy-debug .webpackPanel .devServer .unavailable {
+		font-weight: bold;
+		color: #EE4040;
+	}
+
+	#tracy-debug .webpackPanel table {
+		font: 9pt/1.5 Consolas, monospace;
+	}
+</style>
+
+<div class="webpackPanel">
+	<h1>Resolved assets: <?= count($assets) ?></h1>
+	<div class="tracy-inner">
+		<p class="devServer">
+			Dev server is
+			<?php
+			if ($devServer->isAvailable()) {
+				echo '<span class="availability available">available</span>';
+
+			} elseif ($devServer->isEnabled()) {
+				echo '<span class="availability unavailable">not available</span>, falling back to build directory. Assets may be outdated.';
+
+			} else {
+				echo '<span class="availability disabled">disabled</span>';
+			}
+			?>
+		</p>
+
+		<p>Serving assets from <code><?= \htmlspecialchars($path) ?></code></p>
+
+		<?php
+		if (count($assets) > 1):
+		?>
+		<table>
+			<thead>
+				<tr>
+					<th>Asset</th>
+					<th>Resolution</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php foreach ($assets as [$original, $resolved]): ?>
+			<tr>
+				<td><?= \htmlspecialchars($original) ?></td>
+				<td>
+					<a href="<?= \htmlspecialchars($path) . '/' . \htmlspecialchars($resolved) ?>"><?= \htmlspecialchars($resolved); ?></a>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
+		endif;
+		?>
+	</div>
+</div>

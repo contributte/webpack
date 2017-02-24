@@ -1,0 +1,8 @@
+extensions:
+	webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(true)
+
+
+webpack:
+	build:
+		directory: %wwwDir%
+		publicPath: dist/

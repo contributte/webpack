@@ -1,0 +1,10 @@
+extensions:
+	webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(false)
+
+
+webpack:
+	build:
+		directory: %wwwDir%
+		publicPath: dist/
+
+	assetResolver: Oops\WebpackNetteAdapter\AssetResolver\ManifestAssetResolver(manifest.json)

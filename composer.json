@@ -1,0 +1,46 @@
+{
+	"name": "oops/webpack-nette-adapter",
+	"description": "Webpack adapter for Nette Framework.",
+	"keywords": ["nette", "webpack"],
+	"type": "library",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Jiří Pudil",
+			"email": "me@jiripudil.cz",
+			"homepage": "https://jiripudil.cz"
+		}
+	],
+	"support": {
+		"email": "me@jiripudil.cz",
+		"issues": "https://github.com/o2ps/WebpackNetteAdapter/issues"
+	},
+	"require": {
+		"php": ">= 7.0.0",
+		"nette/di": "~2.4",
+		"guzzlehttp/guzzle": "~6.2.0"
+	},
+	"require-dev": {
+		"nette/tester": "~1.0",
+		"jakub-onderka/php-parallel-lint": "~0.8",
+		"mockery/mockery": "~0.9",
+		"nette/application": "~2.4",
+		"nette/bootstrap": "~2.4",
+		"latte/latte": "~2.4",
+		"tracy/tracy": "~2.4"
+	},
+	"suggest": {
+		"tracy/tracy": "to enable asset debugging in the debug bar panel",
+		"latte/latte": "to enable Latte integration via {webpack} macro"
+	},
+	"autoload": {
+		"psr-4": {
+			"Oops\\WebpackNetteAdapter\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-0": {
+			"OopsTests\\WebpackNetteAdapter\\": "tests/WebpackNetteAdapter"
+		}
+	}
+}

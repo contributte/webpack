@@ -1,0 +1,18 @@
+sudo: false
+language: php
+
+php:
+  - 7.0
+  - 7.1
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source
+  - ./vendor/bin/parallel-lint -e php,phpt --exclude ./vendor .
+
+script:
+  - ./vendor/bin/tester -c ./tests/php.unix.ini ./tests
+
+cache:
+  directories:
+    - $HOME/.composer/cache
