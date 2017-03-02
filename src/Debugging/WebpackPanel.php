@@ -16,7 +16,7 @@ final class WebpackPanel implements IBarPanel
 	/**
 	 * @var PublicPathProvider
 	 */
-	private $pathResolver;
+	private $pathProvider;
 
 	/**
 	 * @var DebuggerAwareAssetResolver
@@ -29,9 +29,9 @@ final class WebpackPanel implements IBarPanel
 	private $devServer;
 
 
-	public function __construct(PublicPathProvider $pathResolver, DebuggerAwareAssetResolver $assetResolver, DevServer $devServer)
+	public function __construct(PublicPathProvider $pathProvider, DebuggerAwareAssetResolver $assetResolver, DevServer $devServer)
 	{
-		$this->pathResolver = $pathResolver;
+		$this->pathProvider = $pathProvider;
 		$this->assetResolver = $assetResolver;
 		$this->devServer = $devServer;
 	}
@@ -51,7 +51,7 @@ final class WebpackPanel implements IBarPanel
 	{
 		ob_start(function () {});
 		$devServer = $this->devServer;
-		$path = $this->pathResolver->getPath();
+		$path = $this->pathProvider->getPath();
 		$assets = $this->assetResolver->getResolvedAssets();
 		require __DIR__ . '/templates/WebpackPanel.panel.phtml';
 		return ob_get_clean();

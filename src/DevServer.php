@@ -67,7 +67,7 @@ class DevServer
 				 * not guaranteed to produce a 200 response (can be 404 if the index file is missing).
 				 */
 
-				$response = $this->httpClient->request('GET', $this->url, ['http_errors' => FALSE]);
+				$response = $this->httpClient->request('GET', $this->url, ['http_errors' => FALSE, 'verify' => FALSE]);
 				$this->available = $response->hasHeader('X-Powered-By') && $response->getHeader('X-Powered-By')[0] === 'Express';
 
 			} catch (GuzzleException $e) {

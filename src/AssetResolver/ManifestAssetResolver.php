@@ -47,7 +47,8 @@ final class ManifestAssetResolver implements AssetResolverInterface
 
 	private function loadManifest()
 	{
-		$manifest = file_get_contents($this->manifestPath);
+		$context = stream_context_create(['ssl' => ['verify_peer' => FALSE]]);
+		$manifest = file_get_contents($this->manifestPath, FALSE, $context);
 		if ($manifest === FALSE) {
 			throw new CannotResolveAssetException(sprintf(
 				"Manifest file '%s' could not be loaded: %s",
