@@ -42,7 +42,7 @@ class DevServerTest extends TestCase
 		Assert::true($devServer->isEnabled());
 
 		$this->httpClient->shouldReceive('request')
-			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE])
+			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE, 'verify' => FALSE])
 			->andReturn(new Response(404, ['X-Powered-By' => 'Express']));
 		Assert::true($devServer->isAvailable());
 	}
@@ -54,7 +54,7 @@ class DevServerTest extends TestCase
 		Assert::true($devServer->isEnabled());
 
 		$this->httpClient->shouldReceive('request')
-			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE])
+			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE, 'verify' => FALSE])
 			->andThrow(new RequestException('', new Request('GET', 'http://localhost:3000')));
 		Assert::false($devServer->isAvailable());
 	}
