@@ -24,7 +24,7 @@ final class ManifestAssetResolver implements AssetResolverInterface
 
 	public function __construct(string $manifestName, BuildDirectoryProvider $directoryProvider)
 	{
-		$this->manifestPath = $directoryProvider->getBuildDirectory() . DIRECTORY_SEPARATOR . $manifestName;
+		$this->manifestPath = $directoryProvider->getBuildDirectory() . '/' . $manifestName;
 	}
 
 
