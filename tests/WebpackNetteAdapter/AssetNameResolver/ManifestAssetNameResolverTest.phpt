@@ -6,8 +6,7 @@ namespace OopsTests\WebpackNetteAdapter\AssetNameResolver;
 
 use Oops\WebpackNetteAdapter\AssetNameResolver\CannotResolveAssetNameException;
 use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
-use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
-use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -23,9 +22,15 @@ class ManifestAssetNameResolverTest extends TestCase
 
 	public function testResolver()
 	{
-		$devServer = \Mockery::mock(DevServer::class);
-		$devServer->shouldReceive('isAvailable')->andReturn(FALSE);
-		$resolver = new ManifestAssetNameResolver('manifest.json', new BuildDirectoryProvider(__DIR__, $devServer));
+		$manifestLoader = \Mockery::mock(ManifestLoader::class);
+		$manifestLoader->shouldReceive('loadManifest')
+			->with('manifest.json')
+			->andReturn(['asset.js' => 'resolved.asset.js']);
+
+		$manifestLoader->shouldReceive('getManifestPath')
+			->andReturn('/path/to/manifest.json');
+
+		$resolver = new ManifestAssetNameResolver('manifest.json', $manifestLoader);
 		Assert::same('resolved.asset.js', $resolver->resolveAssetName('asset.js'));
 
 		Assert::throws(function () use ($resolver) {

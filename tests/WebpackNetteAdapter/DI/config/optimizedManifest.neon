@@ -6,3 +6,6 @@ webpack:
 	build:
 		directory: %buildDir%
 		publicPath: dist/
+
+	manifest:
+		name: optimizedManifest.json

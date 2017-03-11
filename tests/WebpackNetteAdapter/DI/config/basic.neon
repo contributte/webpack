@@ -4,7 +4,7 @@ extensions:
 
 webpack:
 	build:
-		directory: %wwwDir%
+		directory: %buildDir%
 		publicPath: dist/
 
 	devServer:

@@ -56,14 +56,17 @@ webpack:
 
 You might want to include the Webpack's asset hash in its file name for assets caching (and automatic cache busting in new releases) in the user agent. But how do you reference the asset files in your code if their names are dynamic?
 
-WebpackNetteAdapter comes to the rescue. You can employ the [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) or some similar plugin to produce a manifest file, and then switch the asset resolver accordingly:
+WebpackNetteAdapter comes to the rescue. You can employ the [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) or some similar plugin to produce a manifest file, and then configure the adapter to use it:
 
 ```yaml
 webpack:
-	assetResolver: Oops\WebpackNetteAdapter\AssetResolver\ManifestAssetNameResolver(manifest.json)
+	manifest:
+		name: manifest.json
 ```
 
 This way, you can keep using the original asset names, and they get expanded automatically following the resolutions from the manifest file.
+
+WebpackNetteAdapter automatically optimizes this in production environment by loading the manifest file in compile time.
 
 
 ### Debugger
