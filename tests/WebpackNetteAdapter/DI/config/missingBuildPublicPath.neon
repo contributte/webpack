@@ -5,7 +5,7 @@ extensions:
 webpack:
 	build:
 		directory: %wwwDir%
-		publicPath: dist/
+		publicPath:
 
 	devServer:
-		url: http://localhost:3000
+		url:

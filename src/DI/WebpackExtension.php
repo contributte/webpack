@@ -10,7 +10,6 @@ use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\MissingServiceException;
 use Nette\DI\Statement;
-use Nette\Utils\Validators;
 use Oops\WebpackNetteAdapter\AssetResolver;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
@@ -27,11 +26,11 @@ class WebpackExtension extends CompilerExtension
 		'macros' => NULL,
 		'devServer' => [
 			'enabled' => NULL,
-			'url' => 'http://localhost:3000',
+			'url' => NULL,
 		],
 		'build' => [
-			'directory' => '',
-			'publicPath' => '',
+			'directory' => NULL,
+			'publicPath' => NULL,
 		],
 		'assetResolver' => AssetResolver\IdentityAssetResolver::class,
 	];
@@ -56,8 +55,18 @@ class WebpackExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 		$config = $this->validateConfig($this->defaults);
 
-		Validators::assertField($config['build'], 'directory', 'string:1..');
-		Validators::assertField($config['build'], 'publicPath', 'string:1..');
+		if (empty($config['build']['directory'])) {
+			throw new ConfigurationException('You need to specify the build directory.');
+		}
+
+		if (empty($config['build']['publicPath'])) {
+			throw new ConfigurationException('You need to specify the build public path.');
+		}
+
+		if ($config['devServer']['enabled'] && empty($config['devServer']['url'])) {
+			throw new ConfigurationException('You need to specify the dev server URL.');
+		}
+
 
 		$builder->addDefinition($this->prefix('pathProvider'))
 			->setClass(PublicPathProvider::class, [$config['build']['publicPath']]);
@@ -69,7 +78,7 @@ class WebpackExtension extends CompilerExtension
 			->setClass(DevServer::class)
 			->setArguments([
 				$config['devServer']['enabled'],
-				$config['devServer']['url'],
+				$config['devServer']['url'] ?? '',
 				new Statement(Client::class)
 			]);
 

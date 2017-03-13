@@ -8,4 +8,4 @@ webpack:
 		publicPath: dist/
 
 	devServer:
-		url: http://localhost:3000
+		url:
