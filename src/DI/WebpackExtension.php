@@ -44,7 +44,7 @@ class WebpackExtension extends CompilerExtension
 
 	public function __construct(bool $debugMode)
 	{
-		$this->defaults['debugger'] = interface_exists(Tracy\IBarPanel::class);
+		$this->defaults['debugger'] = $debugMode;
 		$this->defaults['macros'] = class_exists(Latte\Engine::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
 		$this->debugMode = $debugMode;
@@ -90,7 +90,7 @@ class WebpackExtension extends CompilerExtension
 			->setClass(AssetNameResolver\AssetNameResolverInterface::class)
 			->setFactory($config['assetResolver']);
 
-		if ($this->debugMode && $config['debugger']) {
+		if ($config['debugger']) {
 			$assetResolver->setAutowired(FALSE);
 			$builder->addDefinition($this->prefix('assetResolver.debug'))
 				->setClass(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
@@ -114,7 +114,7 @@ class WebpackExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		if ($this->debugMode && $this->config['debugger']) {
+		if ($this->config['debugger'] && interface_exists(Tracy\IBarPanel::class)) {
 			$builder->getDefinition($this->prefix('pathProvider'))
 				->addSetup('@Tracy\Bar::addPanel', [
 					new Statement(WebpackPanel::class)
