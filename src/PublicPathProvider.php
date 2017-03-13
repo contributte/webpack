@@ -7,6 +7,9 @@ namespace Oops\WebpackNetteAdapter;
 use Nette\Http\IRequest;
 
 
+/**
+ * @internal
+ */
 class PublicPathProvider
 {
 
@@ -34,7 +37,7 @@ class PublicPathProvider
 	}
 
 
-	public function getPath(): string
+	public function getPublicPath(): string
 	{
 		return $this->devServer->isAvailable()
 			? $this->devServer->getUrl()

@@ -2,13 +2,13 @@
 
 declare(strict_types = 1);
 
-namespace Oops\WebpackNetteAdapter\AssetResolver;
+namespace Oops\WebpackNetteAdapter\AssetNameResolver;
 
 use Nette\Utils\Json;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 
 
-final class ManifestAssetResolver implements AssetResolverInterface
+final class ManifestAssetNameResolver implements AssetNameResolverInterface
 {
 
 	/**
@@ -28,14 +28,14 @@ final class ManifestAssetResolver implements AssetResolverInterface
 	}
 
 
-	public function resolveAsset(string $asset): string
+	public function resolveAssetName(string $asset): string
 	{
 		if ($this->manifestCache === NULL) {
 			$this->loadManifest();
 		}
 
 		if ( ! isset($this->manifestCache[$asset])) {
-			throw new CannotResolveAssetException(sprintf(
+			throw new CannotResolveAssetNameException(sprintf(
 				"Asset '%s' was not found in the manifest file '%s'",
 				$asset, $this->manifestPath
 			));
@@ -50,7 +50,7 @@ final class ManifestAssetResolver implements AssetResolverInterface
 		$context = stream_context_create(['ssl' => ['verify_peer' => FALSE]]);
 		$manifest = file_get_contents($this->manifestPath, FALSE, $context);
 		if ($manifest === FALSE) {
-			throw new CannotResolveAssetException(sprintf(
+			throw new CannotResolveAssetNameException(sprintf(
 				"Manifest file '%s' could not be loaded: %s",
 				$this->manifestPath, error_get_last()['message'] ?? 'unknown error'
 			));

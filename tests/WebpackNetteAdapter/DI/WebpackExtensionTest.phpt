@@ -8,10 +8,11 @@ use Latte\Loaders\StringLoader;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\Configurator;
 use Nette\DI\Container;
-use Oops\WebpackNetteAdapter\AssetResolver\AssetResolverInterface;
-use Oops\WebpackNetteAdapter\AssetResolver\DebuggerAwareAssetResolver;
-use Oops\WebpackNetteAdapter\AssetResolver\IdentityAssetResolver;
-use Oops\WebpackNetteAdapter\AssetResolver\ManifestAssetResolver;
+use Oops\WebpackNetteAdapter\AssetLocator;
+use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
+use Oops\WebpackNetteAdapter\AssetNameResolver\DebuggerAwareAssetNameResolver;
+use Oops\WebpackNetteAdapter\AssetNameResolver\IdentityAssetNameResolver;
+use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
 use Oops\WebpackNetteAdapter\DI\ConfigurationException;
@@ -34,7 +35,7 @@ class WebpackExtensionTest extends TestCase
 	{
 		$container = $this->createContainer('basic');
 
-		Assert::type(DebuggerAwareAssetResolver::class, $container->getByType(AssetResolverInterface::class));
+		Assert::type(DebuggerAwareAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 		Assert::type(PublicPathProvider::class, $container->getByType(PublicPathProvider::class));
 		Assert::type(DevServer::class, $devServer = $container->getByType(DevServer::class));
 
@@ -51,7 +52,7 @@ class WebpackExtensionTest extends TestCase
 	{
 		$container = $this->createContainer('noDebug');
 
-		Assert::type(IdentityAssetResolver::class, $container->getByType(AssetResolverInterface::class));
+		Assert::type(IdentityAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 		Assert::type(PublicPathProvider::class, $container->getByType(PublicPathProvider::class));
 		Assert::type(DevServer::class, $devServer = $container->getByType(DevServer::class));
 
@@ -83,7 +84,7 @@ class WebpackExtensionTest extends TestCase
 	public function testManifestResolver()
 	{
 		$container = $this->createContainer('manifest');
-		Assert::type(ManifestAssetResolver::class, $container->getByType(AssetResolverInterface::class));
+		Assert::type(ManifestAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 	}
 
 
@@ -96,8 +97,7 @@ class WebpackExtensionTest extends TestCase
 		$latte = $latteFactory->create();
 
 		$providers = $latte->getProviders();
-		Assert::type(AssetResolverInterface::class, $providers['webpackAssetResolver']);
-		Assert::type(PublicPathProvider::class, $providers['webpackPublicPathProvider']);
+		Assert::type(AssetLocator::class, $providers['webpackAssetLocator']);
 
 		$latte->setLoader(new StringLoader());
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));

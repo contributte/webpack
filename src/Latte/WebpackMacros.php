@@ -26,11 +26,7 @@ class WebpackMacros extends MacroSet
 
 	public function macroWebpackAsset(MacroNode $node, PhpWriter $writer)
 	{
-		return $writer->write(
-			'echo %escape(%modify($this->global->webpackPublicPathProvider->getPath()'
-			. ' . "/" . '
-			. '$this->global->webpackAssetResolver->resolveAsset(%node.word)))'
-		);
+		return $writer->write('echo %escape(%modify($this->global->webpackAssetLocator->locateInPublicPath(%node.word)))');
 	}
 
 }

@@ -7,4 +7,4 @@ webpack:
 		directory: %wwwDir%
 		publicPath: dist/
 
-	assetResolver: Oops\WebpackNetteAdapter\AssetResolver\ManifestAssetResolver(manifest.json)
+	assetResolver: Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver(manifest.json)

@@ -31,7 +31,7 @@ class PublicPathProviderTest extends TestCase
 		$devServer->shouldReceive('getUrl')->andReturn('http://localhost:3000');
 
 		$provider = new PublicPathProvider('dist/', $httpRequest, $devServer);
-		Assert::same('http://localhost:3000', $provider->getPath());
+		Assert::same('http://localhost:3000', $provider->getPublicPath());
 	}
 
 
@@ -46,7 +46,7 @@ class PublicPathProviderTest extends TestCase
 		$devServer->shouldReceive('getUrl')->never();
 
 		$provider = new PublicPathProvider('dist/', $httpRequest, $devServer);
-		Assert::same('/dist', $provider->getPath());
+		Assert::same('/dist', $provider->getPublicPath());
 	}
 
 

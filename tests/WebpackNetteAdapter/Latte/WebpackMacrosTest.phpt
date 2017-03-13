@@ -6,9 +6,8 @@ namespace OopsTests\WebpackNetteAdapter\Latte;
 
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
-use Oops\WebpackNetteAdapter\AssetResolver\IdentityAssetResolver;
+use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\Latte\WebpackMacros;
-use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -24,19 +23,21 @@ class WebpackMacrosTest extends TestCase
 
 	public function testMacros()
 	{
+		$assetLocator = \Mockery::mock(AssetLocator::class);
+		$assetLocator->shouldReceive('locateInPublicPath')
+			->with('asset.js')
+			->andReturn('/dist/asset.js');
+
 		$latte = new Engine();
-		$latte->addProvider('webpackAssetResolver', new IdentityAssetResolver());
-
-		$pathProvider = \Mockery::mock(PublicPathProvider::class);
-		$pathProvider->shouldReceive('getPath')->andReturn('/dist');
-		$latte->addProvider('webpackPublicPathProvider', $pathProvider);
-
+		$latte->addProvider('webpackAssetLocator', $assetLocator);
 		$latte->onCompile[] = function (Engine $engine) {
 			WebpackMacros::install($engine->getCompiler());
 		};
 
 		$latte->setLoader(new StringLoader());
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));
+
+		\Mockery::close();
 	}
 
 }

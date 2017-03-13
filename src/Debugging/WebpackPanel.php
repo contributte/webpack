@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Oops\WebpackNetteAdapter\Debugging;
 
-use Oops\WebpackNetteAdapter\AssetResolver\DebuggerAwareAssetResolver;
+use Oops\WebpackNetteAdapter\AssetNameResolver\DebuggerAwareAssetNameResolver;
 use Oops\WebpackNetteAdapter\DevServer;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy\IBarPanel;
@@ -19,7 +19,7 @@ final class WebpackPanel implements IBarPanel
 	private $pathProvider;
 
 	/**
-	 * @var DebuggerAwareAssetResolver
+	 * @var DebuggerAwareAssetNameResolver
 	 */
 	private $assetResolver;
 
@@ -29,7 +29,7 @@ final class WebpackPanel implements IBarPanel
 	private $devServer;
 
 
-	public function __construct(PublicPathProvider $pathProvider, DebuggerAwareAssetResolver $assetResolver, DevServer $devServer)
+	public function __construct(PublicPathProvider $pathProvider, DebuggerAwareAssetNameResolver $assetResolver, DevServer $devServer)
 	{
 		$this->pathProvider = $pathProvider;
 		$this->assetResolver = $assetResolver;
@@ -51,7 +51,7 @@ final class WebpackPanel implements IBarPanel
 	{
 		ob_start(function () {});
 		$devServer = $this->devServer;
-		$path = $this->pathProvider->getPath();
+		$path = $this->pathProvider->getPublicPath();
 		$assets = $this->assetResolver->getResolvedAssets();
 		require __DIR__ . '/templates/WebpackPanel.panel.phtml';
 		return ob_get_clean();

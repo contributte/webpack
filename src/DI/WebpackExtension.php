@@ -10,7 +10,8 @@ use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\MissingServiceException;
 use Nette\DI\Statement;
-use Oops\WebpackNetteAdapter\AssetResolver;
+use Oops\WebpackNetteAdapter\AssetLocator;
+use Oops\WebpackNetteAdapter\AssetNameResolver;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
@@ -32,7 +33,7 @@ class WebpackExtension extends CompilerExtension
 			'directory' => NULL,
 			'publicPath' => NULL,
 		],
-		'assetResolver' => AssetResolver\IdentityAssetResolver::class,
+		'assetResolver' => AssetNameResolver\IdentityAssetNameResolver::class,
 	];
 
 	/**
@@ -74,6 +75,9 @@ class WebpackExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('buildDirProvider'))
 			->setClass(BuildDirectoryProvider::class, [$config['build']['directory']]);
 
+		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
+			->setClass(AssetLocator::class);
+
 		$builder->addDefinition($this->prefix('devServer'))
 			->setClass(DevServer::class)
 			->setArguments([
@@ -83,21 +87,20 @@ class WebpackExtension extends CompilerExtension
 			]);
 
 		$assetResolver = $builder->addDefinition($this->prefix('assetResolver'))
-			->setClass(AssetResolver\AssetResolverInterface::class)
+			->setClass(AssetNameResolver\AssetNameResolverInterface::class)
 			->setFactory($config['assetResolver']);
 
 		if ($this->debugMode && $config['debugger']) {
 			$assetResolver->setAutowired(FALSE);
-			$assetResolver = $builder->addDefinition($this->prefix('assetResolver.debug'))
-				->setClass(AssetResolver\DebuggerAwareAssetResolver::class, [$assetResolver]);
+			$builder->addDefinition($this->prefix('assetResolver.debug'))
+				->setClass(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
 		}
 
 		// latte macro
 		if ($config['macros']) {
 			try {
 				$builder->getDefinitionByType(ILatteFactory::class)
-					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetResolver', $assetResolver])
-					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackPublicPathProvider', $this->prefix('@pathProvider')])
+					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
 					->addSetup('?->onCompile[] = function ($engine) { Oops\WebpackNetteAdapter\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
 
 			} catch (MissingServiceException $e) {

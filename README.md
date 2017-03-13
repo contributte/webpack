@@ -60,7 +60,7 @@ WebpackNetteAdapter comes to the rescue. You can employ the [webpack-manifest-pl
 
 ```yaml
 webpack:
-	assetResolver: Oops\WebpackNetteAdapter\AssetResolver\ManifestAssetResolver(manifest.json)
+	assetResolver: Oops\WebpackNetteAdapter\AssetResolver\ManifestAssetNameResolver(manifest.json)
 ```
 
 This way, you can keep using the original asset names, and they get expanded automatically following the resolutions from the manifest file.

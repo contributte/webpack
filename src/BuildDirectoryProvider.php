@@ -5,6 +5,9 @@ declare(strict_types = 1);
 namespace Oops\WebpackNetteAdapter;
 
 
+/**
+ * @internal
+ */
 class BuildDirectoryProvider
 {
 
