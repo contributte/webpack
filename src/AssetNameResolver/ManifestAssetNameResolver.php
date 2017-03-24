@@ -4,8 +4,8 @@ declare(strict_types = 1);
 
 namespace Oops\WebpackNetteAdapter\AssetNameResolver;
 
-use Nette\Utils\Json;
-use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
+use Oops\WebpackNetteAdapter\Manifest\CannotLoadManifestException;
+use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 
 
 final class ManifestAssetNameResolver implements AssetNameResolverInterface
@@ -14,49 +14,45 @@ final class ManifestAssetNameResolver implements AssetNameResolverInterface
 	/**
 	 * @var string
 	 */
-	private $manifestPath;
+	private $manifestName;
 
 	/**
-	 * @var string[]
+	 * @var ManifestLoader
+	 */
+	private $loader;
+
+	/**
+	 * @var string[]|NULL
 	 */
 	private $manifestCache;
 
 
-	public function __construct(string $manifestName, BuildDirectoryProvider $directoryProvider)
+	public function __construct(string $manifestName, ManifestLoader $loader)
 	{
-		$this->manifestPath = $directoryProvider->getBuildDirectory() . '/' . $manifestName;
+		$this->manifestName = $manifestName;
+		$this->loader = $loader;
 	}
 
 
 	public function resolveAssetName(string $asset): string
 	{
 		if ($this->manifestCache === NULL) {
-			$this->loadManifest();
+			try {
+				$this->manifestCache = $this->loader->loadManifest($this->manifestName);
+
+			} catch (CannotLoadManifestException $e) {
+				throw new CannotResolveAssetNameException('Failed to load manifest file.', 0, $e);
+			}
 		}
 
 		if ( ! isset($this->manifestCache[$asset])) {
 			throw new CannotResolveAssetNameException(sprintf(
 				"Asset '%s' was not found in the manifest file '%s'",
-				$asset, $this->manifestPath
+				$asset, $this->loader->getManifestPath($this->manifestName)
 			));
 		}
 
 		return $this->manifestCache[$asset];
-	}
-
-
-	private function loadManifest()
-	{
-		$context = stream_context_create(['ssl' => ['verify_peer' => FALSE]]);
-		$manifest = file_get_contents($this->manifestPath, FALSE, $context);
-		if ($manifest === FALSE) {
-			throw new CannotResolveAssetNameException(sprintf(
-				"Manifest file '%s' could not be loaded: %s",
-				$this->manifestPath, error_get_last()['message'] ?? 'unknown error'
-			));
-		}
-
-		$this->manifestCache = Json::decode($manifest, Json::FORCE_ARRAY);
 	}
 
 }

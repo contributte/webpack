@@ -13,6 +13,7 @@ use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
 use Oops\WebpackNetteAdapter\AssetNameResolver\DebuggerAwareAssetNameResolver;
 use Oops\WebpackNetteAdapter\AssetNameResolver\IdentityAssetNameResolver;
 use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
+use Oops\WebpackNetteAdapter\AssetNameResolver\StaticAssetNameResolver;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
 use Oops\WebpackNetteAdapter\DI\ConfigurationException;
@@ -88,6 +89,21 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
+	public function testOptimizedManifest()
+	{
+		$container = $this->createContainer('optimizedManifest');
+		$resolver = $container->getByType(AssetNameResolverInterface::class);
+
+		Assert::type(StaticAssetNameResolver::class, $resolver);
+
+		$refl = new \ReflectionClass($resolver);
+		$cache = $refl->getProperty('resolutions');
+		$cache->setAccessible(TRUE);
+
+		Assert::same(["asset.js" => "cached.resolved.asset.js"], $cache->getValue($resolver));
+	}
+
+
 	public function testLatte()
 	{
 		$container = $this->createContainer('noDebug');
@@ -109,6 +125,8 @@ class WebpackExtensionTest extends TestCase
 		$configurator = new Configurator();
 		$configurator->setTempDirectory(TEMP_DIR);
 		$configurator->setDebugMode(FALSE);
+
+		$configurator->addParameters(['buildDir' => __DIR__]);
 		$configurator->addConfig(__DIR__ . '/config/common.neon');
 		$configurator->addConfig(__DIR__ . '/config/' . $configFile . '.neon');
 

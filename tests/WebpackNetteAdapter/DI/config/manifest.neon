@@ -4,7 +4,9 @@ extensions:
 
 webpack:
 	build:
-		directory: %wwwDir%
+		directory: %buildDir%
 		publicPath: dist/
 
-	assetResolver: Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver(manifest.json)
+	manifest:
+		name: manifest.json
+		optimize: false

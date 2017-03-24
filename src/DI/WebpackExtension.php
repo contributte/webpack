@@ -9,12 +9,14 @@ use Latte;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\MissingServiceException;
+use Nette\DI\ServiceDefinition;
 use Nette\DI\Statement;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
 
@@ -33,7 +35,10 @@ class WebpackExtension extends CompilerExtension
 			'directory' => NULL,
 			'publicPath' => NULL,
 		],
-		'assetResolver' => AssetNameResolver\IdentityAssetNameResolver::class,
+		'manifest' => [
+			'name' => NULL,
+			'optimize' => NULL,
+		]
 	];
 
 	/**
@@ -47,6 +52,7 @@ class WebpackExtension extends CompilerExtension
 		$this->defaults['debugger'] = $debugMode;
 		$this->defaults['macros'] = class_exists(Latte\Engine::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
+		$this->defaults['manifest']['optimize'] = ! $debugMode;
 		$this->debugMode = $debugMode;
 	}
 
@@ -86,9 +92,7 @@ class WebpackExtension extends CompilerExtension
 				new Statement(Client::class)
 			]);
 
-		$assetResolver = $builder->addDefinition($this->prefix('assetResolver'))
-			->setClass(AssetNameResolver\AssetNameResolverInterface::class)
-			->setFactory($config['assetResolver']);
+		$assetResolver = $this->setupAssetResolver($config);
 
 		if ($config['debugger']) {
 			$assetResolver->setAutowired(FALSE);
@@ -120,6 +124,45 @@ class WebpackExtension extends CompilerExtension
 					new Statement(WebpackPanel::class)
 				]);
 		}
+	}
+
+
+	private function setupAssetResolver(array $config): ServiceDefinition
+	{
+		$builder = $this->getContainerBuilder();
+
+		$assetResolver = $builder->addDefinition($this->prefix('assetResolver'))
+			->setClass(AssetNameResolver\AssetNameResolverInterface::class);
+
+		if ($config['manifest']['name'] !== NULL) {
+			if ( ! $config['manifest']['optimize']) {
+				$loader = $builder->addDefinition($this->prefix('manifestLoader'))
+					->setClass(ManifestLoader::class)
+					->setAutowired(FALSE);
+
+				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
+					$config['manifest']['name'],
+					$loader
+				]);
+
+			} else {
+				$devServerInstance = new DevServer($config['devServer']['enabled'], $config['devServer']['url'] ?? '', new Client());
+				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
+				$loaderInstance = new ManifestLoader($directoryProviderInstance);
+				$manifestCache = $loaderInstance->loadManifest($config['manifest']['name']);
+
+				$assetResolver->setFactory(AssetNameResolver\StaticAssetNameResolver::class, [$manifestCache]);
+
+				// add dependency so that container is recompiled if manifest changes
+				$manifestPath = $loaderInstance->getManifestPath($config['manifest']['name']);
+				$this->compiler->addDependencies([$manifestPath]);
+			}
+
+		} else {
+			$assetResolver->setFactory(AssetNameResolver\IdentityAssetNameResolver::class);
+		}
+
+		return $assetResolver;
 	}
 
 }
