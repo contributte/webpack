@@ -5,9 +5,10 @@ declare(strict_types = 1);
 namespace OopsTests\WebpackNetteAdapter;
 
 use Oops\WebpackNetteAdapter\AssetLocator;
-use Oops\WebpackNetteAdapter\AssetResolver\AssetResolverInterface;
+use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
+use Tester\Assert;
 use Tester\TestCase;
 
 
@@ -28,11 +29,11 @@ class AssetLocatorTest extends TestCase
 			->andReturn('/home/user');
 
 		$pathProvider = \Mockery::mock(PublicPathProvider::class);
-		$directoryProvider->shouldReceive('getPath')
+		$pathProvider->shouldReceive('getPublicPath')
 			->never();
 
-		$assetResolver = \Mockery::mock(AssetResolverInterface::class);
-		$assetResolver->shouldReceive('resolveAsset')
+		$assetResolver = \Mockery::mock(AssetNameResolverInterface::class);
+		$assetResolver->shouldReceive('resolveAssetName')
 			->with('bar.js')
 			->once()
 			->andReturn('bar.js');
@@ -49,12 +50,12 @@ class AssetLocatorTest extends TestCase
 			->never();
 
 		$pathProvider = \Mockery::mock(PublicPathProvider::class);
-		$directoryProvider->shouldReceive('getPath')
+		$pathProvider->shouldReceive('getPublicPath')
 			->once()
 			->andReturn('/foo');
 
-		$assetResolver = \Mockery::mock(AssetResolverInterface::class);
-		$assetResolver->shouldReceive('resolveAsset')
+		$assetResolver = \Mockery::mock(AssetNameResolverInterface::class);
+		$assetResolver->shouldReceive('resolveAssetName')
 			->with('bar.js')
 			->once()
 			->andReturn('bar.js');
