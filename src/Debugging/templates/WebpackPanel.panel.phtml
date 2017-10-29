@@ -71,11 +71,11 @@ use Tracy\Dumper;
 				</tr>
 			</thead>
 			<tbody>
-			<?php foreach ($assets as [$original, $resolved]): ?>
+			<?php foreach ($assets as $asset): ?>
 			<tr>
-				<td><?= \htmlspecialchars($original) ?></td>
+				<td><?= \htmlspecialchars($asset[0]) ?></td>
 				<td>
-					<a href="<?= \htmlspecialchars($path) . '/' . \htmlspecialchars($resolved) ?>"><?= \htmlspecialchars($resolved); ?></a>
+					<a href="<?= \htmlspecialchars($path) . '/' . \htmlspecialchars($asset[1]) ?>"><?= \htmlspecialchars($asset[1]); ?></a>
 				</td>
 			</tr>
 			<?php endforeach; ?>
