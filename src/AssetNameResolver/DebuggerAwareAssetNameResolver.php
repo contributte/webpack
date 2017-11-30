@@ -14,7 +14,7 @@ final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 	private $inner;
 
 	/**
-	 * @var string[]
+	 * @var array[]
 	 */
 	private $resolvedAssets = [];
 
