@@ -4,14 +4,21 @@ language: php
 php:
   - 7.0
   - 7.1
+  - 7.2
+
+before_install:
+  - travis_retry composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-source
+  - travis_retry composer global require "jakub-onderka/php-parallel-lint:^0.9.0" "phpstan/phpstan-shim:^0.9.0"
 
 before_script:
-  - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-source
-  - ./vendor/bin/parallel-lint -e php,phpt --exclude ./vendor .
+  - $HOME/.composer/vendor/bin/parallel-lint -e php,phpt --exclude vendor .
+  - $HOME/.composer/vendor/bin/phpstan.phar analyze --no-progress --no-interaction -l 7 src
 
 script:
-  - ./vendor/bin/tester -c ./tests/php.unix.ini ./tests
+  - vendor/bin/tester -c tests/php.unix.ini tests
 
 cache:
   directories:
