@@ -40,7 +40,11 @@ class AssetLocator
 
 	public function locateInPublicPath(string $asset): string
 	{
-		return $this->publicPathProvider->getPublicPath() . '/' . $this->assetResolver->resolveAssetName($asset);
+		if($this->publicPathProvider->getPublicPath() === '') {
+			return $this->assetResolver->resolveAssetName($asset);
+		} else {
+			return $this->publicPathProvider->getPublicPath() . '/' . $this->assetResolver->resolveAssetName($asset);
+		}
 	}
 
 
