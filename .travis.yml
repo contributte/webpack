@@ -1,24 +1,56 @@
 sudo: false
+dist: xenial
 language: php
 
 php:
-  - 7.0
   - 7.1
   - 7.2
+  - 7.3
+
+env:
+  - NETTE_VERSION="^2.4"
+  - NETTE_VERSION="^3.0"
 
 before_install:
+  - if php --ri xdebug >/dev/null; then phpenv config-rm xdebug.ini; fi
   - travis_retry composer self-update
 
 install:
-  - travis_retry composer install --no-interaction --prefer-source
-  - travis_retry composer global require "jakub-onderka/php-parallel-lint:^1.0.0" "phpstan/phpstan-shim:^0.11.0"
-
-before_script:
-  - $HOME/.composer/vendor/bin/parallel-lint -e php,phpt --exclude vendor .
-  - $HOME/.composer/vendor/bin/phpstan.phar analyze --no-progress --no-interaction -l 7 src
+  - composer require "nette/di:${NETTE_VERSION}" --no-update
+  - composer require "latte/latte:${NETTE_VERSION}" "nette/application:${NETTE_VERSION}" "nette/bootstrap:${NETTE_VERSION}" --dev --no-update
+  - travis_retry composer update --prefer-source --no-interaction
 
 script:
-  - vendor/bin/tester -c tests/php.unix.ini tests
+  - vendor/bin/tester -c tests/php.unix.ini tests/
+
+jobs:
+  include:
+    - stage: QA
+      name: Lint
+      php: 7.3
+      env: NETTE_VERSION="^2.4"
+      before_script:
+        - travis_retry composer global require "jakub-onderka/php-parallel-lint:^1.0.0"
+      script:
+        - $HOME/.composer/vendor/bin/parallel-lint -e php,phpt src/ tests/
+
+    - stage: QA
+      name: Static Analysis
+      php: 7.3
+      env: NETTE_VERSION="^2.4"
+      before_script:
+        - travis_retry composer global require "phpstan/phpstan-shim:^0.11.0"
+      script:
+        - $HOME/.composer/vendor/bin/phpstan.phar analyze --no-progress --no-interaction -l max src/
+
+    - stage: QA
+      name: Code Coverage
+      php: 7.3
+      env: NETTE_VERSION="^2.4"
+      script:
+        - vendor/bin/tester -p phpdbg -c tests/php.unix.ini -s --coverage coverage.xml --coverage-src src/ tests/
+      after_success:
+        - bash <(curl --retry 3 -s https://codecov.io/bash)
 
 cache:
   directories:

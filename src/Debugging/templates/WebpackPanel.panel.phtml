@@ -43,46 +43,48 @@ use Tracy\Dumper;
 <div class="webpackPanel">
 	<h1>Resolved assets: <?= \count($assets) ?></h1>
 	<div class="tracy-inner">
-		<p class="devServer">
-			Dev server is
-			<?php
-			if ($devServer->isAvailable()) {
-				echo '<span class="availability available">available</span>';
+        <div class="tracy-inner-container">
+            <p class="devServer">
+                Dev server is
+                <?php
+                if ($devServer->isAvailable()) {
+                    echo '<span class="availability available">available</span>';
 
-			} elseif ($devServer->isEnabled()) {
-				echo '<span class="availability unavailable">not available</span>, falling back to build directory. Assets may be outdated.';
+                } elseif ($devServer->isEnabled()) {
+                    echo '<span class="availability unavailable">not available</span>, falling back to build directory. Assets may be outdated.';
 
-			} else {
-				echo '<span class="availability disabled">disabled</span>';
-			}
-			?>
-		</p>
+                } else {
+                    echo '<span class="availability disabled">disabled</span>';
+                }
+                ?>
+            </p>
 
-		<p>Serving assets from <code><?= \htmlspecialchars($path) ?></code></p>
+            <p>Serving assets from <code><?= \htmlspecialchars($path) ?></code></p>
 
-		<?php
-		if (\count($assets) > 1):
-		?>
-		<table>
-			<thead>
-				<tr>
-					<th>Asset</th>
-					<th>Resolution</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php foreach ($assets as $asset): ?>
-			<tr>
-				<td><?= \htmlspecialchars($asset[0]) ?></td>
-				<td>
-					<a href="<?= \htmlspecialchars($path) . '/' . \htmlspecialchars($asset[1]) ?>"><?= \htmlspecialchars($asset[1]); ?></a>
-				</td>
-			</tr>
-			<?php endforeach; ?>
-			</tbody>
-		</table>
-		<?php
-		endif;
-		?>
+            <?php
+            if (\count($assets) > 1):
+            ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Asset</th>
+                        <th>Resolution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($assets as [$original, $resolved]): ?>
+                <tr>
+                    <td><?= \htmlspecialchars($original) ?></td>
+                    <td>
+                        <a href="<?= \htmlspecialchars($path) . '/' . \htmlspecialchars($resolved) ?>"><?= \htmlspecialchars($resolved); ?></a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php
+            endif;
+            ?>
+        </div>
 	</div>
 </div>

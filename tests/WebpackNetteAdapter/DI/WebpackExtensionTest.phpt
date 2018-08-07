@@ -32,7 +32,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class WebpackExtensionTest extends TestCase
 {
 
-	public function testBasic()
+	public function testBasic(): void
 	{
 		$container = $this->createContainer('basic');
 
@@ -49,7 +49,7 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
-	public function testNoDebug()
+	public function testNoDebug(): void
 	{
 		$container = $this->createContainer('noDebug');
 
@@ -66,7 +66,7 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
-	public function testMissingRequiredFields()
+	public function testMissingRequiredFields(): void
 	{
 		Assert::throws(function () {
 			$this->createContainer('missingBuildDirectory');
@@ -82,14 +82,14 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
-	public function testManifestResolver()
+	public function testManifestResolver(): void
 	{
 		$container = $this->createContainer('manifest');
 		Assert::type(ManifestAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 	}
 
 
-	public function testOptimizedManifest()
+	public function testOptimizedManifest(): void
 	{
 		$container = $this->createContainer('optimizedManifest');
 		$resolver = $container->getByType(AssetNameResolverInterface::class);
@@ -104,7 +104,7 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
-	public function testLatte()
+	public function testLatte(): void
 	{
 		$container = $this->createContainer('noDebug');
 

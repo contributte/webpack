@@ -8,7 +8,6 @@ use Latte\Compiler;
 use Latte\MacroNode;
 use Latte\Macros\MacroSet;
 use Latte\PhpWriter;
-use Tracy\Debugger;
 
 
 /**
@@ -17,14 +16,14 @@ use Tracy\Debugger;
 class WebpackMacros extends MacroSet
 {
 
-	public static function install(Compiler $compiler)
+	public static function install(Compiler $compiler): void
 	{
 		$me = new static($compiler);
 		$me->addMacro('webpack', [$me, 'macroWebpackAsset']);
 	}
 
 
-	public function macroWebpackAsset(MacroNode $node, PhpWriter $writer)
+	public function macroWebpackAsset(MacroNode $node, PhpWriter $writer): string
 	{
 		return $writer->write('echo %escape(%modify($this->global->webpackAssetLocator->locateInPublicPath(%node.word)))');
 	}

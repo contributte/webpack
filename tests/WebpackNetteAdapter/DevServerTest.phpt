@@ -29,14 +29,14 @@ class DevServerTest extends TestCase
 	private $httpClient;
 
 
-	protected function setUp()
+	protected function setUp(): void
 	{
 		parent::setUp();
 		$this->httpClient = \Mockery::mock(Client::class);
 	}
 
 
-	public function testDevServer()
+	public function testDevServer(): void
 	{
 		$devServer = new DevServer(TRUE, 'http://localhost:3000', 0.1, $this->httpClient);
 		Assert::true($devServer->isEnabled());
@@ -48,7 +48,7 @@ class DevServerTest extends TestCase
 	}
 
 
-	public function testUnavailable()
+	public function testUnavailable(): void
 	{
 		$devServer = new DevServer(TRUE, 'http://localhost:3000', 0.5, $this->httpClient);
 		Assert::true($devServer->isEnabled());
@@ -60,7 +60,7 @@ class DevServerTest extends TestCase
 	}
 
 
-	public function testDisabled()
+	public function testDisabled(): void
 	{
 		$devServer = new DevServer(FALSE, 'http://localhost:3000', 0.1, $this->httpClient);
 		Assert::false($devServer->isEnabled());
@@ -68,7 +68,7 @@ class DevServerTest extends TestCase
 	}
 
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		parent::tearDown();
 		\Mockery::close();

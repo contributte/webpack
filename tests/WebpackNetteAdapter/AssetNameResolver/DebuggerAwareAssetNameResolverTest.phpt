@@ -19,7 +19,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class DebuggerAwareAssetNameResolverTest extends TestCase
 {
 
-	public function testResolver()
+	public function testResolver(): void
 	{
 		$resolver = new DebuggerAwareAssetNameResolver(new IdentityAssetNameResolver());
 		$resolver->resolveAssetName('asset.js');

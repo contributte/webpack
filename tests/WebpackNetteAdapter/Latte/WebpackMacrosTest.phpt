@@ -21,7 +21,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class WebpackMacrosTest extends TestCase
 {
 
-	public function testMacros()
+	public function testMacros(): void
 	{
 		$assetLocator = \Mockery::mock(AssetLocator::class);
 		$assetLocator->shouldReceive('locateInPublicPath')

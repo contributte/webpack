@@ -21,7 +21,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class PublicPathProviderTest extends TestCase
 {
 
-	public function testWithDevServer()
+	public function testWithDevServer(): void
 	{
 		$httpRequest = \Mockery::mock(IRequest::class);
 		$httpRequest->shouldReceive('getUrl')->never();
@@ -35,7 +35,7 @@ class PublicPathProviderTest extends TestCase
 	}
 
 
-	public function testWithoutDevServer()
+	public function testWithoutDevServer(): void
 	{
 		$httpRequest = \Mockery::mock(IRequest::class);
 		$url = new UrlScript('http://example.com/');
@@ -50,7 +50,7 @@ class PublicPathProviderTest extends TestCase
 	}
 
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		parent::tearDown();
 		\Mockery::close();
