@@ -43,7 +43,7 @@ class DevServerTest extends TestCase
 
 		$this->httpClient->shouldReceive('request')
 			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1])
-			->andReturn(new Response(404, ['X-Powered-By' => 'Express']));
+			->andReturn(new Response(404));
 		Assert::true($devServer->isAvailable());
 	}
 

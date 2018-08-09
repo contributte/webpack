@@ -6,7 +6,6 @@ namespace Oops\WebpackNetteAdapter;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use Tracy\Debugger;
 
 
 class DevServer
@@ -62,13 +61,14 @@ class DevServer
 		if ($this->available === NULL) {
 			try {
 				/*
-				 * X-Powered-By can produce false positives (e.g. different Node app running on the target port),
-				 * but it seems to be the only reasonable solution, since the webpack-dev-server's root path is
-				 * not guaranteed to produce a 200 response (can be 404 if the index file is missing).
+				 * This can produce false positives (if a different application is listening on the target port),
+				 * but I currently fail to see a better solution. The root path is not guaranteed to produce a 200 OK
+				 * response (can be 404 if the index file is missing), and while webpack-dev-server at least responds
+				 * with an "X-Powered-By: Express" header, webpack-serve gives no hint whatsoever.
 				 */
 
-				$response = $this->httpClient->request('GET', $this->url, ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1]);
-				$this->available = $response->hasHeader('X-Powered-By') && $response->getHeader('X-Powered-By')[0] === 'Express';
+				$this->httpClient->request('GET', $this->url, ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1]);
+				$this->available = TRUE;
 
 			} catch (GuzzleException $e) {
 				$this->available = FALSE;
