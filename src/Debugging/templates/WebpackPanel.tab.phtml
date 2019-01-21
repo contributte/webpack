@@ -10,7 +10,7 @@ namespace Oops\WebpackNetteAdapter\Debugging;
 		<path fill="#1C78C0" d="M290.4 444.8L162 374.1V234.2l128.4 74.1v136.5zm18.4 0l128.4-70.6v-140l-128.4 74.1v136.5zM299.6 303zm-129-85l129-70.9L428.5 218l-128.9 74.4-129-74.4z"/>
 	</svg>
 	<span class="tracy-label">
-		<?= count($assets) ?> asset<?= count($assets) !== 1 ? 's' : '' ?>
+		<?= \count($assets) ?> asset<?= \count($assets) !== 1 ? 's' : '' ?>
 		<?php
 		if ($devServer->isEnabled() && ! $devServer->isAvailable()) {
 			echo '<span style="color:#EE4040; font-weight:bold">!</span>';

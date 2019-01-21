@@ -32,13 +32,13 @@ class ManifestLoader
 	public function loadManifest(string $fileName): array
 	{
 		$path = $this->getManifestPath($fileName);
-		$context = stream_context_create(['ssl' => ['verify_peer' => FALSE]]); // webpack-dev-server uses self-signed certificate
-		$manifest = @file_get_contents($path, FALSE, $context); // @ - errors handled by custom exception
+		$context = \stream_context_create(['ssl' => ['verify_peer' => FALSE]]); // webpack-dev-server uses self-signed certificate
+		$manifest = @\file_get_contents($path, FALSE, $context); // @ - errors handled by custom exception
 
 		if ($manifest === FALSE) {
-			throw new CannotLoadManifestException(sprintf(
+			throw new CannotLoadManifestException(\sprintf(
 				"Manifest file '%s' could not be loaded: %s",
-				$path, error_get_last()['message'] ?? 'unknown error'
+				$path, \error_get_last()['message'] ?? 'unknown error'
 			));
 		}
 

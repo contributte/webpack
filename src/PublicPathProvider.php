@@ -41,7 +41,7 @@ class PublicPathProvider
 	{
 		return $this->devServer->isAvailable()
 			? $this->devServer->getUrl()
-			: rtrim($this->httpRequest->getUrl()->getBasePath(), '/') . '/' . trim($this->path, '/');
+			: \rtrim($this->httpRequest->getUrl()->getBasePath(), '/') . '/' . \trim($this->path, '/');
 	}
 
 }

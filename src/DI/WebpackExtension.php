@@ -46,7 +46,7 @@ class WebpackExtension extends CompilerExtension
 	public function __construct(bool $debugMode)
 	{
 		$this->defaults['debugger'] = $debugMode;
-		$this->defaults['macros'] = class_exists(Latte\Engine::class);
+		$this->defaults['macros'] = \class_exists(Latte\Engine::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
 		$this->defaults['manifest']['optimize'] = ! $debugMode;
 	}
@@ -114,7 +114,7 @@ class WebpackExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		if ($this->config['debugger'] && interface_exists(Tracy\IBarPanel::class)) {
+		if ($this->config['debugger'] && \interface_exists(Tracy\IBarPanel::class)) {
 			$builder->getDefinition($this->prefix('pathProvider'))
 				->addSetup('@Tracy\Bar::addPanel', [
 					new Statement(WebpackPanel::class)

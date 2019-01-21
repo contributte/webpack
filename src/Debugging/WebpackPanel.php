@@ -39,22 +39,30 @@ final class WebpackPanel implements IBarPanel
 
 	public function getTab()
 	{
-		ob_start(function () {});
+		\ob_start(function () {});
 		$devServer = $this->devServer;
 		$assets = $this->assetResolver->getResolvedAssets();
 		require __DIR__ . '/templates/WebpackPanel.tab.phtml';
-		return ob_get_clean();
+
+		$tab = \ob_get_clean();
+		\assert($tab !== FALSE);
+
+		return $tab;
 	}
 
 
 	public function getPanel()
 	{
-		ob_start(function () {});
+		\ob_start(function () {});
 		$devServer = $this->devServer;
 		$path = $this->pathProvider->getPublicPath();
 		$assets = $this->assetResolver->getResolvedAssets();
 		require __DIR__ . '/templates/WebpackPanel.panel.phtml';
-		return ob_get_clean();
+
+		$panel = \ob_get_clean();
+		\assert($panel !== FALSE);
+
+		return $panel;
 	}
 
 }

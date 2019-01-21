@@ -41,7 +41,7 @@ use Tracy\Dumper;
 </style>
 
 <div class="webpackPanel">
-	<h1>Resolved assets: <?= count($assets) ?></h1>
+	<h1>Resolved assets: <?= \count($assets) ?></h1>
 	<div class="tracy-inner">
 		<p class="devServer">
 			Dev server is
@@ -61,7 +61,7 @@ use Tracy\Dumper;
 		<p>Serving assets from <code><?= \htmlspecialchars($path) ?></code></p>
 
 		<?php
-		if (count($assets) > 1):
+		if (\count($assets) > 1):
 		?>
 		<table>
 			<thead>

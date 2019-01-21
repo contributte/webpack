@@ -46,7 +46,7 @@ final class ManifestAssetNameResolver implements AssetNameResolverInterface
 		}
 
 		if ( ! isset($this->manifestCache[$asset])) {
-			throw new CannotResolveAssetNameException(sprintf(
+			throw new CannotResolveAssetNameException(\sprintf(
 				"Asset '%s' was not found in the manifest file '%s'",
 				$asset, $this->loader->getManifestPath($this->manifestName)
 			));

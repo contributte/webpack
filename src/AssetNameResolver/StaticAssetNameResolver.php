@@ -23,7 +23,7 @@ final class StaticAssetNameResolver implements AssetNameResolverInterface
 	public function resolveAssetName(string $asset): string
 	{
 		if ( ! isset($this->resolutions[$asset])) {
-			throw new CannotResolveAssetNameException(sprintf(
+			throw new CannotResolveAssetNameException(\sprintf(
 				"Asset '%s' was not found in the resolutions array",
 				$asset
 			));
