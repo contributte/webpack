@@ -26,16 +26,22 @@ class DevServer
 	 */
 	private $url;
 
+    /**
+     * @var float
+     */
+	private $timeout;
+
 	/**
 	 * @var ClientInterface
 	 */
 	private $httpClient;
 
 
-	public function __construct(bool $enabled, string $url, ClientInterface $httpClient)
+	public function __construct(bool $enabled, string $url, float $timeout, ClientInterface $httpClient)
 	{
 		$this->enabled = $enabled;
 		$this->url = $url;
+		$this->timeout = $timeout;
 		$this->httpClient = $httpClient;
 	}
 
@@ -67,7 +73,7 @@ class DevServer
 				 * with an "X-Powered-By: Express" header, webpack-serve gives no hint whatsoever.
 				 */
 
-				$this->httpClient->request('GET', $this->url, ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1]);
+				$this->httpClient->request('GET', $this->url, ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => $this->timeout]);
 				$this->available = TRUE;
 
 			} catch (GuzzleException $e) {

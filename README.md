@@ -42,13 +42,14 @@ Now you can use the `{webpack}` macro in your templates. It automatically expand
 
 You might want to use the Webpack's [dev server](https://www.npmjs.com/package/webpack-dev-server) to facilitate the development of client-side assets. But maybe once you're done with the client-side, you would like to build the back-end without having to start up the dev server.
 
-WebpackNetteAdapter effectively solves this problem: it automatically serves assets from the dev server if available, and falls back to the build directory otherwise. All you have to do is configure the dev server URL. The dev server is enabled automatically in debug mode; you can override this setting via `enabled` option:
+WebpackNetteAdapter effectively solves this problem: it automatically serves assets from the dev server if available (i.e. it responds within a specified timeout), and falls back to the build directory otherwise. All you have to do is configure the dev server URL. The dev server is enabled automatically in debug mode; you can override this setting via `enabled` option:
 
 ```yaml
 webpack:
 	devServer:
 		enabled: %debugMode% # default
 		url: http://localhost:3000
+		timeout: 0.1 # (seconds) default
 ```
 
 

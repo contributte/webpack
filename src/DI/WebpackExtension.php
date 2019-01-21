@@ -30,6 +30,7 @@ class WebpackExtension extends CompilerExtension
 		'devServer' => [
 			'enabled' => NULL,
 			'url' => NULL,
+            'timeout' => 0.1,
 		],
 		'build' => [
 			'directory' => NULL,
@@ -41,11 +42,6 @@ class WebpackExtension extends CompilerExtension
 		]
 	];
 
-	/**
-	 * @var bool
-	 */
-	private $debugMode;
-
 
 	public function __construct(bool $debugMode)
 	{
@@ -53,7 +49,6 @@ class WebpackExtension extends CompilerExtension
 		$this->defaults['macros'] = class_exists(Latte\Engine::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
 		$this->defaults['manifest']['optimize'] = ! $debugMode;
-		$this->debugMode = $debugMode;
 	}
 
 
@@ -89,6 +84,7 @@ class WebpackExtension extends CompilerExtension
 			->setArguments([
 				$config['devServer']['enabled'],
 				$config['devServer']['url'] ?? '',
+				$config['devServer']['timeout'],
 				new Statement(Client::class)
 			]);
 
@@ -146,7 +142,13 @@ class WebpackExtension extends CompilerExtension
 				]);
 
 			} else {
-				$devServerInstance = new DevServer($config['devServer']['enabled'], $config['devServer']['url'] ?? '', new Client());
+				$devServerInstance = new DevServer(
+					$config['devServer']['enabled'],
+					$config['devServer']['url'] ?? '',
+					$config['devServer']['timeout'] ?? 0.1,
+					new Client()
+				);
+
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
 				$loaderInstance = new ManifestLoader($directoryProviderInstance);
 				$manifestCache = $loaderInstance->loadManifest($config['manifest']['name']);
