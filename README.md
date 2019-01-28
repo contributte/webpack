@@ -22,12 +22,12 @@ Register the extension in your config file, and configure it. The two `build` op
 
 ```yaml
 extensions:
-	webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(%debugMode%)
+    webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(%debugMode%)
 
 webpack:
-	build:
-		directory: %wwwDir%/dist
-		publicPath: dist/
+    build:
+        directory: %wwwDir%/dist
+        publicPath: dist/
 ```
 
 
@@ -46,10 +46,10 @@ WebpackNetteAdapter effectively solves this problem: it automatically serves ass
 
 ```yaml
 webpack:
-	devServer:
-		enabled: %debugMode% # default
-		url: http://localhost:3000
-		timeout: 0.1 # (seconds) default
+    devServer:
+        enabled: %debugMode% # default
+        url: http://localhost:3000
+        timeout: 0.1 # (seconds) default
 ```
 
 
@@ -61,8 +61,8 @@ WebpackNetteAdapter comes to the rescue. You can employ the [webpack-manifest-pl
 
 ```yaml
 webpack:
-	manifest:
-		name: manifest.json
+    manifest:
+        name: manifest.json
 ```
 
 This way, you can keep using the original asset names, and they get expanded automatically following the resolutions from the manifest file.
