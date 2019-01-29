@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Oops\WebpackNetteAdapter\DI;
 
 use GuzzleHttp\Client;
-use Latte;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
@@ -47,7 +46,7 @@ class WebpackExtension extends CompilerExtension
 	public function __construct(bool $debugMode)
 	{
 		$this->defaults['debugger'] = $debugMode;
-		$this->defaults['macros'] = \class_exists(Latte\Engine::class);
+		$this->defaults['macros'] = \interface_exists(ILatteFactory::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
 		$this->defaults['manifest']['optimize'] = ! $debugMode;
 	}
