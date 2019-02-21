@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Oops\WebpackNetteAdapter;
 
-use Nette\Http\IRequest;
+use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
 
 
 /**
@@ -19,9 +19,9 @@ class PublicPathProvider
 	private $path;
 
 	/**
-	 * @var IRequest
+	 * @var BasePathProvider
 	 */
-	private $httpRequest;
+	private $basePathProvider;
 
 	/**
 	 * @var DevServer
@@ -29,10 +29,10 @@ class PublicPathProvider
 	private $devServer;
 
 
-	public function __construct(string $path, IRequest $httpRequest, DevServer $devServer)
+	public function __construct(string $path, BasePathProvider $basePathProvider, DevServer $devServer)
 	{
 		$this->path = $path;
-		$this->httpRequest = $httpRequest;
+		$this->basePathProvider = $basePathProvider;
 		$this->devServer = $devServer;
 	}
 
@@ -41,7 +41,7 @@ class PublicPathProvider
 	{
 		return $this->devServer->isAvailable()
 			? $this->devServer->getUrl()
-			: \rtrim($this->httpRequest->getUrl()->getBasePath(), '/') . '/' . \trim($this->path, '/');
+			: \rtrim($this->basePathProvider->getBasePath(), '/') . '/' . \trim($this->path, '/');
 	}
 
 }

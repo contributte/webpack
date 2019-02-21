@@ -13,6 +13,8 @@ use Nette\DI\ServiceDefinition;
 use Nette\DI\Statement;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver;
+use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
+use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
@@ -70,8 +72,13 @@ class WebpackExtension extends CompilerExtension
 		}
 
 
+		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
+			->setType(BasePathProvider::class)
+			->setFactory(NetteHttpBasePathProvider::class)
+			->setAutowired(FALSE);
+
 		$builder->addDefinition($this->prefix('pathProvider'))
-			->setFactory(PublicPathProvider::class, [$config['build']['publicPath']]);
+			->setFactory(PublicPathProvider::class, [$config['build']['publicPath'], $basePathProvider]);
 
 		$builder->addDefinition($this->prefix('buildDirProvider'))
 			->setFactory(BuildDirectoryProvider::class, [$config['build']['directory']]);
