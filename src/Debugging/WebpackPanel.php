@@ -37,7 +37,7 @@ final class WebpackPanel implements IBarPanel
 	}
 
 
-	public function getTab(): string
+	public function getTab(): ?string
 	{
 		\ob_start(function () {});
 		$devServer = $this->devServer;
@@ -47,7 +47,7 @@ final class WebpackPanel implements IBarPanel
 	}
 
 
-	public function getPanel(): string
+	public function getPanel(): ?string
 	{
 		\ob_start(function () {});
 		$devServer = $this->devServer;
