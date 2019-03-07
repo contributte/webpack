@@ -21,7 +21,7 @@ require_once __DIR__ . '/../bootstrap.php';
 class AssetLocatorTest extends TestCase
 {
 
-	public function testLocateInBuildDirectory()
+	public function testLocateInBuildDirectory(): void
 	{
 		$directoryProvider = \Mockery::mock(BuildDirectoryProvider::class);
 		$directoryProvider->shouldReceive('getBuildDirectory')
@@ -43,7 +43,7 @@ class AssetLocatorTest extends TestCase
 	}
 
 
-	public function testLocateInPublicPath()
+	public function testLocateInPublicPath(): void
 	{
 		$directoryProvider = \Mockery::mock(BuildDirectoryProvider::class);
 		$directoryProvider->shouldReceive('getBuildDirectory')
@@ -65,7 +65,7 @@ class AssetLocatorTest extends TestCase
 	}
 
 
-	protected function tearDown()
+	protected function tearDown(): void
 	{
 		\Mockery::close();
 	}

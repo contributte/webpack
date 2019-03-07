@@ -1,2 +1,5 @@
-vendor
+tests/**/output/*.actual
+tests/**/output/*.expected
+vendor/
 composer.lock
+coverage.*

@@ -19,7 +19,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class StaticAssetNameResolverTest extends TestCase
 {
 
-	public function testResolver()
+	public function testResolver(): void
 	{
 		$resolver = new StaticAssetNameResolver([
 			'asset.js' => 'cached.resolved.asset.js',
@@ -29,7 +29,7 @@ class StaticAssetNameResolverTest extends TestCase
 	}
 
 
-	public function testCannotResolveAsset()
+	public function testCannotResolveAsset(): void
 	{
 		$resolver = new StaticAssetNameResolver([
 			'asset.js' => 'cached.resolved.asset.js',

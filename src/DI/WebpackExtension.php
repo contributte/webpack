@@ -5,14 +5,16 @@ declare(strict_types = 1);
 namespace Oops\WebpackNetteAdapter\DI;
 
 use GuzzleHttp\Client;
-use Latte;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\MissingServiceException;
 use Nette\DI\ServiceDefinition;
 use Nette\DI\Statement;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver;
+use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
+use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
@@ -46,13 +48,13 @@ class WebpackExtension extends CompilerExtension
 	public function __construct(bool $debugMode)
 	{
 		$this->defaults['debugger'] = $debugMode;
-		$this->defaults['macros'] = \class_exists(Latte\Engine::class);
+		$this->defaults['macros'] = \interface_exists(ILatteFactory::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
 		$this->defaults['manifest']['optimize'] = ! $debugMode;
 	}
 
 
-	public function loadConfiguration()
+	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
 		$config = $this->validateConfig($this->defaults);
@@ -70,18 +72,22 @@ class WebpackExtension extends CompilerExtension
 		}
 
 
+		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
+			->setType(BasePathProvider::class)
+			->setFactory(NetteHttpBasePathProvider::class)
+			->setAutowired(FALSE);
+
 		$builder->addDefinition($this->prefix('pathProvider'))
-			->setClass(PublicPathProvider::class, [$config['build']['publicPath']]);
+			->setFactory(PublicPathProvider::class, [$config['build']['publicPath'], $basePathProvider]);
 
 		$builder->addDefinition($this->prefix('buildDirProvider'))
-			->setClass(BuildDirectoryProvider::class, [$config['build']['directory']]);
+			->setFactory(BuildDirectoryProvider::class, [$config['build']['directory']]);
 
 		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
-			->setClass(AssetLocator::class);
+			->setFactory(AssetLocator::class);
 
 		$builder->addDefinition($this->prefix('devServer'))
-			->setClass(DevServer::class)
-			->setArguments([
+			->setFactory(DevServer::class, [
 				$config['devServer']['enabled'],
 				$config['devServer']['url'] ?? '',
 				$config['devServer']['timeout'],
@@ -93,13 +99,18 @@ class WebpackExtension extends CompilerExtension
 		if ($config['debugger']) {
 			$assetResolver->setAutowired(FALSE);
 			$builder->addDefinition($this->prefix('assetResolver.debug'))
-				->setClass(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
+				->setFactory(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
 		}
 
 		// latte macro
 		if ($config['macros']) {
 			try {
-				$builder->getDefinitionByType(ILatteFactory::class)
+				$latteFactory = $builder->getDefinitionByType(ILatteFactory::class);
+				$definition = $latteFactory instanceof FactoryDefinition
+					? $latteFactory->getResultDefinition()
+					: $latteFactory;
+
+				$definition
 					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
 					->addSetup('?->onCompile[] = function ($engine) { Oops\WebpackNetteAdapter\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
 
@@ -110,7 +121,7 @@ class WebpackExtension extends CompilerExtension
 	}
 
 
-	public function beforeCompile()
+	public function beforeCompile(): void
 	{
 		$builder = $this->getContainerBuilder();
 
@@ -128,12 +139,12 @@ class WebpackExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		$assetResolver = $builder->addDefinition($this->prefix('assetResolver'))
-			->setClass(AssetNameResolver\AssetNameResolverInterface::class);
+			->setType(AssetNameResolver\AssetNameResolverInterface::class);
 
 		if ($config['manifest']['name'] !== NULL) {
 			if ( ! $config['manifest']['optimize']) {
 				$loader = $builder->addDefinition($this->prefix('manifestLoader'))
-					->setClass(ManifestLoader::class)
+					->setFactory(ManifestLoader::class)
 					->setAutowired(FALSE);
 
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [

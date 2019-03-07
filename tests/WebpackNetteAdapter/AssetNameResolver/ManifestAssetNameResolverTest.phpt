@@ -6,6 +6,7 @@ namespace OopsTests\WebpackNetteAdapter\AssetNameResolver;
 
 use Oops\WebpackNetteAdapter\AssetNameResolver\CannotResolveAssetNameException;
 use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
+use Oops\WebpackNetteAdapter\Manifest\CannotLoadManifestException;
 use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Tester\Assert;
 use Tester\TestCase;
@@ -20,7 +21,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class ManifestAssetNameResolverTest extends TestCase
 {
 
-	public function testResolver()
+	public function testResolver(): void
 	{
 		$manifestLoader = \Mockery::mock(ManifestLoader::class);
 		$manifestLoader->shouldReceive('loadManifest')
@@ -36,7 +37,27 @@ class ManifestAssetNameResolverTest extends TestCase
 		Assert::throws(function () use ($resolver) {
 			$resolver->resolveAssetName('unknownAsset.js');
 		}, CannotResolveAssetNameException::class);
+	}
 
+
+	public function testCannotLoadManifest(): void
+	{
+		$manifestLoader = \Mockery::mock(ManifestLoader::class);
+		$manifestLoader->shouldReceive('loadManifest')
+			->with('manifest.json')
+			->andThrow(new CannotLoadManifestException());
+
+		$resolver = new ManifestAssetNameResolver('manifest.json', $manifestLoader);
+
+		Assert::throws(function () use ($resolver) {
+			$resolver->resolveAssetName('asset.js');
+		}, CannotResolveAssetNameException::class);
+	}
+
+
+	protected function tearDown(): void
+	{
+		parent::tearDown();
 		\Mockery::close();
 	}
 

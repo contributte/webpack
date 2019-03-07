@@ -20,7 +20,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class ManifestLoaderTest extends TestCase
 {
 
-	public function testLoader()
+	public function testLoader(): void
 	{
 		$buildDirProvider = \Mockery::mock(BuildDirectoryProvider::class);
 		$buildDirProvider->shouldReceive('getBuildDirectory')->andReturn(__DIR__);

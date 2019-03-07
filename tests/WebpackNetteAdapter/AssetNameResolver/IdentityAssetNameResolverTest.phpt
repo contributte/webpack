@@ -18,7 +18,7 @@ require_once __DIR__ . '/../../bootstrap.php';
 class IdentityAssetNameResolverTest extends TestCase
 {
 
-	public function testResolver()
+	public function testResolver(): void
 	{
 		$resolver = new IdentityAssetNameResolver();
 		Assert::same('asset.js', $resolver->resolveAssetName('asset.js'));
