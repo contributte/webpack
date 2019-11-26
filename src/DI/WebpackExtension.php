@@ -32,6 +32,7 @@ class WebpackExtension extends CompilerExtension
 		'devServer' => [
 			'enabled' => NULL,
 			'url' => NULL,
+			'proxy' => NULL,
             'timeout' => 0.1,
 		],
 		'build' => [
@@ -90,6 +91,7 @@ class WebpackExtension extends CompilerExtension
 			->setFactory(DevServer::class, [
 				$config['devServer']['enabled'],
 				$config['devServer']['url'] ?? '',
+				$config['devServer']['proxy'] ?? '',
 				$config['devServer']['timeout'],
 				new Statement(Client::class)
 			]);
@@ -156,6 +158,7 @@ class WebpackExtension extends CompilerExtension
 				$devServerInstance = new DevServer(
 					$config['devServer']['enabled'],
 					$config['devServer']['url'] ?? '',
+					$config['devServer']['proxy'] ?? '',
 					$config['devServer']['timeout'] ?? 0.1,
 					new Client()
 				);
