@@ -91,6 +91,7 @@ class WebpackExtensionTest extends TestCase
 
 	public function testOptimizedManifest(): void
 	{
+		\putenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST=1');
 		$container = $this->createContainer('optimizedManifest');
 		$resolver = $container->getByType(AssetNameResolverInterface::class);
 

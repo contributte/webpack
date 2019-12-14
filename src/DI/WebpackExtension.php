@@ -38,7 +38,7 @@ class WebpackExtension extends CompilerExtension
 		'devServer' => [
 			'enabled' => NULL,
 			'url' => NULL,
-            'timeout' => 0.1,
+			'timeout' => 0.1,
 		],
 		'build' => [
 			'directory' => NULL,
@@ -51,12 +51,14 @@ class WebpackExtension extends CompilerExtension
 	];
 
 
-	public function __construct(bool $debugMode)
+	public function __construct(bool $debugMode, ?bool $consoleMode = NULL)
 	{
+		$consoleMode = $consoleMode ?? \PHP_SAPI === 'cli';
+
 		$this->defaults['debugger'] = $debugMode;
 		$this->defaults['macros'] = \interface_exists(ILatteFactory::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
-		$this->defaults['manifest']['optimize'] = ! $debugMode;
+		$this->defaults['manifest']['optimize'] = ! $debugMode && ( ! $consoleMode || (bool) \getenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST'));
 	}
 
 

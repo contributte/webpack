@@ -23,7 +23,7 @@ Register the extension in your config file, and configure it. The two `build` op
 
 ```yaml
 extensions:
-    webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(%debugMode%)
+    webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(%debugMode%, %consoleMode%)
 
 webpack:
     build:
