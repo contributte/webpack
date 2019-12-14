@@ -23,9 +23,15 @@ use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
 
 
+/**
+ * @property array<string, mixed> $config
+ */
 class WebpackExtension extends CompilerExtension
 {
 
+	/**
+	 * @var array<string, mixed>
+	 */
 	private $defaults = [
 		'debugger' => NULL,
 		'macros' => NULL,
@@ -110,6 +116,7 @@ class WebpackExtension extends CompilerExtension
 					? $latteFactory->getResultDefinition()
 					: $latteFactory;
 
+				\assert($definition instanceof ServiceDefinition);
 				$definition
 					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
 					->addSetup('?->onCompile[] = function ($engine) { Oops\WebpackNetteAdapter\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
@@ -126,14 +133,19 @@ class WebpackExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		if ($this->config['debugger'] && \interface_exists(Tracy\IBarPanel::class)) {
-			$builder->getDefinition($this->prefix('pathProvider'))
-				->addSetup('@Tracy\Bar::addPanel', [
-					new Statement(WebpackPanel::class)
-				]);
+			$definition = $builder->getDefinition($this->prefix('pathProvider'));
+			\assert($definition instanceof ServiceDefinition);
+
+			$definition->addSetup('@Tracy\Bar::addPanel', [
+				new Statement(WebpackPanel::class)
+			]);
 		}
 	}
 
 
+	/**
+	 * @param array<string, mixed> $config
+	 */
 	private function setupAssetResolver(array $config): ServiceDefinition
 	{
 		$builder = $this->getContainerBuilder();
