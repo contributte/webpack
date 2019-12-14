@@ -22,7 +22,7 @@ final class ManifestAssetNameResolver implements AssetNameResolverInterface
 	private $loader;
 
 	/**
-	 * @var string[]|NULL
+	 * @var array<string, string>|NULL
 	 */
 	private $manifestCache;
 

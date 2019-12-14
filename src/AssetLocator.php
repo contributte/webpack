@@ -25,28 +25,53 @@ class AssetLocator
 	 */
 	private $assetResolver;
 
+	/**
+	 * @var DevServer
+	 */
+	private $devServer;
 
+	/**
+	 * @var string[]
+	 */
+	private $ignoredAssetNames;
+
+
+	/**
+	 * @param string[] $ignoredAssetNames
+	 */
 	public function __construct(
 		BuildDirectoryProvider $directoryProvider,
 		PublicPathProvider $publicPathProvider,
-		AssetNameResolverInterface $assetResolver
+		AssetNameResolverInterface $assetResolver,
+		DevServer $devServer,
+		array $ignoredAssetNames
 	)
 	{
 		$this->directoryProvider = $directoryProvider;
 		$this->publicPathProvider = $publicPathProvider;
 		$this->assetResolver = $assetResolver;
+		$this->devServer = $devServer;
+		$this->ignoredAssetNames = $ignoredAssetNames;
 	}
 
 
 	public function locateInPublicPath(string $asset): string
 	{
-		return $this->publicPathProvider->getPublicPath() . '/' . $this->assetResolver->resolveAssetName($asset);
+		if ($this->devServer->isAvailable() && \in_array($asset, $this->ignoredAssetNames, TRUE)) {
+			return 'data:,';
+		}
+
+		return \rtrim($this->publicPathProvider->getPublicPath(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
 	}
 
 
 	public function locateInBuildDirectory(string $asset): string
 	{
-		return $this->directoryProvider->getBuildDirectory() . '/' . $this->assetResolver->resolveAssetName($asset);
+		if ($this->devServer->isAvailable() && \in_array($asset, $this->ignoredAssetNames, TRUE)) {
+			return 'data:,';
+		}
+
+		return \rtrim($this->directoryProvider->getBuildDirectory(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
 	}
 
 }

@@ -14,7 +14,7 @@ final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 	private $inner;
 
 	/**
-	 * @var array[]
+	 * @var array<array{string, string}>
 	 */
 	private $resolvedAssets = [];
 
@@ -33,6 +33,9 @@ final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 	}
 
 
+	/**
+	 * @return array<array{string, string}>
+	 */
 	public function getResolvedAssets(): array
 	{
 		return $this->resolvedAssets;

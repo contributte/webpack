@@ -9,11 +9,14 @@ final class StaticAssetNameResolver implements AssetNameResolverInterface
 {
 
 	/**
-	 * @var string[]
+	 * @var array<string, string>
 	 */
 	private $resolutions;
 
 
+	/**
+	 * @param array<string, string> $resolutions
+	 */
 	public function __construct(array $resolutions)
 	{
 		$this->resolutions = $resolutions;

@@ -23,16 +23,23 @@ use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
 
 
+/**
+ * @property array<string, mixed> $config
+ */
 class WebpackExtension extends CompilerExtension
 {
 
+	/**
+	 * @var array<string, mixed>
+	 */
 	private $defaults = [
 		'debugger' => NULL,
 		'macros' => NULL,
 		'devServer' => [
 			'enabled' => NULL,
 			'url' => NULL,
-            'timeout' => 0.1,
+			'timeout' => 0.1,
+			'ignoredAssets' => [],
 		],
 		'build' => [
 			'directory' => NULL,
@@ -45,12 +52,14 @@ class WebpackExtension extends CompilerExtension
 	];
 
 
-	public function __construct(bool $debugMode)
+	public function __construct(bool $debugMode, ?bool $consoleMode = NULL)
 	{
+		$consoleMode = $consoleMode ?? \PHP_SAPI === 'cli';
+
 		$this->defaults['debugger'] = $debugMode;
 		$this->defaults['macros'] = \interface_exists(ILatteFactory::class);
 		$this->defaults['devServer']['enabled'] = $debugMode;
-		$this->defaults['manifest']['optimize'] = ! $debugMode;
+		$this->defaults['manifest']['optimize'] = ! $debugMode && ( ! $consoleMode || (bool) \getenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST'));
 	}
 
 
@@ -83,15 +92,17 @@ class WebpackExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('buildDirProvider'))
 			->setFactory(BuildDirectoryProvider::class, [$config['build']['directory']]);
 
-		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
-			->setFactory(AssetLocator::class);
-
 		$builder->addDefinition($this->prefix('devServer'))
 			->setFactory(DevServer::class, [
 				$config['devServer']['enabled'],
 				$config['devServer']['url'] ?? '',
 				$config['devServer']['timeout'],
-				new Statement(Client::class)
+				new Statement(Client::class),
+			]);
+
+		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
+			->setFactory(AssetLocator::class, [
+				'ignoredAssetNames' => $config['devServer']['ignoredAssets'],
 			]);
 
 		$assetResolver = $this->setupAssetResolver($config);
@@ -110,6 +121,7 @@ class WebpackExtension extends CompilerExtension
 					? $latteFactory->getResultDefinition()
 					: $latteFactory;
 
+				\assert($definition instanceof ServiceDefinition);
 				$definition
 					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
 					->addSetup('?->onCompile[] = function ($engine) { Oops\WebpackNetteAdapter\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
@@ -126,14 +138,19 @@ class WebpackExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		if ($this->config['debugger'] && \interface_exists(Tracy\IBarPanel::class)) {
-			$builder->getDefinition($this->prefix('pathProvider'))
-				->addSetup('@Tracy\Bar::addPanel', [
-					new Statement(WebpackPanel::class)
-				]);
+			$definition = $builder->getDefinition($this->prefix('pathProvider'));
+			\assert($definition instanceof ServiceDefinition);
+
+			$definition->addSetup('@Tracy\Bar::addPanel', [
+				new Statement(WebpackPanel::class)
+			]);
 		}
 	}
 
 
+	/**
+	 * @param array<string, mixed> $config
+	 */
 	private function setupAssetResolver(array $config): ServiceDefinition
 	{
 		$builder = $this->getContainerBuilder();
