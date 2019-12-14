@@ -39,6 +39,7 @@ class WebpackExtension extends CompilerExtension
 			'enabled' => NULL,
 			'url' => NULL,
 			'timeout' => 0.1,
+			'ignoredAssets' => [],
 		],
 		'build' => [
 			'directory' => NULL,
@@ -91,15 +92,17 @@ class WebpackExtension extends CompilerExtension
 		$builder->addDefinition($this->prefix('buildDirProvider'))
 			->setFactory(BuildDirectoryProvider::class, [$config['build']['directory']]);
 
-		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
-			->setFactory(AssetLocator::class);
-
 		$builder->addDefinition($this->prefix('devServer'))
 			->setFactory(DevServer::class, [
 				$config['devServer']['enabled'],
 				$config['devServer']['url'] ?? '',
 				$config['devServer']['timeout'],
-				new Statement(Client::class)
+				new Statement(Client::class),
+			]);
+
+		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
+			->setFactory(AssetLocator::class, [
+				'ignoredAssetNames' => $config['devServer']['ignoredAssets'],
 			]);
 
 		$assetResolver = $this->setupAssetResolver($config);

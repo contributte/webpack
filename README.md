@@ -53,6 +53,17 @@ webpack:
         timeout: 0.1 # (seconds) default
 ```
 
+#### Ignored assets
+
+You can also configure a set of asset names that should be ignored (i.e. resolved to an empty data URI) if the dev-server is available. This can be helpful e.g. if you use [`style-loader`](https://www.npmjs.com/package/style-loader) in development which does not emit any CSS files.
+
+```yaml
+webpack:
+    devServer:
+        ignoredAssets:
+            - main.css
+```
+
 
 ### Asset resolvers and manifest file
 
