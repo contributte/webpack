@@ -40,13 +40,13 @@ class AssetLocator
 
 	public function locateInPublicPath(string $asset): string
 	{
-		return $this->publicPathProvider->getPublicPath() . '/' . $this->assetResolver->resolveAssetName($asset);
+		return \rtrim($this->publicPathProvider->getPublicPath(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
 	}
 
 
 	public function locateInBuildDirectory(string $asset): string
 	{
-		return $this->directoryProvider->getBuildDirectory() . '/' . $this->assetResolver->resolveAssetName($asset);
+		return \rtrim($this->directoryProvider->getBuildDirectory(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
 	}
 
 }
