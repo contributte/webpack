@@ -53,6 +53,17 @@ webpack:
         timeout: 0.1 # (seconds) default
 ```
 
+### Public url (eg. Docker usage)
+Devserver might have different url when accessed from Nette and different url from other applications (eg. when running in Docker). For this set up `publicUrl`.   
+
+```yaml
+webpack:
+    devServer:
+        enabled: %debugMode% # default
+        url: http://localhost:3000
+        publicUrl: http://localhost:3030
+```
+
 
 ### Asset resolvers and manifest file
 
