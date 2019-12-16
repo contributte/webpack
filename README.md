@@ -64,6 +64,17 @@ webpack:
             - main.css
 ```
 
+#### Public URL (e.g. Docker usage)
+
+Dev-server might have different URLs for different access points. For example, when running in Docker Compose setup, the Nette application accesses it via the internal Docker network, while you access it in the browser via the exposed port. For this, you can set up a different `publicUrl`.   
+
+```yaml
+webpack:
+    devServer:
+        url: http://webpack-dev-server:3000 # URL over internal Docker network
+        publicUrl: http://localhost:3030 # exposed port from the dev-server container
+```
+
 
 ### Asset resolvers and manifest file
 
