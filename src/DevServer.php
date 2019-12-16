@@ -29,7 +29,7 @@ class DevServer
 	/**
 	 * @var string
 	 */
-	private $proxy;
+	private $publicUrl;
 
     /**
      * @var float
@@ -42,11 +42,11 @@ class DevServer
 	private $httpClient;
 
 
-	public function __construct(bool $enabled, string $url, string $proxy, float $timeout, ClientInterface $httpClient)
+	public function __construct(bool $enabled, string $url, string $publicUrl, float $timeout, ClientInterface $httpClient)
 	{
 		$this->enabled = $enabled;
 		$this->url = $url;
-		$this->proxy = $proxy;
+		$this->publicUrl = $publicUrl;
 		$this->timeout = $timeout;
 		$this->httpClient = $httpClient;
 	}
@@ -54,7 +54,7 @@ class DevServer
 
 	public function getUrl(): string
 	{
-		return $this->proxy ? $this->proxy : $this->url;
+		return $this->publicUrl ?? $this->url;
 	}
 
 
