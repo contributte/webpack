@@ -14,7 +14,7 @@ WebpackNetteAdapter is a tool that helps integrate your Nette Framework applicat
 $ composer require oops/webpack-nette-adapter
 ```
 
-Oops/WebpackNetteAdapter requires PHP >= 7.1.
+Oops/WebpackNetteAdapter requires PHP >= 7.2.
 
 
 ## Usage
@@ -23,7 +23,7 @@ Register the extension in your config file, and configure it. The two `build` op
 
 ```yaml
 extensions:
-    webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(%debugMode%)
+    webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(%debugMode%, %consoleMode%)
 
 webpack:
     build:
@@ -53,8 +53,20 @@ webpack:
         timeout: 0.1 # (seconds) default
 ```
 
+#### Ignored assets
+
+You can also configure a set of asset names that should be ignored (i.e. resolved to an empty data URI) if the dev-server is available. This can be helpful e.g. if you use [`style-loader`](https://www.npmjs.com/package/style-loader) in development which does not emit any CSS files.
+
+```yaml
+webpack:
+    devServer:
+        ignoredAssets:
+            - main.css
+```
+
 ### Public url (eg. Docker usage)
-Devserver might have different url when accessed from Nette and different url from other applications (eg. when running in Docker). For this set up `publicUrl`.   
+
+Devserver might have different url when accessed from Nette and different url from other applications (eg. when running in Docker). For this set up `publicUrl`.  
 
 ```yaml
 webpack:
@@ -63,7 +75,6 @@ webpack:
         url: http://localhost:3000
         publicUrl: http://localhost:3030
 ```
-
 
 ### Asset resolvers and manifest file
 

@@ -28,6 +28,7 @@ class ManifestLoader
 
 	/**
 	 * @throws CannotLoadManifestException
+	 * @return array<string, string>
 	 */
 	public function loadManifest(string $fileName): array
 	{

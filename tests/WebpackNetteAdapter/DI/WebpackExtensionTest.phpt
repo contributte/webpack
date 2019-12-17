@@ -91,6 +91,7 @@ class WebpackExtensionTest extends TestCase
 
 	public function testOptimizedManifest(): void
 	{
+		\putenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST=1');
 		$container = $this->createContainer('optimizedManifest');
 		$resolver = $container->getByType(AssetNameResolverInterface::class);
 
@@ -101,6 +102,28 @@ class WebpackExtensionTest extends TestCase
 		$cache->setAccessible(TRUE);
 
 		Assert::same(["asset.js" => "cached.resolved.asset.js"], $cache->getValue($resolver));
+	}
+
+
+	public function testIgnoredAssets(): void
+	{
+		$container = $this->createContainer('ignoredAssets');
+
+		// mock devServer so that it is available
+		$devServerMock = \Mockery::mock(DevServer::class);
+		$devServerMock->shouldReceive('getUrl')->andReturn('/devServer/');
+		$devServerMock->shouldReceive('isAvailable')->andReturn(TRUE);
+		$container->removeService('webpack.devServer');
+		$container->addService('webpack.devServer', $devServerMock);
+
+		/** @var AssetLocator $assetLocator */
+		$assetLocator = $container->getByType(AssetLocator::class);
+		Assert::same('/devServer/foo.js', $assetLocator->locateInPublicPath('foo.js'));
+		Assert::same('/devServer/foo.js', $assetLocator->locateInBuildDirectory('foo.js'));
+		Assert::same('data:,', $assetLocator->locateInPublicPath('foo.css'));
+		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
+
+		\Mockery::close();
 	}
 
 

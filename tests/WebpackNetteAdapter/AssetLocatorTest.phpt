@@ -7,6 +7,7 @@ namespace OopsTests\WebpackNetteAdapter;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
+use Oops\WebpackNetteAdapter\DevServer;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;
@@ -38,7 +39,10 @@ class AssetLocatorTest extends TestCase
 			->once()
 			->andReturn('bar.js');
 
-		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver);
+		$devServer = \Mockery::mock(DevServer::class);
+		$devServer->shouldReceive('isAvailable')->andReturn(FALSE);
+
+		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
 		Assert::same('/home/user/bar.js', $assetLocator->locateInBuildDirectory('bar.js'));
 	}
 
@@ -60,7 +64,43 @@ class AssetLocatorTest extends TestCase
 			->once()
 			->andReturn('bar.js');
 
-		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver);
+		$devServer = \Mockery::mock(DevServer::class);
+		$devServer->shouldReceive('isAvailable')->andReturn(FALSE);
+
+		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
+		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
+	}
+
+
+	public function testIgnoredAssets(): void
+	{
+		$directoryProvider = \Mockery::mock(BuildDirectoryProvider::class);
+		$directoryProvider->shouldReceive('getBuildDirectory')
+			->once()
+			->andReturn('/home/user');
+
+		$pathProvider = \Mockery::mock(PublicPathProvider::class);
+		$pathProvider->shouldReceive('getPublicPath')
+			->once()
+			->andReturn('/foo');
+
+		$assetResolver = \Mockery::mock(AssetNameResolverInterface::class);
+		$assetResolver->shouldReceive('resolveAssetName')
+			->with('bar.js')
+			->twice()
+			->andReturn('bar.js');
+
+		$assetResolver->shouldReceive('resolveAssetName')
+			->with('foo.css')
+			->never();
+
+		$devServer = \Mockery::mock(DevServer::class);
+		$devServer->shouldReceive('isAvailable')->andReturn(TRUE);
+
+		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, ['foo.css']);
+		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
+		Assert::same('data:,', $assetLocator->locateInPublicPath('foo.css'));
+		Assert::same('/home/user/bar.js', $assetLocator->locateInBuildDirectory('bar.js'));
 		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
 	}
 

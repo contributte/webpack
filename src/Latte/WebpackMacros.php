@@ -13,12 +13,12 @@ use Latte\PhpWriter;
 /**
  * - {webpack 'asset.name.js'}
  */
-class WebpackMacros extends MacroSet
+final class WebpackMacros extends MacroSet
 {
 
 	public static function install(Compiler $compiler): void
 	{
-		$me = new static($compiler);
+		$me = new self($compiler);
 		$me->addMacro('webpack', [$me, 'macroWebpackAsset']);
 	}
 

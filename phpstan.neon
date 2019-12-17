@@ -1,5 +1,0 @@
-parameters:
-	ignoreErrors:
-		# Nette 3.0 support; class is used in instanceof
-		- '#^Class Nette\\DI\\Definitions\\FactoryDefinition not found\.$#'
-		- '#^Call to method getResultDefinition\(\) on an unknown class Nette\\DI\\Definitions\\FactoryDefinition\.$#'
