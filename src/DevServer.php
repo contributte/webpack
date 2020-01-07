@@ -27,7 +27,7 @@ class DevServer
 	private $url;
 
 	/**
-	 * @var string
+	 * @var ?string
 	 */
 	private $publicUrl;
 
@@ -42,7 +42,7 @@ class DevServer
 	private $httpClient;
 
 
-	public function __construct(bool $enabled, string $url, string $publicUrl, float $timeout, ClientInterface $httpClient)
+	public function __construct(bool $enabled, string $url, ?string $publicUrl, float $timeout, ClientInterface $httpClient)
 	{
 		$this->enabled = $enabled;
 		$this->url = $url;

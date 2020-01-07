@@ -97,7 +97,7 @@ class WebpackExtension extends CompilerExtension
 			->setFactory(DevServer::class, [
 				$config['devServer']['enabled'],
 				$config['devServer']['url'] ?? '',
-				$config['devServer']['publicUrl'] ?? '',
+				$config['devServer']['publicUrl'],
 				$config['devServer']['timeout'],
 				new Statement(Client::class),
 			]);

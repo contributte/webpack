@@ -38,8 +38,9 @@ class DevServerTest extends TestCase
 
 	public function testDevServer(): void
 	{
-		$devServer = new DevServer(TRUE, 'http://localhost:3000', '', 0.1, $this->httpClient);
+		$devServer = new DevServer(TRUE, 'http://localhost:3000', NULL, 0.1, $this->httpClient);
 		Assert::true($devServer->isEnabled());
+		Assert::same($devServer->getUrl(), 'http://localhost:3000');
 
 		$this->httpClient->shouldReceive('request')
 			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1])
@@ -64,7 +65,7 @@ class DevServerTest extends TestCase
 
 	public function testUnavailable(): void
 	{
-		$devServer = new DevServer(TRUE, 'http://localhost:3000', '', 0.5, $this->httpClient);
+		$devServer = new DevServer(TRUE, 'http://localhost:3000', NULL, 0.5, $this->httpClient);
 		Assert::true($devServer->isEnabled());
 
 		$this->httpClient->shouldReceive('request')
@@ -76,7 +77,7 @@ class DevServerTest extends TestCase
 
 	public function testDisabled(): void
 	{
-		$devServer = new DevServer(FALSE, 'http://localhost:3000', '', 0.1, $this->httpClient);
+		$devServer = new DevServer(FALSE, 'http://localhost:3000', NULL, 0.1, $this->httpClient);
 		Assert::false($devServer->isEnabled());
 		Assert::false($devServer->isAvailable());
 	}
