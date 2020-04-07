@@ -41,6 +41,7 @@ class DevServerTest extends TestCase
 		$devServer = new DevServer(TRUE, 'http://localhost:3000', NULL, 0.1, $this->httpClient);
 		Assert::true($devServer->isEnabled());
 		Assert::same($devServer->getUrl(), 'http://localhost:3000');
+		Assert::same($devServer->getInternalUrl(), 'http://localhost:3000');
 
 		$this->httpClient->shouldReceive('request')
 			->with('GET', 'http://localhost:3000', ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1])
@@ -53,9 +54,10 @@ class DevServerTest extends TestCase
 	{
 	    $devServer = new DevServer(TRUE, 'http://localhost:3000', 'http://localhost:3030', 0.1, $this->httpClient);
 	    Assert::true($devServer->isEnabled());
-	    Assert::same($devServer->getUrl(), 'http://localhost:3030');
+		Assert::same($devServer->getUrl(), 'http://localhost:3030');
+		Assert::same($devServer->getInternalUrl(), 'http://localhost:3000');
 
-	    $this->httpClient->shouldReceive('request')
+		$this->httpClient->shouldReceive('request')
 	        ->with('GET', 'http://localhost:3000', ['http_errors' => FALSE, 'verify' => FALSE, 'timeout' => 0.1])
 	        ->andReturn(new Response(404));
 

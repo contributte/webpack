@@ -31,9 +31,9 @@ class DevServer
 	 */
 	private $publicUrl;
 
-    /**
-     * @var float
-     */
+	/**
+	 * @var float
+	 */
 	private $timeout;
 
 	/**
@@ -55,6 +55,12 @@ class DevServer
 	public function getUrl(): string
 	{
 		return $this->publicUrl ?? $this->url;
+	}
+
+
+	public function getInternalUrl(): string
+	{
+		return $this->url;
 	}
 
 
