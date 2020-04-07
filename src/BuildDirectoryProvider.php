@@ -32,7 +32,7 @@ class BuildDirectoryProvider
 	public function getBuildDirectory(): string
 	{
 		return $this->devServer->isAvailable()
-			? $this->devServer->getUrl()
+			? $this->devServer->getInternalUrl()
 			: $this->directory;
 	}
 

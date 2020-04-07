@@ -112,6 +112,7 @@ class WebpackExtensionTest extends TestCase
 		// mock devServer so that it is available
 		$devServerMock = \Mockery::mock(DevServer::class);
 		$devServerMock->shouldReceive('getUrl')->andReturn('/devServer/');
+		$devServerMock->shouldReceive('getInternalUrl')->andReturn('/devServer-internal/');
 		$devServerMock->shouldReceive('isAvailable')->andReturn(TRUE);
 		$container->removeService('webpack.devServer');
 		$container->addService('webpack.devServer', $devServerMock);
@@ -119,7 +120,7 @@ class WebpackExtensionTest extends TestCase
 		/** @var AssetLocator $assetLocator */
 		$assetLocator = $container->getByType(AssetLocator::class);
 		Assert::same('/devServer/foo.js', $assetLocator->locateInPublicPath('foo.js'));
-		Assert::same('/devServer/foo.js', $assetLocator->locateInBuildDirectory('foo.js'));
+		Assert::same('/devServer-internal/foo.js', $assetLocator->locateInBuildDirectory('foo.js'));
 		Assert::same('data:,', $assetLocator->locateInPublicPath('foo.css'));
 		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
 
