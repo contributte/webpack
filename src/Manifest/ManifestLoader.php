@@ -19,10 +19,16 @@ class ManifestLoader
 	 */
 	private $directoryProvider;
 
+	/**
+	 * @var ?ManifestMapper
+	 */
+	private $manifestMapper;
 
-	public function __construct(BuildDirectoryProvider $directoryProvider)
+
+	public function __construct(BuildDirectoryProvider $directoryProvider, ?ManifestMapper $manifestMapper = null)
 	{
 		$this->directoryProvider = $directoryProvider;
+		$this->manifestMapper = $manifestMapper;
 	}
 
 
@@ -43,7 +49,11 @@ class ManifestLoader
 			));
 		}
 
-		return Json::decode($manifest, Json::FORCE_ARRAY);
+		$manifest = Json::decode($manifest, Json::FORCE_ARRAY);
+		if ($this->manifestMapper !== NULL) {
+			return $this->manifestMapper->map($manifest);
+		}
+		return $manifest;
 	}
 
 

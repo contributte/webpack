@@ -49,6 +49,7 @@ class WebpackExtension extends CompilerExtension
 		'manifest' => [
 			'name' => NULL,
 			'optimize' => NULL,
+			'mapper' => NULL,
 		]
 	];
 
@@ -81,6 +82,11 @@ class WebpackExtension extends CompilerExtension
 			throw new ConfigurationException('You need to specify the dev server URL.');
 		}
 
+		if ($config['manifest']['mapper'] !== NULL) {
+			if (!class_exists($config['manifest']['mapper'])) {
+				throw new ConfigurationException("Non-existent classname \'{$config['manifest']['mapper']}\'provided for ManifestMapper.");
+			}
+		}
 
 		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
 			->setType(BasePathProvider::class)
@@ -166,6 +172,10 @@ class WebpackExtension extends CompilerExtension
 					->setFactory(ManifestLoader::class)
 					->setAutowired(FALSE);
 
+				if ($config['manifest']['mapper'] !== NULL) {
+					$loader->setArgument(1, $config['manifest']['mapper']);
+				}
+
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
 					$config['manifest']['name'],
 					$loader
@@ -180,8 +190,10 @@ class WebpackExtension extends CompilerExtension
 					new Client()
 				);
 
+				$mapperInstance = ($config['manifest']['mapper'] === NULL) ? NULL : new $config['manifest']['mapper']();
+
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
-				$loaderInstance = new ManifestLoader($directoryProviderInstance);
+				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance);
 				$manifestCache = $loaderInstance->loadManifest($config['manifest']['name']);
 
 				$assetResolver->setFactory(AssetNameResolver\StaticAssetNameResolver::class, [$manifestCache]);
