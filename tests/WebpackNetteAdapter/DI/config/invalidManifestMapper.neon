@@ -1,0 +1,13 @@
+extensions:
+	webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(false)
+
+
+webpack:
+	build:
+		directory: %buildDir%
+		publicPath: dist/
+
+	manifest:
+		name: manifest.json
+		optimize: false
+		mapper: No\Namespace\NonExistentClass

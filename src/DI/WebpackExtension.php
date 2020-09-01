@@ -84,7 +84,7 @@ class WebpackExtension extends CompilerExtension
 
 		if ($config['manifest']['mapper'] !== NULL) {
 			if (!class_exists($config['manifest']['mapper'])) {
-				throw new ConfigurationException("Non-existent classname \'{$config['manifest']['mapper']}\'provided for ManifestMapper.");
+				throw new ConfigurationException("Non-existent classname '{$config['manifest']['mapper']}'provided for ManifestMapper.");
 			}
 		}
 
@@ -173,7 +173,7 @@ class WebpackExtension extends CompilerExtension
 					->setAutowired(FALSE);
 
 				if ($config['manifest']['mapper'] !== NULL) {
-					$loader->setArgument(1, $config['manifest']['mapper']);
+					$loader->setArgument(1, new Statement($config['manifest']['mapper']));
 				}
 
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
