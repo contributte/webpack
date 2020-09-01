@@ -173,7 +173,7 @@ class WebpackExtension extends CompilerExtension
 					->setAutowired(FALSE);
 
 				if ($config['manifest']['mapper'] !== NULL) {
-					$loader->setArgument(1, new Statement($config['manifest']['mapper']));
+					$loader->getFactory()->arguments[1] = new Statement($config['manifest']['mapper']);
 				}
 
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
