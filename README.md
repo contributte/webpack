@@ -1,9 +1,10 @@
 # Oops/WebpackNetteAdapter
 
-[![Build Status](https://img.shields.io/travis/o2ps/WebpackNetteAdapter.svg)](https://travis-ci.org/o2ps/WebpackNetteAdapter)
+[![Build Status](https://img.shields.io/github/workflow/status/o2ps/WebpackNetteAdapter/Test)](https://github.com/o2ps/WebpackNetteAdapter/actions?query=workflow%3ATest)
 [![Code Coverage](https://img.shields.io/codecov/c/github/o2ps/WebpackNetteAdapter.svg)](https://codecov.io/gh/o2ps/WebpackNetteAdapter)
 [![Downloads this Month](https://img.shields.io/packagist/dm/oops/webpack-nette-adapter.svg)](https://packagist.org/packages/oops/webpack-nette-adapter)
 [![Latest stable](https://img.shields.io/packagist/v/oops/webpack-nette-adapter.svg)](https://packagist.org/packages/oops/webpack-nette-adapter)
+[![License](https://img.shields.io/packagist/l/oops/webpack-nette-adapter)](https://packagist.org/packages/oops/webpack-nette-adapter)
 
 WebpackNetteAdapter is a tool that helps integrate your Nette Framework application with assets built via Webpack.
 
