@@ -39,7 +39,7 @@ class ManifestLoader
 	public function loadManifest(string $fileName): array
 	{
 		$path = $this->getManifestPath($fileName);
-		$context = \stream_context_create(['ssl' => ['verify_peer' => FALSE]]); // webpack-dev-server uses self-signed certificate
+		$context = \stream_context_create(['ssl' => ['verify_peer' => FALSE, 'verify_peer_name' => FALSE]]); // webpack-dev-server uses self-signed certificate
 		$manifest = @\file_get_contents($path, FALSE, $context); // @ - errors handled by custom exception
 
 		if ($manifest === FALSE) {
