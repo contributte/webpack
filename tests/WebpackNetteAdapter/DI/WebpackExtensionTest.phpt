@@ -82,14 +82,6 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
-	public function testInvalidMapperClass(): void
-	{
-		Assert::throws(function () {
-			$this->createContainer('invalidManifestMapper');
-		}, ConfigurationException::class,  'Non-existent classname \'No\\Namespace\\NonExistentClass\'provided for ManifestMapper.');
-	}
-
-
 	public function testManifestResolver(): void
 	{
 		$container = $this->createContainer('manifest');

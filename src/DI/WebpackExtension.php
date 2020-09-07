@@ -82,12 +82,6 @@ class WebpackExtension extends CompilerExtension
 			throw new ConfigurationException('You need to specify the dev server URL.');
 		}
 
-		if ($config['manifest']['mapper'] !== NULL) {
-			if (!class_exists($config['manifest']['mapper'])) {
-				throw new ConfigurationException("Non-existent classname '{$config['manifest']['mapper']}'provided for ManifestMapper.");
-			}
-		}
-
 		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
 			->setType(BasePathProvider::class)
 			->setFactory(NetteHttpBasePathProvider::class)
