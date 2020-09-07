@@ -18,6 +18,7 @@ use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\Manifest\IdentityMapper;
 use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
@@ -184,7 +185,9 @@ class WebpackExtension extends CompilerExtension
 					new Client()
 				);
 
-				$mapperInstance = ($config['manifest']['mapper'] === NULL) ? NULL : new $config['manifest']['mapper']();
+				$mapperInstance = ($config['manifest']['mapper'] === NULL)
+					? NULL
+					: new $config['manifest']['mapper']();
 
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
 				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance);
