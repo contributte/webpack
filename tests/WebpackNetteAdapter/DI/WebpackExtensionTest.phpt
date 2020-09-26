@@ -89,6 +89,13 @@ class WebpackExtensionTest extends TestCase
 	}
 
 
+	public function testManifestResolverWithMapper(): void
+	{
+		$container = $this->createContainer('manifestWithMapper');
+		Assert::type(ManifestAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
+	}
+
+
 	public function testOptimizedManifest(): void
 	{
 		\putenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST=1');

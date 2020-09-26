@@ -80,7 +80,7 @@ webpack:
 
 You might want to include the Webpack's asset hash in its file name for assets caching (and automatic cache busting in new releases) in the user agent. But how do you reference the asset files in your code if their names are dynamic?
 
-WebpackNetteAdapter comes to the rescue. You can employ the [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) or some similar plugin to produce a manifest file, and then configure the adapter to use it:
+WebpackNetteAdapter comes to the rescue. You can employ the [`webpack-manifest-plugin`](https://www.npmjs.com/package/webpack-manifest-plugin) or some similar plugin (see below) to produce a manifest file, and then configure the adapter to use it:
 
 ```yaml
 webpack:
@@ -91,6 +91,20 @@ webpack:
 This way, you can keep using the original asset names, and they get expanded automatically following the resolutions from the manifest file.
 
 WebpackNetteAdapter automatically optimizes this in production environment by loading the manifest file in compile time.
+
+
+#### Manifest mappers
+
+By default, WebpackNetteAdapter supports the aforementioned `webpack-manifest-plugin`. If you use a different plugin that produces the manifest in a different format, you can implement and configure a mapper for it. WebpackNetteAdapter comes bundled with a mapper for the [`assets-webpack-plugin`](https://www.npmjs.com/package/assets-webpack-plugin):
+
+```yaml
+webpack:
+    manifest:
+      name: manifest.json
+      mapper: Oops\WebpackNetteAdapter\Manifest\Mapper\AssetsWebpackPluginMapper
+```
+
+You can also implement your own mapper, simply extend `Oops\WebpackNetteAdapter\Manifest\ManifestMapper` and implement its `map()` method. It takes the parsed JSON content of the manifest file and is expected to return a flat array mapping asset names to file names.
 
 
 ### Debugger

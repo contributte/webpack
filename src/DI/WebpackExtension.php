@@ -18,6 +18,7 @@ use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
 use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
@@ -49,6 +50,7 @@ class WebpackExtension extends CompilerExtension
 		'manifest' => [
 			'name' => NULL,
 			'optimize' => NULL,
+			'mapper' => WebpackManifestPluginMapper::class,
 		]
 	];
 
@@ -80,7 +82,6 @@ class WebpackExtension extends CompilerExtension
 		if ($config['devServer']['enabled'] && empty($config['devServer']['url'])) {
 			throw new ConfigurationException('You need to specify the dev server URL.');
 		}
-
 
 		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
 			->setType(BasePathProvider::class)
@@ -163,7 +164,9 @@ class WebpackExtension extends CompilerExtension
 		if ($config['manifest']['name'] !== NULL) {
 			if ( ! $config['manifest']['optimize']) {
 				$loader = $builder->addDefinition($this->prefix('manifestLoader'))
-					->setFactory(ManifestLoader::class)
+					->setFactory(ManifestLoader::class, [
+						1 => new Statement($config['manifest']['mapper']),
+					])
 					->setAutowired(FALSE);
 
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
@@ -176,12 +179,14 @@ class WebpackExtension extends CompilerExtension
 					$config['devServer']['enabled'],
 					$config['devServer']['url'] ?? '',
 					$config['devServer']['publicUrl'] ?? '',
-					$config['devServer']['timeout'] ?? 0.1,
+					$config['devServer']['timeout'],
 					new Client()
 				);
 
+				$mapperInstance = new $config['manifest']['mapper']();
+
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
-				$loaderInstance = new ManifestLoader($directoryProviderInstance);
+				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance);
 				$manifestCache = $loaderInstance->loadManifest($config['manifest']['name']);
 
 				$assetResolver->setFactory(AssetNameResolver\StaticAssetNameResolver::class, [$manifestCache]);
