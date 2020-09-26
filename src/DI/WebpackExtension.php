@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Oops\WebpackNetteAdapter\DI;
 
-use GuzzleHttp\Client;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
@@ -17,7 +16,8 @@ use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
 use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
-use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\DevServer\DevServer;
+use Oops\WebpackNetteAdapter\DevServer\Http\CurlClient;
 use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
 use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
@@ -100,7 +100,7 @@ class WebpackExtension extends CompilerExtension
 				$config['devServer']['url'] ?? '',
 				$config['devServer']['publicUrl'],
 				$config['devServer']['timeout'],
-				new Statement(Client::class),
+				new Statement(CurlClient::class),
 			]);
 
 		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
@@ -180,7 +180,7 @@ class WebpackExtension extends CompilerExtension
 					$config['devServer']['url'] ?? '',
 					$config['devServer']['publicUrl'] ?? '',
 					$config['devServer']['timeout'],
-					new Client()
+					new CurlClient()
 				);
 
 				$mapperInstance = new $config['manifest']['mapper']();

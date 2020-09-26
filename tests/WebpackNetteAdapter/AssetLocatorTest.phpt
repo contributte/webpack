@@ -7,7 +7,7 @@ namespace OopsTests\WebpackNetteAdapter;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
-use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\DevServer\DevServer;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;

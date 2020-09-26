@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Oops\WebpackNetteAdapter;
 
 use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
+use Oops\WebpackNetteAdapter\DevServer\DevServer;
 
 
 /**

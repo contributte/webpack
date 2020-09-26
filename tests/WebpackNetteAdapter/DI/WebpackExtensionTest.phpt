@@ -15,7 +15,7 @@ use Oops\WebpackNetteAdapter\AssetNameResolver\IdentityAssetNameResolver;
 use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
 use Oops\WebpackNetteAdapter\AssetNameResolver\StaticAssetNameResolver;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
-use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\DevServer\DevServer;
 use Oops\WebpackNetteAdapter\DI\ConfigurationException;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
@@ -57,7 +57,7 @@ class WebpackExtensionTest extends TestCase
 		Assert::type(PublicPathProvider::class, $container->getByType(PublicPathProvider::class));
 		Assert::type(DevServer::class, $devServer = $container->getByType(DevServer::class));
 
-		/** @var DevServer $devServer */
+		/** @var \Oops\WebpackNetteAdapter\DevServer\DevServer $devServer */
 		Assert::false($devServer->isEnabled());
 
 		/** @var Bar $bar */

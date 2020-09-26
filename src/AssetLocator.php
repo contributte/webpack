@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Oops\WebpackNetteAdapter;
 
 use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
+use Oops\WebpackNetteAdapter\DevServer\DevServer;
 
 
 class AssetLocator
