@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Manifest;
+namespace Oops\WebpackNetteAdapter\Manifest\Mapper;
+
+use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
+
 
 /**
  * Maps from https://github.com/ztoben/assets-webpack-plugin format to flat files
@@ -20,12 +23,8 @@ namespace Oops\WebpackNetteAdapter\Manifest;
  * }
  *
  */
-class AssetsWebpackPluginMapper implements ManifestMapper
+class AssetsWebpackPluginMapper extends ManifestMapper
 {
-	public function __construct()
-	{
-	}
-
 	/**
 	 * @inheritDoc
 	 */

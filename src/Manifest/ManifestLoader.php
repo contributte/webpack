@@ -25,10 +25,10 @@ class ManifestLoader
 	private $manifestMapper;
 
 
-	public function __construct(BuildDirectoryProvider $directoryProvider, ?ManifestMapper $manifestMapper = null)
+	public function __construct(BuildDirectoryProvider $directoryProvider, ManifestMapper $manifestMapper)
 	{
 		$this->directoryProvider = $directoryProvider;
-		$this->manifestMapper = $manifestMapper ?? new IdentityMapper();
+		$this->manifestMapper = $manifestMapper;
 	}
 
 

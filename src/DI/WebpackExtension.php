@@ -18,7 +18,7 @@ use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer;
-use Oops\WebpackNetteAdapter\Manifest\IdentityMapper;
+use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
 use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
@@ -50,7 +50,7 @@ class WebpackExtension extends CompilerExtension
 		'manifest' => [
 			'name' => NULL,
 			'optimize' => NULL,
-			'mapper' => NULL,
+			'mapper' => WebpackManifestPluginMapper::class,
 		]
 	];
 
@@ -164,12 +164,10 @@ class WebpackExtension extends CompilerExtension
 		if ($config['manifest']['name'] !== NULL) {
 			if ( ! $config['manifest']['optimize']) {
 				$loader = $builder->addDefinition($this->prefix('manifestLoader'))
-					->setFactory(ManifestLoader::class)
+					->setFactory(ManifestLoader::class, [
+						1 => new Statement($config['manifest']['mapper']),
+					])
 					->setAutowired(FALSE);
-
-				if ($config['manifest']['mapper'] !== NULL) {
-					$loader->getFactory()->arguments[1] = new Statement($config['manifest']['mapper']);
-				}
 
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
 					$config['manifest']['name'],
@@ -181,13 +179,11 @@ class WebpackExtension extends CompilerExtension
 					$config['devServer']['enabled'],
 					$config['devServer']['url'] ?? '',
 					$config['devServer']['publicUrl'] ?? '',
-					$config['devServer']['timeout'] ?? 0.1,
+					$config['devServer']['timeout'],
 					new Client()
 				);
 
-				$mapperInstance = ($config['manifest']['mapper'] === NULL)
-					? NULL
-					: new $config['manifest']['mapper']();
+				$mapperInstance = new $config['manifest']['mapper']();
 
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
 				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance);
