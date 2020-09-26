@@ -16,7 +16,7 @@
 		"issues": "https://github.com/o2ps/WebpackNetteAdapter/issues"
 	},
 	"require": {
-		"php": "^7.2",
+		"php": ">=7.2",
 		"guzzlehttp/guzzle": "^6.3 || ^7.0",
 		"nette/di": "^2.4.10 || ^3.0"
 	},
@@ -27,7 +27,7 @@
 		"nette/bootstrap": "^2.4 || ^3.0",
 		"nette/tester": "^2.0",
 		"phpstan/phpstan": "^0.12",
-		"tracy/tracy": "^2.4 || ^3.0"
+		"tracy/tracy": "^2.4"
 	},
 	"suggest": {
 		"tracy/tracy": "to enable asset debugging in the debug bar panel",
