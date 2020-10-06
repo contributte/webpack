@@ -1,29 +1,21 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Oops\WebpackNetteAdapter;
 
-
 use Oops\WebpackNetteAdapter\DevServer\DevServer;
-
 
 /**
  * @internal
  */
 class BuildDirectoryProvider
 {
-
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $directory;
 
-	/**
-	 * @var DevServer
-	 */
+	/** @var DevServer */
 	private $devServer;
-
 
 	public function __construct(string $directory, DevServer $devServer)
 	{
@@ -31,12 +23,10 @@ class BuildDirectoryProvider
 		$this->devServer = $devServer;
 	}
 
-
 	public function getBuildDirectory(): string
 	{
 		return $this->devServer->isAvailable()
 			? $this->devServer->getInternalUrl()
 			: $this->directory;
 	}
-
 }

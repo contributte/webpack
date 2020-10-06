@@ -1,34 +1,25 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Oops\WebpackNetteAdapter;
 
 use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
 use Oops\WebpackNetteAdapter\DevServer\DevServer;
 
-
 /**
  * @internal
  */
 class PublicPathProvider
 {
-
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $path;
 
-	/**
-	 * @var BasePathProvider
-	 */
+	/** @var BasePathProvider */
 	private $basePathProvider;
 
-	/**
-	 * @var DevServer
-	 */
+	/** @var DevServer */
 	private $devServer;
-
 
 	public function __construct(string $path, BasePathProvider $basePathProvider, DevServer $devServer)
 	{
@@ -37,12 +28,10 @@ class PublicPathProvider
 		$this->devServer = $devServer;
 	}
 
-
 	public function getPublicPath(): string
 	{
 		return $this->devServer->isAvailable()
 			? $this->devServer->getUrl()
 			: \rtrim($this->basePathProvider->getBasePath(), '/') . '/' . \trim($this->path, '/');
 	}
-
 }

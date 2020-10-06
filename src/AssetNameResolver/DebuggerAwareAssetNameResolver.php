@@ -1,29 +1,21 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Oops\WebpackNetteAdapter\AssetNameResolver;
 
-
 final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 {
-
-	/**
-	 * @var AssetNameResolverInterface
-	 */
+	/** @var AssetNameResolverInterface */
 	private $inner;
 
-	/**
-	 * @var array<array{string, string}>
-	 */
+	/** @var array<array{string, string}> */
 	private $resolvedAssets = [];
-
 
 	public function __construct(AssetNameResolverInterface $inner)
 	{
 		$this->inner = $inner;
 	}
-
 
 	public function resolveAssetName(string $asset): string
 	{
@@ -32,7 +24,6 @@ final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 		return $resolved;
 	}
 
-
 	/**
 	 * @return array<array{string, string}>
 	 */
@@ -40,5 +31,4 @@ final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 	{
 		return $this->resolvedAssets;
 	}
-
 }

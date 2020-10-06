@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter\Manifest;
 
@@ -11,7 +11,6 @@ use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
 use Tester\Assert;
 use Tester\TestCase;
 
-
 require_once __DIR__ . '/../../bootstrap.php';
 
 
@@ -20,7 +19,6 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 class ManifestLoaderTest extends TestCase
 {
-
 	public function testLoader(): void
 	{
 		$buildDirProvider = \Mockery::mock(BuildDirectoryProvider::class);
@@ -36,13 +34,12 @@ class ManifestLoaderTest extends TestCase
 		Assert::same(__DIR__ . '/manifest.json', $manifestLoader->getManifestPath('manifest.json'));
 		Assert::same(['asset.js' => 'mapped.asset.js'], $manifestLoader->loadManifest('manifest.json'));
 
-		Assert::throws(function () use ($manifestLoader) {
+		Assert::throws(function () use ($manifestLoader): void {
 			$manifestLoader->loadManifest('unknown.js');
 		}, CannotLoadManifestException::class);
 
 		\Mockery::close();
 	}
-
 }
 
 

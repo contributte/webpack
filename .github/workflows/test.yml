@@ -26,7 +26,7 @@ jobs:
           composer require "nette/di:${{ matrix.nette }}" --no-update
           composer require "nette/application:${{ matrix.nette }}" "nette/bootstrap:${{ matrix.nette }}" --dev --no-update
           composer update --prefer-source --no-interaction
-      - run: vendor/bin/tester -C tests/
+      - run: composer run tests
 
   coverage:
     runs-on: ubuntu-latest
@@ -41,7 +41,7 @@ jobs:
           composer require "nette/di:^3.0" --no-update
           composer require "nette/application:^3.0" "nette/bootstrap:^3.0" --dev --no-update
           composer update --prefer-source --no-interaction
-      - run: vendor/bin/tester -C --coverage coverage.xml --coverage-src src/ tests/
+      - run: composer run tests-with-coverage
       - uses: codecov/codecov-action@v1
 
   phpstan:
@@ -56,4 +56,18 @@ jobs:
           composer require "nette/di:^3.0" --no-update
           composer require "nette/application:^3.0" "nette/bootstrap:^3.0" --dev --no-update
           composer update --prefer-source --no-interaction
-      - run: vendor/bin/phpstan.phar analyze --no-progress --no-interaction -l max src/
+      - run: composer run phpstan -- --no-progress --no-interaction
+
+  coding-standard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+      - run: |
+          composer require "nette/di:^3.0" --no-update
+          composer require "nette/application:^3.0" "nette/bootstrap:^3.0" --dev --no-update
+          composer update --prefer-source --no-interaction
+      - run: composer run check-code-style

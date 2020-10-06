@@ -27,6 +27,7 @@
 		"nette/bootstrap": "^2.4 || ^3.0",
 		"nette/tester": "^2.0",
 		"phpstan/phpstan": "^0.12",
+		"symplify/easy-coding-standard": "^8.3",
 		"tracy/tracy": "^2.4"
 	},
 	"suggest": {
@@ -43,5 +44,15 @@
 			"OopsTests\\WebpackNetteAdapter\\": "tests/WebpackNetteAdapter"
 		}
 	},
-	"prefer-stable": true
+	"scripts": {
+		"phpstan": "vendor/bin/phpstan analyze -l max src",
+		"tests": "vendor/bin/tester -C tests",
+		"tests-with-coverage": "vendor/bin/tester -C --coverage coverage.xml --coverage-src src tests",
+		"check-code-style": "vendor/bin/ecs check src tests",
+		"fix-code-style": "vendor/bin/ecs check src tests --fix"
+	},
+	"prefer-stable": true,
+	"config": {
+		"sort-packages": true
+	}
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter;
 
@@ -12,7 +12,6 @@ use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;
 
-
 require_once __DIR__ . '/../bootstrap.php';
 
 
@@ -21,7 +20,6 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 class AssetLocatorTest extends TestCase
 {
-
 	public function testLocateInBuildDirectory(): void
 	{
 		$directoryProvider = \Mockery::mock(BuildDirectoryProvider::class);
@@ -40,12 +38,11 @@ class AssetLocatorTest extends TestCase
 			->andReturn('bar.js');
 
 		$devServer = \Mockery::mock(DevServer::class);
-		$devServer->shouldReceive('isAvailable')->andReturn(FALSE);
+		$devServer->shouldReceive('isAvailable')->andReturn(false);
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
 		Assert::same('/home/user/bar.js', $assetLocator->locateInBuildDirectory('bar.js'));
 	}
-
 
 	public function testLocateInPublicPath(): void
 	{
@@ -65,12 +62,11 @@ class AssetLocatorTest extends TestCase
 			->andReturn('bar.js');
 
 		$devServer = \Mockery::mock(DevServer::class);
-		$devServer->shouldReceive('isAvailable')->andReturn(FALSE);
+		$devServer->shouldReceive('isAvailable')->andReturn(false);
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
 		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
 	}
-
 
 	public function testIgnoredAssets(): void
 	{
@@ -95,7 +91,7 @@ class AssetLocatorTest extends TestCase
 			->never();
 
 		$devServer = \Mockery::mock(DevServer::class);
-		$devServer->shouldReceive('isAvailable')->andReturn(TRUE);
+		$devServer->shouldReceive('isAvailable')->andReturn(true);
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, ['foo.css']);
 		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
@@ -104,12 +100,10 @@ class AssetLocatorTest extends TestCase
 		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
 	}
 
-
 	protected function tearDown(): void
 	{
 		\Mockery::close();
 	}
-
 }
 
 

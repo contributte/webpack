@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter;
 
@@ -10,7 +10,6 @@ use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;
 
-
 require_once __DIR__ . '/../bootstrap.php';
 
 
@@ -19,20 +18,18 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 class PublicPathProviderTest extends TestCase
 {
-
 	public function testWithDevServer(): void
 	{
 		$basePathProvider = \Mockery::mock(BasePathProvider::class);
 		$basePathProvider->shouldReceive('getBasePath')->never();
 
 		$devServer = \Mockery::mock(DevServer::class);
-		$devServer->shouldReceive('isAvailable')->andReturn(TRUE);
+		$devServer->shouldReceive('isAvailable')->andReturn(true);
 		$devServer->shouldReceive('getUrl')->andReturn('http://localhost:3000');
 
 		$provider = new PublicPathProvider('dist/', $basePathProvider, $devServer);
 		Assert::same('http://localhost:3000', $provider->getPublicPath());
 	}
-
 
 	public function testWithoutDevServer(): void
 	{
@@ -40,20 +37,18 @@ class PublicPathProviderTest extends TestCase
 		$basePathProvider->shouldReceive('getBasePath')->andReturn('/');
 
 		$devServer = \Mockery::mock(DevServer::class);
-		$devServer->shouldReceive('isAvailable')->andReturn(FALSE);
+		$devServer->shouldReceive('isAvailable')->andReturn(false);
 		$devServer->shouldReceive('getUrl')->never();
 
 		$provider = new PublicPathProvider('dist/', $basePathProvider, $devServer);
 		Assert::same('/dist', $provider->getPublicPath());
 	}
 
-
 	protected function tearDown(): void
 	{
 		parent::tearDown();
 		\Mockery::close();
 	}
-
 }
 
 
