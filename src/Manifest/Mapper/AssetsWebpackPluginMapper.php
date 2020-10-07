@@ -22,7 +22,7 @@ use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
  * }
  *
  */
-class AssetsWebpackPluginMapper extends ManifestMapper
+final class AssetsWebpackPluginMapper extends ManifestMapper
 {
 	/**
 	 * @inheritDoc

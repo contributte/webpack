@@ -7,7 +7,7 @@ namespace Oops\WebpackNetteAdapter\AssetNameResolver;
 final class StaticAssetNameResolver implements AssetNameResolverInterface
 {
 	/** @var array<string, string> */
-	private $resolutions;
+	private array $resolutions;
 
 	/**
 	 * @param array<string, string> $resolutions

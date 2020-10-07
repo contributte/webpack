@@ -6,11 +6,10 @@ namespace Oops\WebpackNetteAdapter\AssetNameResolver;
 
 final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 {
-	/** @var AssetNameResolverInterface */
-	private $inner;
+	private AssetNameResolverInterface $inner;
 
 	/** @var array<array{string, string}> */
-	private $resolvedAssets = [];
+	private array $resolvedAssets = [];
 
 	public function __construct(AssetNameResolverInterface $inner)
 	{

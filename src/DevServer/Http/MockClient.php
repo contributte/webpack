@@ -9,8 +9,7 @@ namespace Oops\WebpackNetteAdapter\DevServer\Http;
  */
 final class MockClient implements Client
 {
-	/** @var bool */
-	private $isAvailable;
+	private bool $isAvailable;
 
 	public function __construct(bool $isAvailable)
 	{

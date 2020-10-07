@@ -8,6 +8,7 @@ use Latte\Loaders\StringLoader;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\Configurator;
 use Nette\DI\Container;
+use Nette\DI\InvalidConfigurationException;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
 use Oops\WebpackNetteAdapter\AssetNameResolver\DebuggerAwareAssetNameResolver;
@@ -16,19 +17,18 @@ use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
 use Oops\WebpackNetteAdapter\AssetNameResolver\StaticAssetNameResolver;
 use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
 use Oops\WebpackNetteAdapter\DevServer\DevServer;
-use Oops\WebpackNetteAdapter\DI\ConfigurationException;
 use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;
 use Tracy\Bar;
+use function OopsTests\WebpackNetteAdapter\createEnabledDevServer;
 
 require_once __DIR__ . '/../../bootstrap.php';
-
 
 /**
  * @testCase
  */
-class WebpackExtensionTest extends TestCase
+final class WebpackExtensionTest extends TestCase
 {
 	public function testBasic(): void
 	{
@@ -66,15 +66,15 @@ class WebpackExtensionTest extends TestCase
 	{
 		Assert::throws(function (): void {
 			$this->createContainer('missingBuildDirectory');
-		}, ConfigurationException::class, 'You need to specify the build directory.');
+		}, InvalidConfigurationException::class);
 
 		Assert::throws(function (): void {
 			$this->createContainer('missingBuildPublicPath');
-		}, ConfigurationException::class, 'You need to specify the build public path.');
+		}, InvalidConfigurationException::class);
 
 		Assert::throws(function (): void {
 			$this->createContainer('missingDevServerUrl');
-		}, ConfigurationException::class, 'You need to specify the dev server URL.');
+		}, InvalidConfigurationException::class);
 	}
 
 	public function testManifestResolver(): void
@@ -101,7 +101,7 @@ class WebpackExtensionTest extends TestCase
 		$cache = $refl->getProperty('resolutions');
 		$cache->setAccessible(true);
 
-		Assert::same(["asset.js" => "cached.resolved.asset.js"], $cache->getValue($resolver));
+		Assert::same(['asset.js' => 'cached.resolved.asset.js'], $cache->getValue($resolver));
 	}
 
 	public function testIgnoredAssets(): void
@@ -109,21 +109,16 @@ class WebpackExtensionTest extends TestCase
 		$container = $this->createContainer('ignoredAssets');
 
 		// mock devServer so that it is available
-		$devServerMock = \Mockery::mock(DevServer::class);
-		$devServerMock->shouldReceive('getUrl')->andReturn('/devServer/');
-		$devServerMock->shouldReceive('getInternalUrl')->andReturn('/devServer-internal/');
-		$devServerMock->shouldReceive('isAvailable')->andReturn(true);
+		$devServerMock = createEnabledDevServer(true);
 		$container->removeService('webpack.devServer');
 		$container->addService('webpack.devServer', $devServerMock);
 
 		/** @var AssetLocator $assetLocator */
 		$assetLocator = $container->getByType(AssetLocator::class);
-		Assert::same('/devServer/foo.js', $assetLocator->locateInPublicPath('foo.js'));
-		Assert::same('/devServer-internal/foo.js', $assetLocator->locateInBuildDirectory('foo.js'));
+		Assert::same('http://localhost:3000/foo.js', $assetLocator->locateInPublicPath('foo.js'));
+		Assert::same('http://webpack-dev-server:3000/foo.js', $assetLocator->locateInBuildDirectory('foo.js'));
 		Assert::same('data:,', $assetLocator->locateInPublicPath('foo.css'));
 		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
-
-		\Mockery::close();
 	}
 
 	public function testLatte(): void
@@ -154,6 +149,5 @@ class WebpackExtensionTest extends TestCase
 		return $configurator->createContainer();
 	}
 }
-
 
 (new WebpackExtensionTest())->run();

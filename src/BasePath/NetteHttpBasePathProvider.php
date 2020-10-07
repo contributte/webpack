@@ -8,8 +8,7 @@ use Nette\Http\IRequest;
 
 final class NetteHttpBasePathProvider implements BasePathProvider
 {
-	/** @var IRequest */
-	private $httpRequest;
+	private IRequest $httpRequest;
 
 	public function __construct(IRequest $httpRequest)
 	{

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Oops\WebpackNetteAdapter\DI;
 
+use Nette;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
+use Nette\DI\Definitions\ServiceDefinition;
+use Nette\DI\Definitions\Statement;
 use Nette\DI\MissingServiceException;
-use Nette\DI\ServiceDefinition;
-use Nette\DI\Statement;
+use Nette\Schema\Expect;
 use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\AssetNameResolver;
 use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
@@ -24,58 +26,51 @@ use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tracy;
 
 /**
- * @property array<string, mixed> $config
+ * @property-read array<string, mixed> $config
  */
-class WebpackExtension extends CompilerExtension
+final class WebpackExtension extends CompilerExtension
 {
-	/** @var array<string, mixed> */
-	private $defaults = [
-		'debugger' => null,
-		'macros' => null,
-		'devServer' => [
-			'enabled' => null,
-			'url' => null,
-			'publicUrl' => null,
-			'timeout' => 0.1,
-			'ignoredAssets' => [],
-		],
-		'build' => [
-			'directory' => null,
-			'publicPath' => null,
-		],
-		'manifest' => [
-			'name' => null,
-			'optimize' => null,
-			'mapper' => WebpackManifestPluginMapper::class,
-		]
-	];
+	private bool $debugMode;
+
+	private bool $consoleMode;
 
 	public function __construct(bool $debugMode, ?bool $consoleMode = null)
 	{
-		$consoleMode = $consoleMode ?? \PHP_SAPI === 'cli';
+		$this->debugMode = $debugMode;
+		$this->consoleMode = $consoleMode ?? \PHP_SAPI === 'cli';
+	}
 
-		$this->defaults['debugger'] = $debugMode;
-		$this->defaults['macros'] = \interface_exists(ILatteFactory::class);
-		$this->defaults['devServer']['enabled'] = $debugMode;
-		$this->defaults['manifest']['optimize'] = !$debugMode && (!$consoleMode || (bool) \getenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST'));
+	public function getConfigSchema(): Nette\Schema\Schema
+	{
+		return Expect::structure([
+			'debugger' => Expect::bool($this->debugMode),
+			'macros' => Expect::bool(\interface_exists(ILatteFactory::class)),
+			'devServer' => Expect::structure([
+				'enabled' => Expect::bool($this->debugMode),
+				'url' => Expect::string()->nullable()->dynamic(),
+				'publicUrl' => Expect::string()->nullable()->dynamic(),
+				'timeout' => Expect::anyOf(Expect::float(), Expect::int())->default(0.1),
+				'ignoredAssets' => Expect::listOf(Expect::string())->default([]),
+			])->castTo('array')
+				->assert(
+					static fn (array $devServer): bool => !$devServer['enabled'] || $devServer['url'] !== null,
+					"The 'webpack › devServer › url' expects to be string, null given."
+				),
+			'build' => Expect::structure([
+				'directory' => Expect::string()->required(),
+				'publicPath' => Expect::string()->required(),
+			])->castTo('array'),
+			'manifest' => Expect::structure([
+				'name' => Expect::string()->nullable(),
+				'optimize' => Expect::bool(!$this->debugMode && (!$this->consoleMode || (bool) \getenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST'))),
+				'mapper' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->default(WebpackManifestPluginMapper::class),
+			])->castTo('array'),
+		])->castTo('array');
 	}
 
 	public function loadConfiguration(): void
 	{
 		$builder = $this->getContainerBuilder();
-		$config = $this->validateConfig($this->defaults);
-
-		if (empty($config['build']['directory'])) {
-			throw new ConfigurationException('You need to specify the build directory.');
-		}
-
-		if (empty($config['build']['publicPath'])) {
-			throw new ConfigurationException('You need to specify the build public path.');
-		}
-
-		if ($config['devServer']['enabled'] && empty($config['devServer']['url'])) {
-			throw new ConfigurationException('You need to specify the dev server URL.');
-		}
 
 		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
 			->setType(BasePathProvider::class)
@@ -83,42 +78,42 @@ class WebpackExtension extends CompilerExtension
 			->setAutowired(false);
 
 		$builder->addDefinition($this->prefix('pathProvider'))
-			->setFactory(PublicPathProvider::class, [$config['build']['publicPath'], $basePathProvider]);
+			->setFactory(PublicPathProvider::class, [$this->config['build']['publicPath'], $basePathProvider]);
 
 		$builder->addDefinition($this->prefix('buildDirProvider'))
-			->setFactory(BuildDirectoryProvider::class, [$config['build']['directory']]);
+			->setFactory(BuildDirectoryProvider::class, [$this->config['build']['directory']]);
 
 		$builder->addDefinition($this->prefix('devServer'))
 			->setFactory(DevServer::class, [
-				$config['devServer']['enabled'],
-				$config['devServer']['url'] ?? '',
-				$config['devServer']['publicUrl'],
-				$config['devServer']['timeout'],
+				$this->config['devServer']['enabled'],
+				$this->config['devServer']['url'] ?? '',
+				$this->config['devServer']['publicUrl'],
+				$this->config['devServer']['timeout'],
 				new Statement(CurlClient::class),
 			]);
 
 		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
 			->setFactory(AssetLocator::class, [
-				'ignoredAssetNames' => $config['devServer']['ignoredAssets'],
+				'ignoredAssetNames' => $this->config['devServer']['ignoredAssets'],
 			]);
 
-		$assetResolver = $this->setupAssetResolver($config);
+		$assetResolver = $this->setupAssetResolver($this->config);
 
-		if ($config['debugger']) {
+		if ($this->config['debugger']) {
 			$assetResolver->setAutowired(false);
 			$builder->addDefinition($this->prefix('assetResolver.debug'))
 				->setFactory(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
 		}
 
 		// latte macro
-		if ($config['macros']) {
+		if ($this->config['macros']) {
 			try {
 				$latteFactory = $builder->getDefinitionByType(ILatteFactory::class);
-				$definition = $latteFactory instanceof FactoryDefinition
-					? $latteFactory->getResultDefinition()
-					: $latteFactory;
+				\assert($latteFactory instanceof FactoryDefinition);
 
+				$definition = $latteFactory->getResultDefinition();
 				\assert($definition instanceof ServiceDefinition);
+
 				$definition
 					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
 					->addSetup('?->onCompile[] = function ($engine) { Oops\WebpackNetteAdapter\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);

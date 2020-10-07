@@ -7,22 +7,18 @@ namespace Oops\WebpackNetteAdapter;
 use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
 use Oops\WebpackNetteAdapter\DevServer\DevServer;
 
-class AssetLocator
+final class AssetLocator
 {
-	/** @var BuildDirectoryProvider */
-	private $directoryProvider;
+	private BuildDirectoryProvider $directoryProvider;
 
-	/** @var PublicPathProvider */
-	private $publicPathProvider;
+	private PublicPathProvider $publicPathProvider;
 
-	/** @var AssetNameResolverInterface */
-	private $assetResolver;
+	private AssetNameResolverInterface $assetResolver;
 
-	/** @var DevServer */
-	private $devServer;
+	private DevServer $devServer;
 
 	/** @var string[] */
-	private $ignoredAssetNames;
+	private array $ignoredAssetNames;
 
 	/**
 	 * @param string[] $ignoredAssetNames

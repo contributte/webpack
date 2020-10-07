@@ -11,11 +11,10 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-
 /**
  * @testCase
  */
-class DebuggerAwareAssetNameResolverTest extends TestCase
+final class DebuggerAwareAssetNameResolverTest extends TestCase
 {
 	public function testResolver(): void
 	{
@@ -29,6 +28,5 @@ class DebuggerAwareAssetNameResolverTest extends TestCase
 		], $resolver->getResolvedAssets());
 	}
 }
-
 
 (new DebuggerAwareAssetNameResolverTest())->run();

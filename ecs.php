@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PhpCsFixer\Fixer\Basic\BracesFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer;
+use PhpCsFixer\Fixer\StringNotation\SingleQuoteFixer;
 use SlevomatCodingStandard\Sniffs\Variables\UnusedVariableSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\EasyCodingStandard\ValueObject\Option;
@@ -18,7 +19,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 	$parameters->set(Option::EXCLUDE_PATHS, ['temp/*']);
 
 	$parameters->set(Option::INDENTATION, Option::INDENTATION_TAB);
-	$parameters->set(Option::SETS, [SetList::CLEAN_CODE, SetList::PSR_12, SetList::PHP_71]);
+	$parameters->set(Option::SETS, [SetList::CLEAN_CODE, SetList::PSR_12, SetList::PHP_71, SetList::PHP_73_MIGRATION]);
+	$services->set(SingleQuoteFixer::class);
 	$services->set(ClassAttributesSeparationFixer::class);
 	$services->set(PhpdocLineSpanFixer::class)
 		->call('configure', [[

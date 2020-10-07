@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace Oops\WebpackNetteAdapter\Manifest;
 
-class CannotLoadManifestException extends \RuntimeException
+final class CannotLoadManifestException extends \RuntimeException
 {
 }

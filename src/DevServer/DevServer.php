@@ -6,25 +6,19 @@ namespace Oops\WebpackNetteAdapter\DevServer;
 
 use Oops\WebpackNetteAdapter\DevServer\Http\Client;
 
-class DevServer
+final class DevServer
 {
-	/** @var bool */
-	private $enabled;
+	private bool $enabled;
 
-	/** @var bool */
-	private $available;
+	private ?bool $available = null;
 
-	/** @var string */
-	private $url;
+	private string $url;
 
-	/** @var ?string */
-	private $publicUrl;
+	private ?string $publicUrl;
 
-	/** @var float */
-	private $timeout;
+	private float $timeout;
 
-	/** @var Client */
-	private $httpClient;
+	private Client $httpClient;
 
 	public function __construct(bool $enabled, string $url, ?string $publicUrl, float $timeout, Client $httpClient)
 	{

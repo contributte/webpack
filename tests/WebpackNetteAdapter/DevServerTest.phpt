@@ -11,11 +11,10 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../bootstrap.php';
 
-
 /**
  * @testCase
  */
-class DevServerTest extends TestCase
+final class DevServerTest extends TestCase
 {
 	public function testDevServer(): void
 	{
@@ -49,6 +48,5 @@ class DevServerTest extends TestCase
 		Assert::false($devServer->isAvailable());
 	}
 }
-
 
 (new DevServerTest())->run();

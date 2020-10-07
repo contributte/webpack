@@ -10,13 +10,11 @@ use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 /**
  * @internal
  */
-class ManifestLoader
+final class ManifestLoader
 {
-	/** @var BuildDirectoryProvider */
-	private $directoryProvider;
+	private BuildDirectoryProvider $directoryProvider;
 
-	/** @var ManifestMapper */
-	private $manifestMapper;
+	private ManifestMapper $manifestMapper;
 
 	public function __construct(BuildDirectoryProvider $directoryProvider, ManifestMapper $manifestMapper)
 	{

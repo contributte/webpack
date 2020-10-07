@@ -10,11 +10,10 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
-
 /**
  * @testCase
  */
-class WebpackManifestPluginMapperTest extends TestCase
+final class WebpackManifestPluginMapperTest extends TestCase
 {
 	public function testMapper(): void
 	{
@@ -29,6 +28,5 @@ class WebpackManifestPluginMapperTest extends TestCase
 		], $result);
 	}
 }
-
 
 (new WebpackManifestPluginMapperTest())->run();
