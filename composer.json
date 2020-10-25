@@ -16,15 +16,14 @@
 		"issues": "https://github.com/o2ps/WebpackNetteAdapter/issues"
 	},
 	"require": {
-		"php": ">=7.2",
+		"php": ">=7.4",
 		"ext-curl": "*",
-		"nette/di": "^2.4.10 || ^3.0"
+		"nette/di": "^3.0"
 	},
 	"require-dev": {
 		"latte/latte": "^2.4",
-		"mockery/mockery": "^1.0",
-		"nette/application": "^2.4 || ^3.0",
-		"nette/bootstrap": "^2.4 || ^3.0",
+		"nette/application": "^3.0",
+		"nette/bootstrap": "^3.0",
 		"nette/tester": "^2.0",
 		"phpstan/phpstan": "^0.12",
 		"symplify/easy-coding-standard": "^8.3",
@@ -37,11 +36,6 @@
 	"autoload": {
 		"psr-4": {
 			"Oops\\WebpackNetteAdapter\\": "src/"
-		}
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"OopsTests\\WebpackNetteAdapter\\": "tests/WebpackNetteAdapter"
 		}
 	},
 	"scripts": {

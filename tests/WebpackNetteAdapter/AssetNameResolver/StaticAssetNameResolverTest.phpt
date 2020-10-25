@@ -11,11 +11,10 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-
 /**
  * @testCase
  */
-class StaticAssetNameResolverTest extends TestCase
+final class StaticAssetNameResolverTest extends TestCase
 {
 	public function testResolver(): void
 	{
@@ -37,6 +36,5 @@ class StaticAssetNameResolverTest extends TestCase
 		}, CannotResolveAssetNameException::class);
 	}
 }
-
 
 (new StaticAssetNameResolverTest())->run();

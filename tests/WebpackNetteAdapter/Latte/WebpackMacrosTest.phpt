@@ -10,21 +10,27 @@ use Oops\WebpackNetteAdapter\AssetLocator;
 use Oops\WebpackNetteAdapter\Latte\WebpackMacros;
 use Tester\Assert;
 use Tester\TestCase;
+use function OopsTests\WebpackNetteAdapter\createAssetNameResolver;
+use function OopsTests\WebpackNetteAdapter\createBuildDirectoryProvider;
+use function OopsTests\WebpackNetteAdapter\createDisabledDevServer;
+use function OopsTests\WebpackNetteAdapter\createPublicPathProvider;
 
 require_once __DIR__ . '/../../bootstrap.php';
-
 
 /**
  * @testCase
  */
-class WebpackMacrosTest extends TestCase
+final class WebpackMacrosTest extends TestCase
 {
 	public function testMacros(): void
 	{
-		$assetLocator = \Mockery::mock(AssetLocator::class);
-		$assetLocator->shouldReceive('locateInPublicPath')
-			->with('asset.js')
-			->andReturn('/dist/asset.js');
+		$assetLocator = new AssetLocator(
+			createBuildDirectoryProvider('/home/user'),
+			createPublicPathProvider('/dist'),
+			createAssetNameResolver(['asset.js' => 'asset.js']),
+			createDisabledDevServer(),
+			[],
+		);
 
 		$latte = new Engine();
 		$latte->addProvider('webpackAssetLocator', $assetLocator);
@@ -34,10 +40,7 @@ class WebpackMacrosTest extends TestCase
 
 		$latte->setLoader(new StringLoader());
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));
-
-		\Mockery::close();
 	}
 }
-
 
 (new WebpackMacrosTest())->run();

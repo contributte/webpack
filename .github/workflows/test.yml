@@ -4,16 +4,9 @@ on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ matrix.nightly }}
     strategy:
       matrix:
-        php: ['7.2', '7.3', '7.4']
-        nette: ['^2.4', '^3.0']
-        nightly: [false]
-        include:
-          - php: '8.0'
-            nette: '^3.0'
-            nightly: true
+        php: ['7.4', '8.0']
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -22,10 +15,7 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: curl, iconv, json, mbstring, tokenizer
           coverage: none
-      - run: |
-          composer require "nette/di:${{ matrix.nette }}" --no-update
-          composer require "nette/application:${{ matrix.nette }}" "nette/bootstrap:${{ matrix.nette }}" --dev --no-update
-          composer update --prefer-source --no-interaction
+      - run: composer install --ignore-platform-reqs --no-interaction
       - run: composer run tests
 
   coverage:
@@ -37,10 +27,7 @@ jobs:
           php-version: '7.4'
           extensions: curl, iconv, json, mbstring, tokenizer
           coverage: pcov
-      - run: |
-          composer require "nette/di:^3.0" --no-update
-          composer require "nette/application:^3.0" "nette/bootstrap:^3.0" --dev --no-update
-          composer update --prefer-source --no-interaction
+      - run: composer install --no-interaction
       - run: composer run tests-with-coverage
       - uses: codecov/codecov-action@v1
 
@@ -52,10 +39,7 @@ jobs:
         with:
           php-version: '7.4'
           coverage: none
-      - run: |
-          composer require "nette/di:^3.0" --no-update
-          composer require "nette/application:^3.0" "nette/bootstrap:^3.0" --dev --no-update
-          composer update --prefer-source --no-interaction
+      - run: composer install --no-interaction
       - run: composer run phpstan -- --no-progress --no-interaction
 
   coding-standard:
@@ -66,8 +50,5 @@ jobs:
         with:
           php-version: '7.4'
           coverage: none
-      - run: |
-          composer require "nette/di:^3.0" --no-update
-          composer require "nette/application:^3.0" "nette/bootstrap:^3.0" --dev --no-update
-          composer update --prefer-source --no-interaction
+      - run: composer install --no-interaction
       - run: composer run check-code-style

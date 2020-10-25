@@ -9,7 +9,7 @@ use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
 /**
  * Default identity mapper compatible with webpack-manifest-mapper's flat structure.
  */
-class WebpackManifestPluginMapper extends ManifestMapper
+final class WebpackManifestPluginMapper extends ManifestMapper
 {
 	public function map(array $manifest): array
 	{

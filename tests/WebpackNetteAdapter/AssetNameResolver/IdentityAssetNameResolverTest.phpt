@@ -10,11 +10,10 @@ use Tester\TestCase;
 
 require_once __DIR__ . '/../../bootstrap.php';
 
-
 /**
  * @testCase
  */
-class IdentityAssetNameResolverTest extends TestCase
+final class IdentityAssetNameResolverTest extends TestCase
 {
 	public function testResolver(): void
 	{
@@ -22,6 +21,5 @@ class IdentityAssetNameResolverTest extends TestCase
 		Assert::same('asset.js', $resolver->resolveAssetName('asset.js'));
 	}
 }
-
 
 (new IdentityAssetNameResolverTest())->run();

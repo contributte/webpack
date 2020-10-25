@@ -10,16 +10,13 @@ use Oops\WebpackNetteAdapter\DevServer\DevServer;
 /**
  * @internal
  */
-class PublicPathProvider
+final class PublicPathProvider
 {
-	/** @var string */
-	private $path;
+	private string $path;
 
-	/** @var BasePathProvider */
-	private $basePathProvider;
+	private BasePathProvider $basePathProvider;
 
-	/** @var DevServer */
-	private $devServer;
+	private DevServer $devServer;
 
 	public function __construct(string $path, BasePathProvider $basePathProvider, DevServer $devServer)
 	{

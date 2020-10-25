@@ -9,13 +9,11 @@ use Oops\WebpackNetteAdapter\DevServer\DevServer;
 /**
  * @internal
  */
-class BuildDirectoryProvider
+final class BuildDirectoryProvider
 {
-	/** @var string */
-	private $directory;
+	private string $directory;
 
-	/** @var DevServer */
-	private $devServer;
+	private DevServer $devServer;
 
 	public function __construct(string $directory, DevServer $devServer)
 	{

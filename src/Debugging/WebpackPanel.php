@@ -11,14 +11,11 @@ use Tracy\IBarPanel;
 
 final class WebpackPanel implements IBarPanel
 {
-	/** @var PublicPathProvider */
-	private $pathProvider;
+	private PublicPathProvider $pathProvider;
 
-	/** @var DebuggerAwareAssetNameResolver */
-	private $assetResolver;
+	private DebuggerAwareAssetNameResolver $assetResolver;
 
-	/** @var DevServer */
-	private $devServer;
+	private DevServer $devServer;
 
 	public function __construct(PublicPathProvider $pathProvider, DebuggerAwareAssetNameResolver $assetResolver, DevServer $devServer)
 	{

@@ -9,14 +9,12 @@ use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
 
 final class ManifestAssetNameResolver implements AssetNameResolverInterface
 {
-	/** @var string */
-	private $manifestName;
+	private string $manifestName;
 
-	/** @var ManifestLoader */
-	private $loader;
+	private ManifestLoader $loader;
 
-	/** @var array<string, string>|NULL */
-	private $manifestCache;
+	/** @var array<string, string>|null */
+	private ?array $manifestCache = null;
 
 	public function __construct(string $manifestName, ManifestLoader $loader)
 	{
