@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter\Latte;
 
@@ -11,7 +11,6 @@ use Oops\WebpackNetteAdapter\Latte\WebpackMacros;
 use Tester\Assert;
 use Tester\TestCase;
 
-
 require_once __DIR__ . '/../../bootstrap.php';
 
 
@@ -20,7 +19,6 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 class WebpackMacrosTest extends TestCase
 {
-
 	public function testMacros(): void
 	{
 		$assetLocator = \Mockery::mock(AssetLocator::class);
@@ -30,7 +28,7 @@ class WebpackMacrosTest extends TestCase
 
 		$latte = new Engine();
 		$latte->addProvider('webpackAssetLocator', $assetLocator);
-		$latte->onCompile[] = function (Engine $engine) {
+		$latte->onCompile[] = function (Engine $engine): void {
 			WebpackMacros::install($engine->getCompiler());
 		};
 
@@ -39,7 +37,6 @@ class WebpackMacrosTest extends TestCase
 
 		\Mockery::close();
 	}
-
 }
 
 

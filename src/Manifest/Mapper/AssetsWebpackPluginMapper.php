@@ -6,7 +6,6 @@ namespace Oops\WebpackNetteAdapter\Manifest\Mapper;
 
 use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
 
-
 /**
  * Maps from https://github.com/ztoben/assets-webpack-plugin format to flat files
  *

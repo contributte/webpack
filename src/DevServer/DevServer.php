@@ -1,45 +1,30 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Oops\WebpackNetteAdapter\DevServer;
 
 use Oops\WebpackNetteAdapter\DevServer\Http\Client;
 
-
 class DevServer
 {
-
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	private $enabled;
 
-	/**
-	 * @var bool
-	 */
+	/** @var bool */
 	private $available;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $url;
 
-	/**
-	 * @var ?string
-	 */
+	/** @var ?string */
 	private $publicUrl;
 
-	/**
-	 * @var float
-	 */
+	/** @var float */
 	private $timeout;
 
-	/**
-	 * @var Client
-	 */
+	/** @var Client */
 	private $httpClient;
-
 
 	public function __construct(bool $enabled, string $url, ?string $publicUrl, float $timeout, Client $httpClient)
 	{
@@ -50,36 +35,31 @@ class DevServer
 		$this->httpClient = $httpClient;
 	}
 
-
 	public function getUrl(): string
 	{
 		return $this->publicUrl ?? $this->url;
 	}
-
 
 	public function getInternalUrl(): string
 	{
 		return $this->url;
 	}
 
-
 	public function isEnabled(): bool
 	{
 		return $this->enabled;
 	}
 
-
 	public function isAvailable(): bool
 	{
-		if ( ! $this->isEnabled()) {
-			return FALSE;
+		if (!$this->isEnabled()) {
+			return false;
 		}
 
-		if ($this->available === NULL) {
+		if ($this->available === null) {
 			$this->available = $this->httpClient->isAvailable($this->url, $this->timeout);
 		}
 
 		return $this->available;
 	}
-
 }

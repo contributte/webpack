@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter\Manifest\Mapper;
 
 use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
 use Tester\Assert;
 use Tester\TestCase;
-
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
@@ -17,7 +16,6 @@ require_once __DIR__ . '/../../../bootstrap.php';
  */
 class WebpackManifestPluginMapperTest extends TestCase
 {
-
 	public function testMapper(): void
 	{
 		$mapper = new WebpackManifestPluginMapper();
@@ -30,7 +28,6 @@ class WebpackManifestPluginMapperTest extends TestCase
 			'asset.js' => 'resolved.asset.js',
 		], $result);
 	}
-
 }
 
 

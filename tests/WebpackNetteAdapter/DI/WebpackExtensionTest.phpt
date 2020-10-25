@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter\DI;
 
@@ -22,7 +22,6 @@ use Tester\Assert;
 use Tester\TestCase;
 use Tracy\Bar;
 
-
 require_once __DIR__ . '/../../bootstrap.php';
 
 
@@ -31,7 +30,6 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 class WebpackExtensionTest extends TestCase
 {
-
 	public function testBasic(): void
 	{
 		$container = $this->createContainer('basic');
@@ -45,9 +43,8 @@ class WebpackExtensionTest extends TestCase
 
 		/** @var Bar $bar */
 		$bar = $container->getByType(Bar::class);
-		Assert::notSame(NULL, $bar->getPanel(WebpackPanel::class));
+		Assert::notSame(null, $bar->getPanel(WebpackPanel::class));
 	}
-
 
 	public function testNoDebug(): void
 	{
@@ -65,22 +62,20 @@ class WebpackExtensionTest extends TestCase
 		Assert::null($bar->getPanel(WebpackPanel::class));
 	}
 
-
 	public function testMissingRequiredFields(): void
 	{
-		Assert::throws(function () {
+		Assert::throws(function (): void {
 			$this->createContainer('missingBuildDirectory');
 		}, ConfigurationException::class, 'You need to specify the build directory.');
 
-		Assert::throws(function () {
+		Assert::throws(function (): void {
 			$this->createContainer('missingBuildPublicPath');
 		}, ConfigurationException::class, 'You need to specify the build public path.');
 
-		Assert::throws(function () {
+		Assert::throws(function (): void {
 			$this->createContainer('missingDevServerUrl');
 		}, ConfigurationException::class, 'You need to specify the dev server URL.');
 	}
-
 
 	public function testManifestResolver(): void
 	{
@@ -88,13 +83,11 @@ class WebpackExtensionTest extends TestCase
 		Assert::type(ManifestAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 	}
 
-
 	public function testManifestResolverWithMapper(): void
 	{
 		$container = $this->createContainer('manifestWithMapper');
 		Assert::type(ManifestAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 	}
-
 
 	public function testOptimizedManifest(): void
 	{
@@ -106,11 +99,10 @@ class WebpackExtensionTest extends TestCase
 
 		$refl = new \ReflectionClass($resolver);
 		$cache = $refl->getProperty('resolutions');
-		$cache->setAccessible(TRUE);
+		$cache->setAccessible(true);
 
 		Assert::same(["asset.js" => "cached.resolved.asset.js"], $cache->getValue($resolver));
 	}
-
 
 	public function testIgnoredAssets(): void
 	{
@@ -120,7 +112,7 @@ class WebpackExtensionTest extends TestCase
 		$devServerMock = \Mockery::mock(DevServer::class);
 		$devServerMock->shouldReceive('getUrl')->andReturn('/devServer/');
 		$devServerMock->shouldReceive('getInternalUrl')->andReturn('/devServer-internal/');
-		$devServerMock->shouldReceive('isAvailable')->andReturn(TRUE);
+		$devServerMock->shouldReceive('isAvailable')->andReturn(true);
 		$container->removeService('webpack.devServer');
 		$container->addService('webpack.devServer', $devServerMock);
 
@@ -133,7 +125,6 @@ class WebpackExtensionTest extends TestCase
 
 		\Mockery::close();
 	}
-
 
 	public function testLatte(): void
 	{
@@ -150,12 +141,11 @@ class WebpackExtensionTest extends TestCase
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));
 	}
 
-
 	private function createContainer(string $configFile): Container
 	{
 		$configurator = new Configurator();
 		$configurator->setTempDirectory(TEMP_DIR);
-		$configurator->setDebugMode(FALSE);
+		$configurator->setDebugMode(false);
 
 		$configurator->addParameters(['buildDir' => __DIR__]);
 		$configurator->addConfig(__DIR__ . '/config/common.neon');
@@ -163,7 +153,6 @@ class WebpackExtensionTest extends TestCase
 
 		return $configurator->createContainer();
 	}
-
 }
 
 

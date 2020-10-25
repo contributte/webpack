@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace OopsTests\WebpackNetteAdapter\AssetNameResolver;
 
@@ -8,7 +8,6 @@ use Oops\WebpackNetteAdapter\AssetNameResolver\CannotResolveAssetNameException;
 use Oops\WebpackNetteAdapter\AssetNameResolver\StaticAssetNameResolver;
 use Tester\Assert;
 use Tester\TestCase;
-
 
 require_once __DIR__ . '/../../bootstrap.php';
 
@@ -18,7 +17,6 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 class StaticAssetNameResolverTest extends TestCase
 {
-
 	public function testResolver(): void
 	{
 		$resolver = new StaticAssetNameResolver([
@@ -28,18 +26,16 @@ class StaticAssetNameResolverTest extends TestCase
 		Assert::same('cached.resolved.asset.js', $resolver->resolveAssetName('asset.js'));
 	}
 
-
 	public function testCannotResolveAsset(): void
 	{
 		$resolver = new StaticAssetNameResolver([
 			'asset.js' => 'cached.resolved.asset.js',
 		]);
 
-		Assert::throws(function () use ($resolver) {
+		Assert::throws(function () use ($resolver): void {
 			$resolver->resolveAssetName('unknownAsset.js');
 		}, CannotResolveAssetNameException::class);
 	}
-
 }
 
 
