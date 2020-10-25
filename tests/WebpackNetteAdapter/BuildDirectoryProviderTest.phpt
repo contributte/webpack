@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace OopsTests\WebpackNetteAdapter;
 
 use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
-use Oops\WebpackNetteAdapter\DevServer;
+use Oops\WebpackNetteAdapter\DevServer\DevServer;
 use Tester\Assert;
 use Tester\TestCase;
 

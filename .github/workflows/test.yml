@@ -20,7 +20,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: iconv, json, mbstring, tokenizer
+          extensions: curl, iconv, json, mbstring, tokenizer
           coverage: none
       - run: |
           composer require "nette/di:${{ matrix.nette }}" --no-update
@@ -35,7 +35,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-          extensions: iconv, json, mbstring, tokenizer
+          extensions: curl, iconv, json, mbstring, tokenizer
           coverage: pcov
       - run: |
           composer require "nette/di:^3.0" --no-update
