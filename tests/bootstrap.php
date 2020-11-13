@@ -1,15 +1,15 @@
 <?php
 
-namespace OopsTests\WebpackNetteAdapter;
+namespace Contributte\Webpack\Tests;
 
-use Oops\WebpackNetteAdapter\AssetLocator;
-use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
-use Oops\WebpackNetteAdapter\AssetNameResolver\CannotResolveAssetNameException;
-use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
-use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
-use Oops\WebpackNetteAdapter\DevServer\Http\MockClient;
-use Oops\WebpackNetteAdapter\PublicPathProvider;
+use Contributte\Webpack\AssetLocator;
+use Contributte\Webpack\AssetNameResolver\AssetNameResolverInterface;
+use Contributte\Webpack\AssetNameResolver\CannotResolveAssetNameException;
+use Contributte\Webpack\BasePath\BasePathProvider;
+use Contributte\Webpack\BuildDirectoryProvider;
+use Contributte\Webpack\DevServer\DevServer;
+use Contributte\Webpack\DevServer\Http\MockClient;
+use Contributte\Webpack\PublicPathProvider;
 use Tester\Environment;
 use Tester\Helpers;
 

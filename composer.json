@@ -1,9 +1,10 @@
 {
-	"name": "oops/webpack-nette-adapter",
-	"description": "Webpack adapter for Nette Framework.",
+	"name": "contributte/webpack",
+	"description": "Webpack integration for Nette Framework.",
 	"keywords": ["nette", "webpack"],
 	"type": "library",
 	"license": "BSD-3-Clause",
+	"homepage": "https://github.com/contributte/webpack",
 	"authors": [
 		{
 			"name": "Jiří Pudil",
@@ -13,7 +14,7 @@
 	],
 	"support": {
 		"email": "me@jiripudil.cz",
-		"issues": "https://github.com/o2ps/WebpackNetteAdapter/issues"
+		"issues": "https://github.com/contributte/webpack/issues"
 	},
 	"require": {
 		"php": ">=7.4",
@@ -35,7 +36,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Oops\\WebpackNetteAdapter\\": "src/"
+			"Contributte\\Webpack\\": "src/"
 		}
 	},
 	"scripts": {

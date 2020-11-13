@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter;
+namespace Contributte\Webpack;
 
-use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
+use Contributte\Webpack\BasePath\BasePathProvider;
+use Contributte\Webpack\DevServer\DevServer;
 
 /**
  * @internal

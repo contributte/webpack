@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\AssetNameResolver;
+namespace Contributte\Webpack\AssetNameResolver;
 
 interface AssetNameResolverInterface
 {

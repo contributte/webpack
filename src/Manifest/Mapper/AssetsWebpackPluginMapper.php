@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Manifest\Mapper;
+namespace Contributte\Webpack\Manifest\Mapper;
 
-use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
+use Contributte\Webpack\Manifest\ManifestMapper;
 
 /**
  * Maps from https://github.com/ztoben/assets-webpack-plugin format to flat files

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Manifest\Mapper;
+namespace Contributte\Webpack\Manifest\Mapper;
 
-use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
+use Contributte\Webpack\Manifest\ManifestMapper;
 
 /**
  * Default identity mapper compatible with webpack-manifest-mapper's flat structure.

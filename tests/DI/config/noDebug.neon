@@ -1,5 +1,5 @@
 extensions:
-	webpack: Oops\WebpackNetteAdapter\DI\WebpackExtension(false)
+	webpack: Contributte\Webpack\DI\WebpackExtension(false)
 
 
 webpack:

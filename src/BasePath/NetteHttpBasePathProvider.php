@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\BasePath;
+namespace Contributte\Webpack\BasePath;
 
 use Nette\Http\IRequest;
 

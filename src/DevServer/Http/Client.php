@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\DevServer\Http;
+namespace Contributte\Webpack\DevServer\Http;
 
 interface Client
 {

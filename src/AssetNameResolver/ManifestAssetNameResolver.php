@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\AssetNameResolver;
+namespace Contributte\Webpack\AssetNameResolver;
 
-use Oops\WebpackNetteAdapter\Manifest\CannotLoadManifestException;
-use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
+use Contributte\Webpack\Manifest\CannotLoadManifestException;
+use Contributte\Webpack\Manifest\ManifestLoader;
 
 final class ManifestAssetNameResolver implements AssetNameResolverInterface
 {

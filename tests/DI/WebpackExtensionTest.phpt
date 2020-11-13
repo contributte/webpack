@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter\DI;
+namespace Contributte\Webpack\Tests\DI;
 
+use Contributte\Webpack\AssetLocator;
+use Contributte\Webpack\AssetNameResolver\AssetNameResolverInterface;
+use Contributte\Webpack\AssetNameResolver\DebuggerAwareAssetNameResolver;
+use Contributte\Webpack\AssetNameResolver\IdentityAssetNameResolver;
+use Contributte\Webpack\AssetNameResolver\ManifestAssetNameResolver;
+use Contributte\Webpack\AssetNameResolver\StaticAssetNameResolver;
+use Contributte\Webpack\Debugging\WebpackPanel;
+use Contributte\Webpack\DevServer\DevServer;
+use Contributte\Webpack\PublicPathProvider;
 use Latte\Loaders\StringLoader;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\Configurator;
 use Nette\DI\Container;
 use Nette\DI\InvalidConfigurationException;
-use Oops\WebpackNetteAdapter\AssetLocator;
-use Oops\WebpackNetteAdapter\AssetNameResolver\AssetNameResolverInterface;
-use Oops\WebpackNetteAdapter\AssetNameResolver\DebuggerAwareAssetNameResolver;
-use Oops\WebpackNetteAdapter\AssetNameResolver\IdentityAssetNameResolver;
-use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
-use Oops\WebpackNetteAdapter\AssetNameResolver\StaticAssetNameResolver;
-use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
-use Oops\WebpackNetteAdapter\PublicPathProvider;
 use Tester\Assert;
 use Tester\TestCase;
 use Tracy\Bar;
-use function OopsTests\WebpackNetteAdapter\createEnabledDevServer;
+use function Contributte\Webpack\Tests\createEnabledDevServer;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase
@@ -54,7 +54,7 @@ final class WebpackExtensionTest extends TestCase
 		Assert::type(PublicPathProvider::class, $container->getByType(PublicPathProvider::class));
 		Assert::type(DevServer::class, $devServer = $container->getByType(DevServer::class));
 
-		/** @var \Oops\WebpackNetteAdapter\DevServer\DevServer $devServer */
+		/** @var \Contributte\Webpack\DevServer\DevServer $devServer */
 		Assert::false($devServer->isEnabled());
 
 		/** @var Bar $bar */
@@ -91,7 +91,7 @@ final class WebpackExtensionTest extends TestCase
 
 	public function testOptimizedManifest(): void
 	{
-		\putenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST=1');
+		\putenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST=1');
 		$container = $this->createContainer('optimizedManifest');
 		$resolver = $container->getByType(AssetNameResolverInterface::class);
 

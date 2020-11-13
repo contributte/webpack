@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter;
+namespace Contributte\Webpack;
 
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
+use Contributte\Webpack\DevServer\DevServer;
 
 /**
  * @internal

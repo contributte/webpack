@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter;
+namespace Contributte\Webpack\Tests;
 
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
-use Oops\WebpackNetteAdapter\DevServer\Http\MockClient;
+use Contributte\Webpack\DevServer\DevServer;
+use Contributte\Webpack\DevServer\Http\MockClient;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/bootstrap.php';
 
 /**
  * @testCase

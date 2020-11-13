@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Manifest;
+namespace Contributte\Webpack\Manifest;
 
+use Contributte\Webpack\BuildDirectoryProvider;
 use Nette\Utils\Json;
-use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
 
 /**
  * @internal

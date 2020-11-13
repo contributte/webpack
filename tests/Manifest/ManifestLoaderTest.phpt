@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter\Manifest;
+namespace Contributte\Webpack\Tests\Manifest;
 
-use Oops\WebpackNetteAdapter\Manifest\CannotLoadManifestException;
-use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
-use Oops\WebpackNetteAdapter\Manifest\ManifestMapper;
+use Contributte\Webpack\Manifest\CannotLoadManifestException;
+use Contributte\Webpack\Manifest\ManifestLoader;
+use Contributte\Webpack\Manifest\ManifestMapper;
 use Tester\Assert;
 use Tester\TestCase;
-use function OopsTests\WebpackNetteAdapter\createBuildDirectoryProvider;
+use function Contributte\Webpack\Tests\createBuildDirectoryProvider;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase

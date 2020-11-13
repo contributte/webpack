@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Manifest;
+namespace Contributte\Webpack\Manifest;
 
 abstract class ManifestMapper
 {
@@ -11,7 +11,7 @@ abstract class ManifestMapper
 	}
 
 	/**
-	 * Modifies manifest contents
+	 * Transforms manifest content to a flat map from asset names to resolved names.
 	 * @param array<mixed> $manifest
 	 * @return array<string, string>
 	 */

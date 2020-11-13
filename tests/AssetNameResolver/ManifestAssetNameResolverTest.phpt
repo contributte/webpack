@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter\AssetNameResolver;
+namespace Contributte\Webpack\Tests\AssetNameResolver;
 
-use Oops\WebpackNetteAdapter\AssetNameResolver\CannotResolveAssetNameException;
-use Oops\WebpackNetteAdapter\AssetNameResolver\ManifestAssetNameResolver;
-use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
-use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
+use Contributte\Webpack\AssetNameResolver\CannotResolveAssetNameException;
+use Contributte\Webpack\AssetNameResolver\ManifestAssetNameResolver;
+use Contributte\Webpack\Manifest\ManifestLoader;
+use Contributte\Webpack\Manifest\Mapper\WebpackManifestPluginMapper;
 use Tester\Assert;
 use Tester\TestCase;
-use function OopsTests\WebpackNetteAdapter\createBuildDirectoryProvider;
+use function Contributte\Webpack\Tests\createBuildDirectoryProvider;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase
@@ -38,7 +38,7 @@ final class ManifestAssetNameResolverTest extends TestCase
 	{
 		$manifestLoader = new ManifestLoader(
 			// parent directory doesn't contain manifest.json => throws CannotLoadManifestException
-			createBuildDirectoryProvider(__DIR__ . '/..'),
+			createBuildDirectoryProvider(__DIR__ . '/Webpack'),
 			new WebpackManifestPluginMapper(),
 		);
 

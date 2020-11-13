@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\DevServer;
+namespace Contributte\Webpack\DevServer;
 
-use Oops\WebpackNetteAdapter\DevServer\Http\Client;
+use Contributte\Webpack\DevServer\Http\Client;
 
 final class DevServer
 {

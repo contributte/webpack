@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter\Latte;
+namespace Contributte\Webpack\Tests\Latte;
 
+use Contributte\Webpack\AssetLocator;
+use Contributte\Webpack\Latte\WebpackMacros;
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
-use Oops\WebpackNetteAdapter\AssetLocator;
-use Oops\WebpackNetteAdapter\Latte\WebpackMacros;
 use Tester\Assert;
 use Tester\TestCase;
-use function OopsTests\WebpackNetteAdapter\createAssetNameResolver;
-use function OopsTests\WebpackNetteAdapter\createBuildDirectoryProvider;
-use function OopsTests\WebpackNetteAdapter\createDisabledDevServer;
-use function OopsTests\WebpackNetteAdapter\createPublicPathProvider;
+use function Contributte\Webpack\Tests\createAssetNameResolver;
+use function Contributte\Webpack\Tests\createBuildDirectoryProvider;
+use function Contributte\Webpack\Tests\createDisabledDevServer;
+use function Contributte\Webpack\Tests\createPublicPathProvider;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase

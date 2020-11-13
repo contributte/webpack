@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Latte;
+namespace Contributte\Webpack\Latte;
 
 use Latte\Compiler;
 use Latte\MacroNode;

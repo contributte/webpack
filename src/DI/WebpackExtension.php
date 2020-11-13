@@ -2,9 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\DI;
+namespace Contributte\Webpack\DI;
 
-use Nette;
+use Contributte\Webpack\AssetLocator;
+use Contributte\Webpack\AssetNameResolver;
+use Contributte\Webpack\BasePath\BasePathProvider;
+use Contributte\Webpack\BasePath\NetteHttpBasePathProvider;
+use Contributte\Webpack\BuildDirectoryProvider;
+use Contributte\Webpack\Debugging\WebpackPanel;
+use Contributte\Webpack\DevServer\DevServer;
+use Contributte\Webpack\DevServer\Http\CurlClient;
+use Contributte\Webpack\Manifest\ManifestLoader;
+use Contributte\Webpack\Manifest\Mapper\WebpackManifestPluginMapper;
+use Contributte\Webpack\PublicPathProvider;
 use Nette\Bridges\ApplicationLatte\ILatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
@@ -12,17 +22,7 @@ use Nette\DI\Definitions\ServiceDefinition;
 use Nette\DI\Definitions\Statement;
 use Nette\DI\MissingServiceException;
 use Nette\Schema\Expect;
-use Oops\WebpackNetteAdapter\AssetLocator;
-use Oops\WebpackNetteAdapter\AssetNameResolver;
-use Oops\WebpackNetteAdapter\BasePath\BasePathProvider;
-use Oops\WebpackNetteAdapter\BasePath\NetteHttpBasePathProvider;
-use Oops\WebpackNetteAdapter\BuildDirectoryProvider;
-use Oops\WebpackNetteAdapter\Debugging\WebpackPanel;
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
-use Oops\WebpackNetteAdapter\DevServer\Http\CurlClient;
-use Oops\WebpackNetteAdapter\Manifest\ManifestLoader;
-use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
-use Oops\WebpackNetteAdapter\PublicPathProvider;
+use Nette\Schema\Schema;
 use Tracy;
 
 /**
@@ -40,7 +40,7 @@ final class WebpackExtension extends CompilerExtension
 		$this->consoleMode = $consoleMode ?? \PHP_SAPI === 'cli';
 	}
 
-	public function getConfigSchema(): Nette\Schema\Schema
+	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
 			'debugger' => Expect::bool($this->debugMode),
@@ -62,7 +62,7 @@ final class WebpackExtension extends CompilerExtension
 			])->castTo('array'),
 			'manifest' => Expect::structure([
 				'name' => Expect::string()->nullable(),
-				'optimize' => Expect::bool(!$this->debugMode && (!$this->consoleMode || (bool) \getenv('OOPS_WEBPACK_OPTIMIZE_MANIFEST'))),
+				'optimize' => Expect::bool(!$this->debugMode && (!$this->consoleMode || (bool) \getenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST'))),
 				'mapper' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->default(WebpackManifestPluginMapper::class),
 			])->castTo('array'),
 		])->castTo('array');
@@ -116,7 +116,7 @@ final class WebpackExtension extends CompilerExtension
 
 				$definition
 					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
-					->addSetup('?->onCompile[] = function ($engine) { Oops\WebpackNetteAdapter\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
+					->addSetup('?->onCompile[] = function ($engine) { Contributte\Webpack\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
 			} catch (MissingServiceException $e) {
 				// ignore
 			}

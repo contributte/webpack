@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter\AssetNameResolver;
+namespace Contributte\Webpack\Tests\AssetNameResolver;
 
-use Oops\WebpackNetteAdapter\AssetNameResolver\IdentityAssetNameResolver;
+use Contributte\Webpack\AssetNameResolver\IdentityAssetNameResolver;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 /**
  * @testCase

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace OopsTests\WebpackNetteAdapter\Manifest\Mapper;
+namespace Contributte\Webpack\Tests\Manifest\Mapper;
 
-use Oops\WebpackNetteAdapter\Manifest\Mapper\WebpackManifestPluginMapper;
+use Contributte\Webpack\Manifest\Mapper\WebpackManifestPluginMapper;
 use Tester\Assert;
 use Tester\TestCase;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once __DIR__ . '/../../bootstrap.php';
 
 /**
  * @testCase

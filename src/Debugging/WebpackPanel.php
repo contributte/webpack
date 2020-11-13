@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Oops\WebpackNetteAdapter\Debugging;
+namespace Contributte\Webpack\Debugging;
 
-use Oops\WebpackNetteAdapter\AssetNameResolver\DebuggerAwareAssetNameResolver;
-use Oops\WebpackNetteAdapter\DevServer\DevServer;
-use Oops\WebpackNetteAdapter\PublicPathProvider;
+use Contributte\Webpack\AssetNameResolver\DebuggerAwareAssetNameResolver;
+use Contributte\Webpack\DevServer\DevServer;
+use Contributte\Webpack\PublicPathProvider;
 use Tracy\IBarPanel;
 
 final class WebpackPanel implements IBarPanel
