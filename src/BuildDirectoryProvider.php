@@ -13,9 +13,9 @@ final class BuildDirectoryProvider
 {
 	private string $directory;
 
-	private DevServer $devServer;
+	private ?DevServer $devServer;
 
-	public function __construct(string $directory, DevServer $devServer)
+	public function __construct(string $directory, ?DevServer $devServer = null)
 	{
 		$this->directory = $directory;
 		$this->devServer = $devServer;
@@ -23,8 +23,13 @@ final class BuildDirectoryProvider
 
 	public function getBuildDirectory(): string
 	{
-		return $this->devServer->isAvailable()
-			? $this->devServer->getInternalUrl()
-			: $this->directory;
+	    if ($this->devServer === null) {
+            return $this->directory;
+        } else {
+            return $this->devServer->isAvailable()
+                ? $this->devServer->getInternalUrl()
+                : $this->directory;
+        }
+
 	}
 }

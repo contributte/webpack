@@ -160,17 +160,9 @@ final class WebpackExtension extends CompilerExtension
 					$loader
 				]);
 			} else {
-				$devServerInstance = new DevServer(
-					$config['devServer']['enabled'],
-					$config['devServer']['url'] ?? '',
-					$config['devServer']['publicUrl'] ?? '',
-					$config['devServer']['timeout'],
-					new CurlClient()
-				);
-
 				$mapperInstance = new $config['manifest']['mapper']();
 
-				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
+				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory']);
 				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance);
 				$manifestCache = $loaderInstance->loadManifest($config['manifest']['name']);
 
