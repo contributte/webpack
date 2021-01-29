@@ -23,13 +23,11 @@ final class BuildDirectoryProvider
 
 	public function getBuildDirectory(): string
 	{
-	    if ($this->devServer === null) {
-            return $this->directory;
-        } else {
-            return $this->devServer->isAvailable()
-                ? $this->devServer->getInternalUrl()
-                : $this->directory;
-        }
-
+		if ($this->devServer === null) {
+			return $this->directory;
+		}
+		return $this->devServer->isAvailable()
+			? $this->devServer->getInternalUrl()
+			: $this->directory;
 	}
 }
