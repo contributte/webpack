@@ -160,13 +160,7 @@ final class WebpackExtension extends CompilerExtension
 					$loader
 				]);
 			} else {
-				$devServerInstance = new DevServer(
-					$config['devServer']['enabled'],
-					$config['devServer']['url'] ?? '',
-					$config['devServer']['publicUrl'] ?? '',
-					$config['devServer']['timeout'],
-					new CurlClient()
-				);
+				$devServerInstance = new DevServer(false, '', '', 0.0, new CurlClient());
 
 				$mapperInstance = new $config['manifest']['mapper']();
 
