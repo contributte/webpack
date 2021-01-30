@@ -11,20 +11,20 @@ use Contributte\Webpack\DevServer\DevServer;
  */
 final class BuildDirectoryProvider
 {
-    private string $directory;
+	private string $directory;
 
-    private DevServer $devServer;
+	private DevServer $devServer;
 
-    public function __construct(string $directory, DevServer $devServer)
-    {
-        $this->directory = $directory;
-        $this->devServer = $devServer;
-    }
+	public function __construct(string $directory, DevServer $devServer)
+	{
+		$this->directory = $directory;
+		$this->devServer = $devServer;
+	}
 
-    public function getBuildDirectory(): string
-    {
-        return $this->devServer->isAvailable()
-            ? $this->devServer->getInternalUrl()
-            : $this->directory;
-    }
+	public function getBuildDirectory(): string
+	{
+		return $this->devServer->isAvailable()
+			? $this->devServer->getInternalUrl()
+			: $this->directory;
+	}
 }
