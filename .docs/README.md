@@ -28,7 +28,7 @@ webpack:
 
 Now you can use the `{webpack}` macro in your templates. It automatically expands the provided asset name to the full path as configured:
 
-```html
+```latte
 <script src="{webpack app.js}"></script>
 ```
 
