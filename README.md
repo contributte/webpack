@@ -1,21 +1,35 @@
-# Webpack
+![](https://heatbadger.now.sh/github/readme/contributte/webpack/)
 
-[Webpack](https://github.com/webpack) integration into [Nette Framework](https://github.com/nette).
+<p align=center>
+  <a href="https://github.com/contributte/webpack/actions"><img src="https://badgen.net/github/checks/contributte/webpack/master"></a>
+  <a href="https://codecov.io/gh/contributte/webpack"><img src="https://badgen.net/codecov/c/github/contributte/webpack"></a>
+  <a href="https://packagist.org/packages/contributte/webpack"><img src="https://badgen.net/packagist/dm/contributte/webpack"></a>
+  <a href="https://packagist.org/packages/contributte/webpack"><img src="https://badgen.net/packagist/v/contributte/webpack"></a>
+</p>
+<p align=center>
+  <a href="https://packagist.org/packages/contributte/webpack"><img src="https://badgen.net/packagist/php/contributte/webpack"></a>
+  <a href="https://github.com/contributte/webpack"><img src="https://badgen.net/github/license/contributte/webpack"></a>
+  <a href="https://bit.ly/ctteg"><img src="https://badgen.net/badge/support/gitter/cyan"></a>
+  <a href="https://bit.ly/cttfo"><img src="https://badgen.net/badge/support/forum/yellow"></a>
+  <a href="https://contributte.org/partners.html"><img src="https://badgen.net/badge/sponsor/donations/F96854"></a>
+</p>
 
-[![Build Status](https://img.shields.io/github/workflow/status/contributte/webpack/Test)](https://github.com/contributte/webpack/actions?query=workflow%3ATest)
-[![Code Coverage](https://img.shields.io/codecov/c/github/contributte/webpack.svg)](https://codecov.io/gh/contributte/webpack)
-[![Downloads this Month](https://img.shields.io/packagist/dm/contributte/webpack.svg)](https://packagist.org/packages/contributte/webpack)
-[![Latest stable](https://img.shields.io/packagist/v/contributte/webpack.svg)](https://packagist.org/packages/contributte/webpack)
-[![License](https://img.shields.io/packagist/l/contributte/webpack)](https://packagist.org/packages/contributte/webpack)
+<p align=center>
+Website 🚀 <a href="https://contributte.org">contributte.org</a> | Contact 👨🏻‍💻 <a href="https://f3l1x.io">f3l1x.io</a> | Twitter 🐦 <a href="https://twitter.com/contributte">@contributte</a>
+</p>
 
-## Discussion / Help
+## Usage
 
-[![Join the chat](https://img.shields.io/gitter/room/contributte/contributte.svg?style=flat-square)](http://bit.ly/ctteg)
+To install the latest version of `contributte/webpack` use [Composer](https://getcomposer.org).
+
+```bash
+composer require contributte/webpack
+```
 
 ## Documentation
 
-- [Setup](.docs/README.md#setup)
-- [Usage](.docs/README.md#usage)
+For details on how to use this package, check out our [documentation](.docs).
+
 
 ## Version
 
@@ -24,18 +38,17 @@
 | dev         | `^2.0.x-dev` | `master  | `3.0+`   | `>= 7.4` |
 | stable      | `^2.0`       | `master` | `3.0+`   | `>= 7.4` |
 
-## Maintainers
+## Development
 
-<table>
-    <tbody>
-        <tr>
-            <td align="center">
-                <a href="https://github.com/jiripudil">
-                    <img width="150" height="150" src="https://avatars1.githubusercontent.com/u/1042159?s=150&v=4">
-                </a>
-                <br/>
-                <a href="https://github.com/jiripudil">Jiří Pudil</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+See [how to contribute](https://contributte.org/contributing.html) to this package.
+
+This package is currently maintaining by these authors.
+
+<a href="https://github.com/jiripudil">
+  <img width="80" height="80" src="https://avatars1.githubusercontent.com/u/1042159?s=150&v=4">
+</a>
+
+-----
+
+Consider to [support](https://contributte.org/partners.html) **contributte** development team.
+Also thank you for using this package.
