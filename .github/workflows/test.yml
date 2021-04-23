@@ -20,7 +20,7 @@ jobs:
           extensions: curl, iconv, json, mbstring, tokenizer
           coverage: none
       - run: composer install --ignore-platform-reqs --no-interaction
-      - run: composer run tests
+      - run: make tests
 
   coverage:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
           extensions: curl, iconv, json, mbstring, tokenizer
           coverage: pcov
       - run: composer install --no-interaction
-      - run: composer run tests-with-coverage
+      - run: make coverage-clover
       - uses: codecov/codecov-action@v1
 
   phpstan:
@@ -44,7 +44,7 @@ jobs:
           php-version: '7.4'
           coverage: none
       - run: composer install --no-interaction
-      - run: composer run phpstan -- --no-progress --no-interaction
+      - run: make phpstan
 
   coding-standard:
     runs-on: ubuntu-latest
@@ -55,4 +55,4 @@ jobs:
           php-version: '7.4'
           coverage: none
       - run: composer install --no-interaction
-      - run: composer run check-code-style
+      - run: make cs

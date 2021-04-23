@@ -39,13 +39,6 @@
 			"Contributte\\Webpack\\": "src/"
 		}
 	},
-	"scripts": {
-		"phpstan": "vendor/bin/phpstan analyze -l max src",
-		"tests": "vendor/bin/tester -C tests",
-		"tests-with-coverage": "vendor/bin/tester -C --coverage coverage.xml --coverage-src src tests",
-		"check-code-style": "vendor/bin/ecs check src tests",
-		"fix-code-style": "vendor/bin/ecs check src tests --fix"
-	},
 	"prefer-stable": true,
 	"config": {
 		"sort-packages": true
