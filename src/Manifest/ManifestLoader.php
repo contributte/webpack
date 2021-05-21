@@ -29,8 +29,22 @@ final class ManifestLoader
 	public function loadManifest(string $fileName): array
 	{
 		$path = $this->getManifestPath($fileName);
-		$context = \stream_context_create(['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]); // webpack-dev-server uses self-signed certificate
-		$manifest = @\file_get_contents($path, false, $context); // @ - errors handled by custom exception
+
+		if (\is_file($path)) {
+			$manifest = \file_get_contents($path);
+		} else {
+			$ch = \curl_init($path);
+			\curl_setopt_array($ch, [
+				\CURLOPT_RETURNTRANSFER => true,
+
+				// allow self-signed certificates
+				\CURLOPT_SSL_VERIFYHOST => 0,
+				\CURLOPT_SSL_VERIFYPEER => false,
+			]);
+			/** @var string|false $manifest */
+			$manifest = \curl_exec($ch);
+			\curl_close($ch);
+		}
 
 		if ($manifest === false) {
 			throw new CannotLoadManifestException(\sprintf(
