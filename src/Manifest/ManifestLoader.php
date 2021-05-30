@@ -31,26 +31,37 @@ final class ManifestLoader
 		$path = $this->getManifestPath($fileName);
 
 		if (\is_file($path)) {
-			$manifest = \file_get_contents($path);
+			$manifest = @\file_get_contents($path); // @ - errors handled by custom exception
 		} else {
 			$ch = \curl_init($path);
-			\curl_setopt_array($ch, [
-				\CURLOPT_RETURNTRANSFER => true,
 
-				// allow self-signed certificates
-				\CURLOPT_SSL_VERIFYHOST => 0,
-				\CURLOPT_SSL_VERIFYPEER => false,
-			]);
-			/** @var string|false $manifest */
-			$manifest = \curl_exec($ch);
-			\curl_close($ch);
+			if ($ch === false) {
+				$manifest = false;
+			} else {
+				\curl_setopt_array($ch, [
+					\CURLOPT_RETURNTRANSFER => true,
+					\CURLOPT_FAILONERROR => true,
+
+					// allow self-signed certificates
+					\CURLOPT_SSL_VERIFYHOST => 0,
+					\CURLOPT_SSL_VERIFYPEER => false,
+				]);
+				/** @var string|false $manifest */
+				$manifest = \curl_exec($ch);
+
+				if ($manifest === false) {
+					$errorMessage = \curl_error($ch);
+				}
+
+				\curl_close($ch);
+			}
 		}
 
 		if ($manifest === false) {
 			throw new CannotLoadManifestException(\sprintf(
 				"Manifest file '%s' could not be loaded: %s",
 				$path,
-				\error_get_last()['message'] ?? 'unknown error'
+				$errorMessage ?? (\error_get_last()['message'] ?? 'unknown error')
 			));
 		}
 
