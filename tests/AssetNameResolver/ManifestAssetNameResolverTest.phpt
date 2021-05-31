@@ -24,6 +24,7 @@ final class ManifestAssetNameResolverTest extends TestCase
 		$manifestLoader = new ManifestLoader(
 			createBuildDirectoryProvider(__DIR__),
 			new WebpackManifestPluginMapper(),
+			1,
 		);
 
 		$resolver = new ManifestAssetNameResolver('manifest.json', $manifestLoader);
@@ -40,6 +41,7 @@ final class ManifestAssetNameResolverTest extends TestCase
 			// parent directory doesn't contain manifest.json => throws CannotLoadManifestException
 			createBuildDirectoryProvider(__DIR__ . '/Webpack'),
 			new WebpackManifestPluginMapper(),
+			1,
 		);
 
 		$resolver = new ManifestAssetNameResolver('manifest.json', $manifestLoader);

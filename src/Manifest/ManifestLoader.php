@@ -16,10 +16,16 @@ final class ManifestLoader
 
 	private ManifestMapper $manifestMapper;
 
-	public function __construct(BuildDirectoryProvider $directoryProvider, ManifestMapper $manifestMapper)
-	{
+	private float $timeout;
+
+	public function __construct(
+		BuildDirectoryProvider $directoryProvider,
+		ManifestMapper $manifestMapper,
+		float $timeout
+	) {
 		$this->directoryProvider = $directoryProvider;
 		$this->manifestMapper = $manifestMapper;
+		$this->timeout = $timeout;
 	}
 
 	/**
@@ -39,8 +45,15 @@ final class ManifestLoader
 				$manifest = false;
 			} else {
 				\curl_setopt_array($ch, [
+					\CURLOPT_CUSTOMREQUEST => 'GET',
+					\CURLOPT_PROTOCOLS => \CURLPROTO_HTTP | \CURLPROTO_HTTPS,
+
 					\CURLOPT_RETURNTRANSFER => true,
 					\CURLOPT_FAILONERROR => true,
+
+					// setup timeout; this requires NOSIGNAL for values below 1s
+					\CURLOPT_TIMEOUT_MS => $this->timeout * 1000,
+					\CURLOPT_NOSIGNAL => $this->timeout < 1 && \PHP_OS_FAMILY !== 'Windows',
 
 					// allow self-signed certificates
 					\CURLOPT_SSL_VERIFYHOST => 0,
@@ -61,7 +74,7 @@ final class ManifestLoader
 			throw new CannotLoadManifestException(\sprintf(
 				"Manifest file '%s' could not be loaded: %s",
 				$path,
-				$errorMessage ?? (\error_get_last()['message'] ?? 'unknown error')
+				$errorMessage ?? \error_get_last()['message'] ?? 'unknown error',
 			));
 		}
 
