@@ -101,6 +101,19 @@ webpack:
 You can also implement your own mapper, simply extend `Contributte\Webpack\Manifest\ManifestMapper` and implement its `map()` method. It takes the parsed JSON content of the manifest file and is expected to return a flat array mapping asset names to file names.
 
 
+
+#### Manifest loading timeout
+
+You can specify a timeout for manifest loading from webpack-dev-server. The timeout defaults to 1 second.
+
+```neon
+webpack:
+	manifest:
+		name: manifest.json
+		timeout: 0.5
+```
+
+
 ### Debugger
 
 In development environment, this package registers its own debug bar panel into Tracy, giving you the overview of

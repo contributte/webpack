@@ -30,7 +30,7 @@ final class ManifestLoaderTest extends TestCase
 			}
 		};
 
-		$manifestLoader = new ManifestLoader($buildDirProvider, $manifestMapper);
+		$manifestLoader = new ManifestLoader($buildDirProvider, $manifestMapper, 1);
 
 		Assert::same(__DIR__ . '/manifest.json', $manifestLoader->getManifestPath('manifest.json'));
 		Assert::same(['asset.js' => 'mapped.asset.js'], $manifestLoader->loadManifest('manifest.json'));

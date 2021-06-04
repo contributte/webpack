@@ -64,6 +64,7 @@ final class WebpackExtension extends CompilerExtension
 				'name' => Expect::string()->nullable(),
 				'optimize' => Expect::bool(!$this->debugMode && (!$this->consoleMode || (bool) \getenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST'))),
 				'mapper' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->default(WebpackManifestPluginMapper::class),
+				'timeout' => Expect::anyOf(Expect::float(), Expect::int())->default(1),
 			])->castTo('array'),
 		])->castTo('array');
 	}
@@ -151,7 +152,8 @@ final class WebpackExtension extends CompilerExtension
 			if (!$config['manifest']['optimize']) {
 				$loader = $builder->addDefinition($this->prefix('manifestLoader'))
 					->setFactory(ManifestLoader::class, [
-						1 => new Statement($config['manifest']['mapper']),
+						'manifestMapper' => new Statement($config['manifest']['mapper']),
+						'timeout' => $config['manifest']['timeout'],
 					])
 					->setAutowired(false);
 
@@ -165,7 +167,7 @@ final class WebpackExtension extends CompilerExtension
 				$mapperInstance = new $config['manifest']['mapper']();
 
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);
-				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance);
+				$loaderInstance = new ManifestLoader($directoryProviderInstance, $mapperInstance, $config['manifest']['timeout']);
 				$manifestCache = $loaderInstance->loadManifest($config['manifest']['name']);
 
 				$assetResolver->setFactory(AssetNameResolver\StaticAssetNameResolver::class, [$manifestCache]);
