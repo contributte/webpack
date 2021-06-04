@@ -1,16 +1,21 @@
-name: Test
+name: "build"
+
 on:
   pull_request:
-    branches: [master]
+    paths-ignore:
+      - ".docs/**"
   push:
-    branches: [master]
+    branches:
+      - "*"
+  schedule:
+    - cron: "0 8 * * 1" # At 08:00 on Monday
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: ['7.4', '8.0']
+        php: [ '7.4', '8.0' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
