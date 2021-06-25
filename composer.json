@@ -1,51 +1,54 @@
 {
-	"name": "contributte/webpack",
-	"description": "Webpack integration for Nette Framework.",
-	"keywords": ["nette", "webpack"],
-	"type": "library",
-	"license": "BSD-3-Clause",
-	"homepage": "https://github.com/contributte/webpack",
-	"authors": [
-		{
-			"name": "Jiří Pudil",
-			"email": "me@jiripudil.cz",
-			"homepage": "https://jiripudil.cz"
-		}
-	],
-	"support": {
-		"email": "me@jiripudil.cz",
-		"issues": "https://github.com/contributte/webpack/issues"
-	},
-	"require": {
-		"php": ">=7.4",
-		"ext-curl": "*",
-		"nette/di": "^3.0"
-	},
-	"require-dev": {
-		"latte/latte": "^2.4",
-		"nette/application": "^3.0",
-		"nette/bootstrap": "^3.0",
-		"nette/tester": "^2.0",
-		"phpstan/phpstan": "^0.12",
-		"symplify/easy-coding-standard": "^8.3",
-		"tracy/tracy": "^2.4"
-	},
-	"suggest": {
-		"tracy/tracy": "to enable asset debugging in the debug bar panel",
-		"latte/latte": "to enable Latte integration via {webpack} macro"
-	},
-	"autoload": {
-		"psr-4": {
-			"Contributte\\Webpack\\": "src/"
-		}
-	},
-	"prefer-stable": true,
-	"config": {
-		"sort-packages": true
-	},
-	"extra": {
-		"branch-alias": {
-			"dev-master": "2.0.x-dev"
-		}
-	}
+  "name": "contributte/webpack",
+  "description": "Webpack integration for Nette Framework.",
+  "keywords": [
+    "nette",
+    "webpack"
+  ],
+  "type": "library",
+  "license": "BSD-3-Clause",
+  "homepage": "https://github.com/contributte/webpack",
+  "authors": [
+    {
+      "name": "Jiří Pudil",
+      "email": "me@jiripudil.cz",
+      "homepage": "https://jiripudil.cz"
+    }
+  ],
+  "support": {
+    "email": "me@jiripudil.cz",
+    "issues": "https://github.com/contributte/webpack/issues"
+  },
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "nette/di": "^3.0"
+  },
+  "require-dev": {
+    "latte/latte": "^2.4",
+    "nette/application": "^3.0",
+    "nette/bootstrap": "^3.0",
+    "nette/tester": "^2.0",
+    "phpstan/phpstan": "^0.12",
+    "symplify/easy-coding-standard": "^8.3",
+    "tracy/tracy": "^2.4"
+  },
+  "suggest": {
+    "tracy/tracy": "to enable asset debugging in the debug bar panel",
+    "latte/latte": "to enable Latte integration via {webpack} macro"
+  },
+  "autoload": {
+    "psr-4": {
+      "Contributte\\Webpack\\": "src/"
+    }
+  },
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.0.x-dev"
+    }
+  }
 }
