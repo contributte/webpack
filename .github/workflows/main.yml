@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '7.4', '8.0', '8.1' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           extensions: curl, iconv, json, mbstring, tokenizer
           coverage: pcov
       - run: composer install --no-interaction
@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: none
       - run: composer install --no-interaction
       - run: make phpstan
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: none
       - run: composer install --no-interaction
       - run: make cs
