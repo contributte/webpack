@@ -73,18 +73,18 @@ final class WebpackExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'))
+		$basePathProvider = $builder->addDefinition($this->prefix('pathProvider.basePathProvider'), new ServiceDefinition())
 			->setType(BasePathProvider::class)
 			->setFactory(NetteHttpBasePathProvider::class)
 			->setAutowired(false);
 
-		$builder->addDefinition($this->prefix('pathProvider'))
+		$builder->addDefinition($this->prefix('pathProvider'), new ServiceDefinition())
 			->setFactory(PublicPathProvider::class, [$this->config['build']['publicPath'], $basePathProvider]);
 
-		$builder->addDefinition($this->prefix('buildDirProvider'))
+		$builder->addDefinition($this->prefix('buildDirProvider'), new ServiceDefinition())
 			->setFactory(BuildDirectoryProvider::class, [$this->config['build']['directory']]);
 
-		$builder->addDefinition($this->prefix('devServer'))
+		$builder->addDefinition($this->prefix('devServer'), new ServiceDefinition())
 			->setFactory(DevServer::class, [
 				$this->config['devServer']['enabled'],
 				$this->config['devServer']['url'] ?? '',
@@ -93,7 +93,7 @@ final class WebpackExtension extends CompilerExtension
 				new Statement(CurlClient::class),
 			]);
 
-		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'))
+		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'), new ServiceDefinition())
 			->setFactory(AssetLocator::class, [
 				'ignoredAssetNames' => $this->config['devServer']['ignoredAssets'],
 			]);
@@ -102,7 +102,7 @@ final class WebpackExtension extends CompilerExtension
 
 		if ($this->config['debugger']) {
 			$assetResolver->setAutowired(false);
-			$builder->addDefinition($this->prefix('assetResolver.debug'))
+			$builder->addDefinition($this->prefix('assetResolver.debug'), new ServiceDefinition())
 				->setFactory(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
 		}
 
@@ -145,12 +145,12 @@ final class WebpackExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		$assetResolver = $builder->addDefinition($this->prefix('assetResolver'))
+		$assetResolver = $builder->addDefinition($this->prefix('assetResolver'), new ServiceDefinition())
 			->setType(AssetNameResolver\AssetNameResolverInterface::class);
 
 		if ($config['manifest']['name'] !== null) {
 			if (!$config['manifest']['optimize']) {
-				$loader = $builder->addDefinition($this->prefix('manifestLoader'))
+				$loader = $builder->addDefinition($this->prefix('manifestLoader'), new ServiceDefinition())
 					->setFactory(ManifestLoader::class, [
 						'manifestMapper' => new Statement($config['manifest']['mapper']),
 						'timeout' => $config['manifest']['timeout'],
