@@ -43,7 +43,13 @@ final class AssetLocator
 			return 'data:,';
 		}
 
-		return \rtrim($path, '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
+		$assetName = $this->assetResolver->resolveAssetName($asset);
+
+		if ($this->isAbsoluteUrl($assetName)) {
+			return $assetName;
+		}
+
+		return \rtrim($path, '/') . '/' . \ltrim($assetName, '/');
 	}
 
 	public function locateInPublicPath(string $asset): string
@@ -54,5 +60,10 @@ final class AssetLocator
 	public function locateInBuildDirectory(string $asset): string
 	{
 		return $this->locateInPath($this->directoryProvider->getBuildDirectory(), $asset);
+	}
+
+	private function isAbsoluteUrl(string $url): bool
+	{
+		return strpos($url, '://') !== false || substr($url, 0, 2) === '//';
 	}
 }

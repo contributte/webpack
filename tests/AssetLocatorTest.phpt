@@ -19,29 +19,33 @@ final class AssetLocatorTest extends TestCase
 	{
 		$directoryProvider = createBuildDirectoryProvider('/home/user');
 		$pathProvider = createPublicPathProvider('/foo');
-		$assetResolver = createAssetNameResolver(['bar.js' => 'bar.js']);
+		$assetResolver = createAssetNameResolver(['bar.js' => 'bar.js', 'foo1.js' => 'http://localhost/foo1.js', 'foo2.js' => '//localhost/foo2.js']);
 		$devServer = createDisabledDevServer();
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
 		Assert::same('/home/user/bar.js', $assetLocator->locateInBuildDirectory('bar.js'));
+		Assert::same('http://localhost/foo1.js', $assetLocator->locateInBuildDirectory('foo1.js'));
+		Assert::same('//localhost/foo2.js', $assetLocator->locateInBuildDirectory('foo2.js'));
 	}
 
 	public function testLocateInPublicPath(): void
 	{
 		$directoryProvider = createBuildDirectoryProvider('/home/user');
 		$pathProvider = createPublicPathProvider('/foo');
-		$assetResolver = createAssetNameResolver(['bar.js' => 'bar.js']);
+		$assetResolver = createAssetNameResolver(['bar.js' => 'bar.js', 'foo1.js' => 'http://localhost/foo1.js', 'foo2.js' => '//localhost/foo2.js']);
 		$devServer = createDisabledDevServer();
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
 		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
+		Assert::same('http://localhost/foo1.js', $assetLocator->locateInBuildDirectory('foo1.js'));
+		Assert::same('//localhost/foo2.js', $assetLocator->locateInBuildDirectory('foo2.js'));
 	}
 
 	public function testIgnoredAssets(): void
 	{
 		$directoryProvider = createBuildDirectoryProvider('/home/user');
 		$pathProvider = createPublicPathProvider('/foo');
-		$assetResolver = createAssetNameResolver(['bar.js' => 'bar.js']);
+		$assetResolver = createAssetNameResolver(['bar.js' => 'bar.js', 'foo1.js' => 'http://localhost/foo1.js', 'foo2.js' => '//localhost/foo2.js']);
 		$devServer = createEnabledDevServer(true);
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, ['foo.css']);
@@ -49,6 +53,11 @@ final class AssetLocatorTest extends TestCase
 		Assert::same('data:,', $assetLocator->locateInPublicPath('foo.css'));
 		Assert::same('/home/user/bar.js', $assetLocator->locateInBuildDirectory('bar.js'));
 		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
+		Assert::same('http://localhost/foo1.js', $assetLocator->locateInBuildDirectory('foo1.js'));
+		Assert::same('http://localhost/foo1.js', $assetLocator->locateInPublicPath('foo1.js'));
+		Assert::same('//localhost/foo2.js', $assetLocator->locateInBuildDirectory('foo2.js'));
+		Assert::same('//localhost/foo2.js', $assetLocator->locateInPublicPath('foo2.js'));
+		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
 	}
 }
 
