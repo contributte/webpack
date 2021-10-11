@@ -37,8 +37,8 @@ final class AssetLocatorTest extends TestCase
 
 		$assetLocator = new AssetLocator($directoryProvider, $pathProvider, $assetResolver, $devServer, []);
 		Assert::same('/foo/bar.js', $assetLocator->locateInPublicPath('bar.js'));
-		Assert::same('http://localhost/foo1.js', $assetLocator->locateInBuildDirectory('foo1.js'));
-		Assert::same('//localhost/foo2.js', $assetLocator->locateInBuildDirectory('foo2.js'));
+		Assert::same('http://localhost/foo1.js', $assetLocator->locateInPublicPath('foo1.js'));
+		Assert::same('//localhost/foo2.js', $assetLocator->locateInPublicPath('foo2.js'));
 	}
 
 	public function testIgnoredAssets(): void
@@ -57,7 +57,6 @@ final class AssetLocatorTest extends TestCase
 		Assert::same('http://localhost/foo1.js', $assetLocator->locateInPublicPath('foo1.js'));
 		Assert::same('//localhost/foo2.js', $assetLocator->locateInBuildDirectory('foo2.js'));
 		Assert::same('//localhost/foo2.js', $assetLocator->locateInPublicPath('foo2.js'));
-		Assert::same('data:,', $assetLocator->locateInBuildDirectory('foo.css'));
 	}
 }
 
