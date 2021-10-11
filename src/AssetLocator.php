@@ -37,21 +37,22 @@ final class AssetLocator
 		$this->ignoredAssetNames = $ignoredAssetNames;
 	}
 
-	public function locateInPublicPath(string $asset): string
+	private function locateInPath(string $path, string $asset): string
 	{
 		if ($this->devServer->isAvailable() && \in_array($asset, $this->ignoredAssetNames, true)) {
 			return 'data:,';
 		}
 
-		return \rtrim($this->publicPathProvider->getPublicPath(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
+		return \rtrim($path, '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
+	}
+
+	public function locateInPublicPath(string $asset): string
+	{
+		return $this->locateInPath($this->publicPathProvider->getPublicPath(), $asset);
 	}
 
 	public function locateInBuildDirectory(string $asset): string
 	{
-		if ($this->devServer->isAvailable() && \in_array($asset, $this->ignoredAssetNames, true)) {
-			return 'data:,';
-		}
-
-		return \rtrim($this->directoryProvider->getBuildDirectory(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
+		return $this->locateInPath($this->directoryProvider->getBuildDirectory(), $asset);
 	}
 }
