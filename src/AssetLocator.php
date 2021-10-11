@@ -37,21 +37,33 @@ final class AssetLocator
 		$this->ignoredAssetNames = $ignoredAssetNames;
 	}
 
-	public function locateInPublicPath(string $asset): string
+	private function locateInPath(string $path, string $asset): string
 	{
 		if ($this->devServer->isAvailable() && \in_array($asset, $this->ignoredAssetNames, true)) {
 			return 'data:,';
 		}
 
-		return \rtrim($this->publicPathProvider->getPublicPath(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
+		$assetName = $this->assetResolver->resolveAssetName($asset);
+
+		if ($this->isAbsoluteUrl($assetName)) {
+			return $assetName;
+		}
+
+		return \rtrim($path, '/') . '/' . \ltrim($assetName, '/');
+	}
+
+	public function locateInPublicPath(string $asset): string
+	{
+		return $this->locateInPath($this->publicPathProvider->getPublicPath(), $asset);
 	}
 
 	public function locateInBuildDirectory(string $asset): string
 	{
-		if ($this->devServer->isAvailable() && \in_array($asset, $this->ignoredAssetNames, true)) {
-			return 'data:,';
-		}
+		return $this->locateInPath($this->directoryProvider->getBuildDirectory(), $asset);
+	}
 
-		return \rtrim($this->directoryProvider->getBuildDirectory(), '/') . '/' . \ltrim($this->assetResolver->resolveAssetName($asset), '/');
+	private function isAbsoluteUrl(string $url): bool
+	{
+		return strpos($url, '://') !== false || substr($url, 0, 2) === '//';
 	}
 }
