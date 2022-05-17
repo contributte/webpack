@@ -16,6 +16,7 @@ jobs:
     strategy:
       matrix:
         php: [ '7.4', '8.0', '8.1' ]
+        latte: [ '', '--prefer-lowest' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
@@ -24,7 +25,8 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: curl, iconv, json, mbstring, tokenizer
           coverage: none
-      - run: composer install --ignore-platform-reqs --no-interaction
+      - run: composer install --no-interaction
+      - run: composer update latte/latte ${{ matrix.latte }} --no-interaction
       - run: make tests
 
   coverage:

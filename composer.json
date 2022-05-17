@@ -25,7 +25,7 @@
     "nette/di": "^3.0"
   },
   "require-dev": {
-    "latte/latte": "^2.4",
+    "latte/latte": "^2.4 || ^3.0",
     "nette/application": "^3.0",
     "nette/bootstrap": "^3.0",
     "nette/tester": "^2.0",
@@ -44,7 +44,10 @@
   },
   "prefer-stable": true,
   "config": {
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   },
   "extra": {
     "branch-alias": {

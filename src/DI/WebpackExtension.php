@@ -15,7 +15,8 @@ use Contributte\Webpack\DevServer\Http\CurlClient;
 use Contributte\Webpack\Manifest\ManifestLoader;
 use Contributte\Webpack\Manifest\Mapper\WebpackManifestPluginMapper;
 use Contributte\Webpack\PublicPathProvider;
-use Nette\Bridges\ApplicationLatte\ILatteFactory;
+use Latte\Engine;
+use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
 use Nette\DI\Definitions\ServiceDefinition;
@@ -44,7 +45,7 @@ final class WebpackExtension extends CompilerExtension
 	{
 		return Expect::structure([
 			'debugger' => Expect::bool($this->debugMode),
-			'macros' => Expect::bool(\interface_exists(ILatteFactory::class)),
+			'macros' => Expect::bool(\interface_exists(LatteFactory::class)),
 			'devServer' => Expect::structure([
 				'enabled' => Expect::bool($this->debugMode),
 				'url' => Expect::string()->nullable()->dynamic(),
@@ -109,15 +110,20 @@ final class WebpackExtension extends CompilerExtension
 		// latte macro
 		if ($this->config['macros']) {
 			try {
-				$latteFactory = $builder->getDefinitionByType(ILatteFactory::class);
+				$latteFactory = $builder->getDefinitionByType(LatteFactory::class);
 				\assert($latteFactory instanceof FactoryDefinition);
 
 				$definition = $latteFactory->getResultDefinition();
 				\assert($definition instanceof ServiceDefinition);
 
-				$definition
-					->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator])
-					->addSetup('?->onCompile[] = function ($engine) { Contributte\Webpack\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
+				$definition->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator]);
+
+				// @phpstan-ignore-next-line latte 2 compatibility
+				if (\version_compare(Engine::VERSION, '3', '<')) {
+					$definition->addSetup('?->onCompile[] = function ($engine) { Contributte\Webpack\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
+				} else {
+					$definition->addSetup('addExtension', [new Statement(\Contributte\Webpack\Latte\WebpackExtension::class)]);
+				}
 			} catch (MissingServiceException $e) {
 				// ignore
 			}

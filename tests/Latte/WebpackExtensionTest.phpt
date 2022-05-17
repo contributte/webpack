@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Contributte\Webpack\Tests\Latte;
 
 use Contributte\Webpack\AssetLocator;
-use Contributte\Webpack\Latte\WebpackMacros;
+use Contributte\Webpack\Latte\WebpackExtension;
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
 use Tester\Assert;
@@ -21,12 +21,12 @@ require_once __DIR__ . '/../bootstrap.php';
 /**
  * @testCase
  */
-final class WebpackMacrosTest extends TestCase
+final class WebpackExtensionTest extends TestCase
 {
-	public function testMacros(): void
+	public function testExtension(): void
 	{
-		if (\version_compare(Engine::VERSION, '3', '>')) {
-			Environment::skip('Requires Latte 2.');
+		if (\version_compare(Engine::VERSION, '3', '<')) {
+			Environment::skip('Requires Latte 3.');
 		}
 
 		$assetLocator = new AssetLocator(
@@ -39,13 +39,11 @@ final class WebpackMacrosTest extends TestCase
 
 		$latte = new Engine();
 		$latte->addProvider('webpackAssetLocator', $assetLocator);
-		$latte->onCompile[] = function (Engine $engine): void {
-			WebpackMacros::install($engine->getCompiler());
-		};
+		$latte->addExtension(new WebpackExtension());
 
 		$latte->setLoader(new StringLoader());
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));
 	}
 }
 
-(new WebpackMacrosTest())->run();
+(new WebpackExtensionTest())->run();
