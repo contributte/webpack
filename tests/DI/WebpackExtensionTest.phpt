@@ -14,7 +14,7 @@ use Contributte\Webpack\Debugging\WebpackPanel;
 use Contributte\Webpack\DevServer\DevServer;
 use Contributte\Webpack\PublicPathProvider;
 use Latte\Loaders\StringLoader;
-use Nette\Bridges\ApplicationLatte\ILatteFactory;
+use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Nette\Configurator;
 use Nette\DI\Container;
 use Nette\DI\InvalidConfigurationException;
@@ -125,8 +125,8 @@ final class WebpackExtensionTest extends TestCase
 	{
 		$container = $this->createContainer('noDebug');
 
-		/** @var ILatteFactory $latteFactory */
-		$latteFactory = $container->getByType(ILatteFactory::class);
+		/** @var LatteFactory $latteFactory */
+		$latteFactory = $container->getByType(LatteFactory::class);
 		$latte = $latteFactory->create();
 
 		$providers = $latte->getProviders();

@@ -1,0 +1,3 @@
+parameters:
+	excludePaths:
+		- src/Latte/WebpackMacros.php # latte 2 compatibility
