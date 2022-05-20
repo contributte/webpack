@@ -38,8 +38,7 @@ final class WebpackExtensionTest extends TestCase
 		);
 
 		$latte = new Engine();
-		$latte->addProvider('webpackAssetLocator', $assetLocator);
-		$latte->addExtension(new WebpackExtension());
+		$latte->addExtension(new WebpackExtension($assetLocator));
 
 		$latte->setLoader(new StringLoader());
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));
