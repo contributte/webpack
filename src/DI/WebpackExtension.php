@@ -116,10 +116,9 @@ final class WebpackExtension extends CompilerExtension
 				$definition = $latteFactory->getResultDefinition();
 				\assert($definition instanceof ServiceDefinition);
 
-				$definition->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator]);
-
 				// @phpstan-ignore-next-line latte 2 compatibility
 				if (\version_compare(Engine::VERSION, '3', '<')) {
+					$definition->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator]);
 					$definition->addSetup('?->onCompile[] = function ($engine) { Contributte\Webpack\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
 				} else {
 					$definition->addSetup('addExtension', [new Statement(\Contributte\Webpack\Latte\WebpackExtension::class)]);
