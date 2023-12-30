@@ -13,6 +13,7 @@ use Contributte\Webpack\Debugging\WebpackPanel;
 use Contributte\Webpack\DevServer\DevServer;
 use Contributte\Webpack\DevServer\Http\CurlClient;
 use Contributte\Webpack\Manifest\ManifestLoader;
+use Contributte\Webpack\Manifest\ManifestMapper;
 use Contributte\Webpack\Manifest\Mapper\WebpackManifestPluginMapper;
 use Contributte\Webpack\PublicPathProvider;
 use Latte\Engine;
@@ -31,9 +32,9 @@ use Tracy;
  */
 final class WebpackExtension extends CompilerExtension
 {
-	private bool $debugMode;
+	private readonly bool $debugMode;
 
-	private bool $consoleMode;
+	private readonly bool $consoleMode;
 
 	public function __construct(bool $debugMode, ?bool $consoleMode = null)
 	{
@@ -169,6 +170,7 @@ final class WebpackExtension extends CompilerExtension
 			} else {
 				$devServerInstance = new DevServer(false, '', '', 0.0, new CurlClient());
 
+				/** @var ManifestMapper $mapperInstance */
 				$mapperInstance = new $config['manifest']['mapper']();
 
 				$directoryProviderInstance = new BuildDirectoryProvider($config['build']['directory'], $devServerInstance);

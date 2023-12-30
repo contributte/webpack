@@ -9,11 +9,9 @@ use Latte\Extension;
 
 final class WebpackExtension extends Extension
 {
-	private AssetLocator $assetLocator;
-
-	public function __construct(AssetLocator $assetLocator)
-	{
-		$this->assetLocator = $assetLocator;
+	public function __construct(
+		private readonly AssetLocator $assetLocator,
+	) {
 	}
 
 	public function getTags(): array

@@ -11,22 +11,17 @@ use Tracy\IBarPanel;
 
 final class WebpackPanel implements IBarPanel
 {
-	private PublicPathProvider $pathProvider;
-
-	private DebuggerAwareAssetNameResolver $assetResolver;
-
-	private DevServer $devServer;
-
-	public function __construct(PublicPathProvider $pathProvider, DebuggerAwareAssetNameResolver $assetResolver, DevServer $devServer)
-	{
-		$this->pathProvider = $pathProvider;
-		$this->assetResolver = $assetResolver;
-		$this->devServer = $devServer;
+	public function __construct(
+		private readonly PublicPathProvider $pathProvider,
+		private readonly DebuggerAwareAssetNameResolver $assetResolver,
+		private readonly DevServer $devServer,
+	) {
 	}
 
 	public function getTab(): ?string
 	{
-		\ob_start(function (): void {});
+		\ob_start(function (): void {
+		});
 		$devServer = $this->devServer;
 		$assets = $this->assetResolver->getResolvedAssets();
 		require __DIR__ . '/templates/WebpackPanel.tab.phtml';
@@ -35,7 +30,8 @@ final class WebpackPanel implements IBarPanel
 
 	public function getPanel(): ?string
 	{
-		\ob_start(function (): void {});
+		\ob_start(function (): void {
+		});
 		$devServer = $this->devServer;
 		$path = $this->pathProvider->getPublicPath();
 		$assets = $this->assetResolver->getResolvedAssets();

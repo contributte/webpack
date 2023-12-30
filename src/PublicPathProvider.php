@@ -12,17 +12,11 @@ use Contributte\Webpack\DevServer\DevServer;
  */
 final class PublicPathProvider
 {
-	private string $path;
-
-	private BasePathProvider $basePathProvider;
-
-	private DevServer $devServer;
-
-	public function __construct(string $path, BasePathProvider $basePathProvider, DevServer $devServer)
-	{
-		$this->path = $path;
-		$this->basePathProvider = $basePathProvider;
-		$this->devServer = $devServer;
+	public function __construct(
+		private readonly string $path,
+		private readonly BasePathProvider $basePathProvider,
+		private readonly DevServer $devServer,
+	) {
 	}
 
 	public function getPublicPath(): string

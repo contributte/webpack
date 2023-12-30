@@ -9,17 +9,13 @@ use Contributte\Webpack\Manifest\ManifestLoader;
 
 final class ManifestAssetNameResolver implements AssetNameResolverInterface
 {
-	private string $manifestName;
-
-	private ManifestLoader $loader;
-
 	/** @var array<string, string>|null */
 	private ?array $manifestCache = null;
 
-	public function __construct(string $manifestName, ManifestLoader $loader)
-	{
-		$this->manifestName = $manifestName;
-		$this->loader = $loader;
+	public function __construct(
+		private readonly string $manifestName,
+		private readonly ManifestLoader $loader,
+	) {
 	}
 
 	public function resolveAssetName(string $asset): string

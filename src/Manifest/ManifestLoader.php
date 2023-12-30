@@ -12,20 +12,11 @@ use Nette\Utils\Json;
  */
 final class ManifestLoader
 {
-	private BuildDirectoryProvider $directoryProvider;
-
-	private ManifestMapper $manifestMapper;
-
-	private float $timeout;
-
 	public function __construct(
-		BuildDirectoryProvider $directoryProvider,
-		ManifestMapper $manifestMapper,
-		float $timeout
+		private readonly BuildDirectoryProvider $directoryProvider,
+		private readonly ManifestMapper $manifestMapper,
+		private readonly float $timeout
 	) {
-		$this->directoryProvider = $directoryProvider;
-		$this->manifestMapper = $manifestMapper;
-		$this->timeout = $timeout;
 	}
 
 	/**
@@ -78,7 +69,7 @@ final class ManifestLoader
 			));
 		}
 
-		return $this->manifestMapper->map(Json::decode($manifest, Json::FORCE_ARRAY));
+		return $this->manifestMapper->map(Json::decode($manifest, forceArrays: true));
 	}
 
 	public function getManifestPath(string $fileName): string

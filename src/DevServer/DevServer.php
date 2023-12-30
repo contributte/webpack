@@ -8,25 +8,15 @@ use Contributte\Webpack\DevServer\Http\Client;
 
 final class DevServer
 {
-	private bool $enabled;
-
 	private ?bool $available = null;
 
-	private string $url;
-
-	private ?string $publicUrl;
-
-	private float $timeout;
-
-	private Client $httpClient;
-
-	public function __construct(bool $enabled, string $url, ?string $publicUrl, float $timeout, Client $httpClient)
-	{
-		$this->enabled = $enabled;
-		$this->url = $url;
-		$this->publicUrl = $publicUrl;
-		$this->timeout = $timeout;
-		$this->httpClient = $httpClient;
+	public function __construct(
+		private readonly bool $enabled,
+		private readonly string $url,
+		private readonly ?string $publicUrl,
+		private readonly float $timeout,
+		private readonly Client $httpClient,
+	) {
 	}
 
 	public function getUrl(): string
@@ -50,10 +40,6 @@ final class DevServer
 			return false;
 		}
 
-		if ($this->available === null) {
-			$this->available = $this->httpClient->isAvailable($this->url, $this->timeout);
-		}
-
-		return $this->available;
+		return $this->available ??= $this->httpClient->isAvailable($this->url, $this->timeout);
 	}
 }

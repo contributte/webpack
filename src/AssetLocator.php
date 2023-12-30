@@ -9,32 +9,16 @@ use Contributte\Webpack\DevServer\DevServer;
 
 final class AssetLocator
 {
-	private BuildDirectoryProvider $directoryProvider;
-
-	private PublicPathProvider $publicPathProvider;
-
-	private AssetNameResolverInterface $assetResolver;
-
-	private DevServer $devServer;
-
-	/** @var string[] */
-	private array $ignoredAssetNames;
-
 	/**
 	 * @param string[] $ignoredAssetNames
 	 */
 	public function __construct(
-		BuildDirectoryProvider $directoryProvider,
-		PublicPathProvider $publicPathProvider,
-		AssetNameResolverInterface $assetResolver,
-		DevServer $devServer,
-		array $ignoredAssetNames
+		private readonly BuildDirectoryProvider $directoryProvider,
+		private readonly PublicPathProvider $publicPathProvider,
+		private readonly AssetNameResolverInterface $assetResolver,
+		private readonly DevServer $devServer,
+		private readonly array $ignoredAssetNames,
 	) {
-		$this->directoryProvider = $directoryProvider;
-		$this->publicPathProvider = $publicPathProvider;
-		$this->assetResolver = $assetResolver;
-		$this->devServer = $devServer;
-		$this->ignoredAssetNames = $ignoredAssetNames;
 	}
 
 	private function locateInPath(string $path, string $asset): string
@@ -64,6 +48,6 @@ final class AssetLocator
 
 	private function isAbsoluteUrl(string $url): bool
 	{
-		return strpos($url, '://') !== false || substr($url, 0, 2) === '//';
+		return \str_contains($url, '://') || \str_starts_with($url, '//');
 	}
 }

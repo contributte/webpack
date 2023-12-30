@@ -6,14 +6,12 @@ namespace Contributte\Webpack\AssetNameResolver;
 
 final class DebuggerAwareAssetNameResolver implements AssetNameResolverInterface
 {
-	private AssetNameResolverInterface $inner;
-
 	/** @var array<array{string, string}> */
 	private array $resolvedAssets = [];
 
-	public function __construct(AssetNameResolverInterface $inner)
-	{
-		$this->inner = $inner;
+	public function __construct(
+		private readonly AssetNameResolverInterface $inner,
+	) {
 	}
 
 	public function resolveAssetName(string $asset): string

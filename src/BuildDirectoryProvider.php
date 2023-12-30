@@ -11,14 +11,10 @@ use Contributte\Webpack\DevServer\DevServer;
  */
 final class BuildDirectoryProvider
 {
-	private string $directory;
-
-	private DevServer $devServer;
-
-	public function __construct(string $directory, DevServer $devServer)
-	{
-		$this->directory = $directory;
-		$this->devServer = $devServer;
+	public function __construct(
+		private readonly string $directory,
+		private readonly DevServer $devServer,
+	) {
 	}
 
 	public function getBuildDirectory(): string

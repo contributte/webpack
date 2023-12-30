@@ -9,11 +9,9 @@ namespace Contributte\Webpack\DevServer\Http;
  */
 final class MockClient implements Client
 {
-	private bool $isAvailable;
-
-	public function __construct(bool $isAvailable)
-	{
-		$this->isAvailable = $isAvailable;
+	public function __construct(
+		private readonly bool $isAvailable
+	) {
 	}
 
 	public function isAvailable(string $url, float $timeout): bool

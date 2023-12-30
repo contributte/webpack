@@ -6,15 +6,12 @@ namespace Contributte\Webpack\AssetNameResolver;
 
 final class StaticAssetNameResolver implements AssetNameResolverInterface
 {
-	/** @var array<string, string> */
-	private array $resolutions;
-
 	/**
 	 * @param array<string, string> $resolutions
 	 */
-	public function __construct(array $resolutions)
-	{
-		$this->resolutions = $resolutions;
+	public function __construct(
+		private readonly array $resolutions,
+	) {
 	}
 
 	public function resolveAssetName(string $asset): string
