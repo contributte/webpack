@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contributte\Webpack\Manifest;
 
 use Contributte\Webpack\BuildDirectoryProvider;
-use Nette\Utils\Json;
 
 /**
  * @internal
@@ -69,7 +68,7 @@ final class ManifestLoader
 			));
 		}
 
-		return $this->manifestMapper->map(Json::decode($manifest, forceArrays: true));
+		return $this->manifestMapper->map(\json_decode($manifest, flags: \JSON_THROW_ON_ERROR | \JSON_OBJECT_AS_ARRAY));
 	}
 
 	public function getManifestPath(string $fileName): string
