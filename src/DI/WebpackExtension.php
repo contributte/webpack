@@ -115,7 +115,6 @@ final class WebpackExtension extends CompilerExtension
 				\assert($latteFactory instanceof FactoryDefinition);
 
 				$definition = $latteFactory->getResultDefinition();
-				\assert($definition instanceof ServiceDefinition);
 
 				// @phpstan-ignore-next-line latte 2 compatibility
 				if (\version_compare(Engine::VERSION, '3', '<')) {

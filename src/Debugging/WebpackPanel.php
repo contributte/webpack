@@ -18,7 +18,7 @@ final class WebpackPanel implements IBarPanel
 	) {
 	}
 
-	public function getTab(): ?string
+	public function getTab(): string
 	{
 		\ob_start(function (): void {
 		});
@@ -28,7 +28,7 @@ final class WebpackPanel implements IBarPanel
 		return (string) \ob_get_clean();
 	}
 
-	public function getPanel(): ?string
+	public function getPanel(): string
 	{
 		\ob_start(function (): void {
 		});
