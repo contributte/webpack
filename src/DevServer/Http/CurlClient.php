@@ -23,6 +23,9 @@ final class CurlClient implements Client
 			return false;
 		}
 
+		$output = \fopen('php://temp', 'w+');
+		\assert($output !== false);
+
 		\curl_setopt_array($curl, [
 			\CURLOPT_CUSTOMREQUEST => 'GET',
 			\CURLOPT_PROTOCOLS => \CURLPROTO_HTTP | \CURLPROTO_HTTPS,
@@ -30,10 +33,10 @@ final class CurlClient implements Client
 			// no output please
 			\CURLOPT_RETURNTRANSFER => false,
 			\CURLOPT_HEADER => false,
-			\CURLOPT_FILE => \fopen('php://temp', 'w+'),
+			\CURLOPT_FILE => $output,
 
 			// setup timeout; this requires NOSIGNAL for values below 1s
-			\CURLOPT_TIMEOUT_MS => $timeout * 1000,
+			\CURLOPT_TIMEOUT_MS => (int) $timeout * 1000,
 			\CURLOPT_NOSIGNAL => $timeout < 1 && \PHP_OS_FAMILY !== 'Windows',
 
 			// allow self-signed certificates
@@ -44,7 +47,6 @@ final class CurlClient implements Client
 		\curl_exec($curl);
 		$error = \curl_error($curl);
 
-		\curl_close($curl);
 		return $error === '';
 	}
 }

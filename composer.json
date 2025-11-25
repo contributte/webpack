@@ -20,7 +20,7 @@
     "issues": "https://github.com/contributte/webpack/issues"
   },
   "require": {
-    "php": ">=8.1",
+    "php": ">=8.2",
     "ext-curl": "*",
     "nette/di": "^3.0"
   },

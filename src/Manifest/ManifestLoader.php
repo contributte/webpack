@@ -42,7 +42,7 @@ final class ManifestLoader
 					\CURLOPT_FAILONERROR => true,
 
 					// setup timeout; this requires NOSIGNAL for values below 1s
-					\CURLOPT_TIMEOUT_MS => $this->timeout * 1000,
+					\CURLOPT_TIMEOUT_MS => (int) $this->timeout * 1000,
 					\CURLOPT_NOSIGNAL => $this->timeout < 1 && \PHP_OS_FAMILY !== 'Windows',
 
 					// allow self-signed certificates
@@ -55,8 +55,6 @@ final class ManifestLoader
 				if ($manifest === false) {
 					$errorMessage = \curl_error($ch);
 				}
-
-				\curl_close($ch);
 			}
 		}
 

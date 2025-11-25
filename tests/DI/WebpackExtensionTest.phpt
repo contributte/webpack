@@ -99,7 +99,6 @@ final class WebpackExtensionTest extends TestCase
 
 		$refl = new \ReflectionClass($resolver);
 		$cache = $refl->getProperty('resolutions');
-		$cache->setAccessible(true);
 
 		Assert::same(['asset.js' => 'cached.resolved.asset.js'], $cache->getValue($resolver));
 	}
