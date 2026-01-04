@@ -1,21 +1,22 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\AssetNameResolver;
 
 use Contributte\Webpack\Manifest\CannotLoadManifestException;
 use Contributte\Webpack\Manifest\ManifestLoader;
+use function sprintf;
 
 final class ManifestAssetNameResolver implements AssetNameResolverInterface
 {
+
 	/** @var array<string, string>|null */
 	private ?array $manifestCache = null;
 
 	public function __construct(
 		private readonly string $manifestName,
 		private readonly ManifestLoader $loader,
-	) {
+	)
+	{
 	}
 
 	public function resolveAssetName(string $asset): string
@@ -29,7 +30,7 @@ final class ManifestAssetNameResolver implements AssetNameResolverInterface
 		}
 
 		if (!isset($this->manifestCache[$asset])) {
-			throw new CannotResolveAssetNameException(\sprintf(
+			throw new CannotResolveAssetNameException(sprintf(
 				"Asset '%s' was not found in the manifest file '%s'",
 				$asset,
 				$this->loader->getManifestPath($this->manifestName)
@@ -38,4 +39,5 @@ final class ManifestAssetNameResolver implements AssetNameResolverInterface
 
 		return $this->manifestCache[$asset];
 	}
+
 }

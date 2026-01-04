@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Latte;
 
@@ -9,9 +7,11 @@ use Latte\Extension;
 
 final class WebpackExtension extends Extension
 {
+
 	public function __construct(
 		private readonly AssetLocator $assetLocator,
-	) {
+	)
+	{
 	}
 
 	public function getTags(): array
@@ -27,4 +27,5 @@ final class WebpackExtension extends Extension
 			'webpackAssetLocator' => $this->assetLocator,
 		];
 	}
+
 }

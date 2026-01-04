@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\DI;
 
@@ -26,12 +24,18 @@ use Nette\DI\MissingServiceException;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Tracy;
+use function assert;
+use function getenv;
+use function interface_exists;
+use function version_compare;
+use const PHP_SAPI;
 
 /**
  * @property-read array<string, mixed> $config
  */
 final class WebpackExtension extends CompilerExtension
 {
+
 	private readonly bool $debugMode;
 
 	private readonly bool $consoleMode;
@@ -39,14 +43,14 @@ final class WebpackExtension extends CompilerExtension
 	public function __construct(bool $debugMode, ?bool $consoleMode = null)
 	{
 		$this->debugMode = $debugMode;
-		$this->consoleMode = $consoleMode ?? \PHP_SAPI === 'cli';
+		$this->consoleMode = $consoleMode ?? PHP_SAPI === 'cli';
 	}
 
 	public function getConfigSchema(): Schema
 	{
 		return Expect::structure([
 			'debugger' => Expect::bool($this->debugMode),
-			'macros' => Expect::bool(\interface_exists(LatteFactory::class)),
+			'macros' => Expect::bool(interface_exists(LatteFactory::class)),
 			'devServer' => Expect::structure([
 				'enabled' => Expect::bool($this->debugMode),
 				'url' => Expect::string()->nullable()->dynamic(),
@@ -64,7 +68,7 @@ final class WebpackExtension extends CompilerExtension
 			])->castTo('array'),
 			'manifest' => Expect::structure([
 				'name' => Expect::string()->nullable(),
-				'optimize' => Expect::bool(!$this->debugMode && (!$this->consoleMode || (bool) \getenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST'))),
+				'optimize' => Expect::bool(!$this->debugMode && (!$this->consoleMode || (bool) getenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST'))),
 				'mapper' => Expect::anyOf(Expect::string(), Expect::type(Statement::class))->default(WebpackManifestPluginMapper::class),
 				'timeout' => Expect::anyOf(Expect::float(), Expect::int())->default(1),
 			])->castTo('array'),
@@ -112,12 +116,12 @@ final class WebpackExtension extends CompilerExtension
 		if ($this->config['macros']) {
 			try {
 				$latteFactory = $builder->getDefinitionByType(LatteFactory::class);
-				\assert($latteFactory instanceof FactoryDefinition);
+				assert($latteFactory instanceof FactoryDefinition);
 
 				$definition = $latteFactory->getResultDefinition();
 
 				// @phpstan-ignore-next-line latte 2 compatibility
-				if (\version_compare(Engine::VERSION, '3', '<')) {
+				if (version_compare(Engine::VERSION, '3', '<')) {
 					$definition->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator]);
 					$definition->addSetup('?->onCompile[] = function ($engine) { Contributte\Webpack\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
 				} else {
@@ -133,12 +137,12 @@ final class WebpackExtension extends CompilerExtension
 	{
 		$builder = $this->getContainerBuilder();
 
-		if ($this->config['debugger'] && \interface_exists(Tracy\IBarPanel::class)) {
+		if ($this->config['debugger'] && interface_exists(Tracy\IBarPanel::class)) {
 			$definition = $builder->getDefinition($this->prefix('pathProvider'));
-			\assert($definition instanceof ServiceDefinition);
+			assert($definition instanceof ServiceDefinition);
 
 			$definition->addSetup('@Tracy\Bar::addPanel', [
-				new Statement(WebpackPanel::class)
+				new Statement(WebpackPanel::class),
 			]);
 		}
 	}
@@ -164,7 +168,7 @@ final class WebpackExtension extends CompilerExtension
 
 				$assetResolver->setFactory(AssetNameResolver\ManifestAssetNameResolver::class, [
 					$config['manifest']['name'],
-					$loader
+					$loader,
 				]);
 			} else {
 				$devServerInstance = new DevServer(false, '', '', 0.0, new CurlClient());
@@ -188,4 +192,5 @@ final class WebpackExtension extends CompilerExtension
 
 		return $assetResolver;
 	}
+
 }

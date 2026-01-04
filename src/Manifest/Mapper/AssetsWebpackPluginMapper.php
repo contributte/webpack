@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Manifest\Mapper;
 
@@ -20,10 +18,10 @@ use Contributte\Webpack\Manifest\ManifestMapper;
  * {
  *  "main.js": "/public/path/to/asset"
  * }
- *
  */
 final class AssetsWebpackPluginMapper extends ManifestMapper
 {
+
 	/**
 	 * @inheritDoc
 	 */
@@ -35,6 +33,8 @@ final class AssetsWebpackPluginMapper extends ManifestMapper
 				$result[$main . '.' . $name] = $file;
 			}
 		}
+
 		return $result;
 	}
+
 }

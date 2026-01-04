@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Latte;
 
@@ -16,6 +14,7 @@ use Latte\Compiler\Tag;
  */
 final class WebpackNode extends StatementNode
 {
+
 	public ExpressionNode $expression;
 
 	public ModifierNode $modifier;
@@ -29,6 +28,7 @@ final class WebpackNode extends StatementNode
 		$node->expression = $tag->parser->parseUnquotedStringOrExpression();
 		$node->modifier = $tag->parser->parseModifier();
 		$node->modifier->escape = true;
+
 		return $node;
 	}
 
@@ -45,9 +45,11 @@ final class WebpackNode extends StatementNode
 	/**
 	 * @return \Generator<Node>
 	 */
+	// phpcs:ignore SlevomatCodingStandard.PHP.DisallowReference.DisallowedReturningReference
 	public function &getIterator(): \Generator
 	{
 		yield $this->expression;
 		yield $this->modifier;
 	}
+
 }

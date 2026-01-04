@@ -1,23 +1,25 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\AssetNameResolver;
 
+use function sprintf;
+
 final class StaticAssetNameResolver implements AssetNameResolverInterface
 {
+
 	/**
 	 * @param array<string, string> $resolutions
 	 */
 	public function __construct(
 		private readonly array $resolutions,
-	) {
+	)
+	{
 	}
 
 	public function resolveAssetName(string $asset): string
 	{
 		if (!isset($this->resolutions[$asset])) {
-			throw new CannotResolveAssetNameException(\sprintf(
+			throw new CannotResolveAssetNameException(sprintf(
 				"Asset '%s' was not found in the resolutions array",
 				$asset
 			));
@@ -25,4 +27,5 @@ final class StaticAssetNameResolver implements AssetNameResolverInterface
 
 		return $this->resolutions[$asset];
 	}
+
 }

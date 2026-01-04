@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Latte;
 
@@ -14,6 +12,7 @@ use Latte\PhpWriter;
  */
 final class WebpackMacros extends MacroSet
 {
+
 	public static function install(Compiler $compiler): void
 	{
 		$me = new self($compiler);
@@ -24,4 +23,5 @@ final class WebpackMacros extends MacroSet
 	{
 		return $writer->write('echo %escape(%modify($this->global->webpackAssetLocator->locateInPublicPath(%node.word)))');
 	}
+
 }
