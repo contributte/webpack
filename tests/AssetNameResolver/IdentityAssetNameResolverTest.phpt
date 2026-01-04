@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\AssetNameResolver;
 
@@ -15,11 +13,13 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class IdentityAssetNameResolverTest extends TestCase
 {
+
 	public function testResolver(): void
 	{
 		$resolver = new IdentityAssetNameResolver();
 		Assert::same('asset.js', $resolver->resolveAssetName('asset.js'));
 	}
+
 }
 
 (new IdentityAssetNameResolverTest())->run();

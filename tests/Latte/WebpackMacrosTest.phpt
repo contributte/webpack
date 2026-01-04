@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\Latte;
 
@@ -15,6 +13,7 @@ use function Contributte\Webpack\Tests\createAssetNameResolver;
 use function Contributte\Webpack\Tests\createBuildDirectoryProvider;
 use function Contributte\Webpack\Tests\createDisabledDevServer;
 use function Contributte\Webpack\Tests\createPublicPathProvider;
+use function version_compare;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -23,9 +22,10 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class WebpackMacrosTest extends TestCase
 {
+
 	public function testMacros(): void
 	{
-		if (\version_compare(Engine::VERSION, '3', '>')) {
+		if (version_compare(Engine::VERSION, '3', '>')) {
 			Environment::skip('Requires Latte 2.');
 		}
 
@@ -46,6 +46,7 @@ final class WebpackMacrosTest extends TestCase
 		$latte->setLoader(new StringLoader());
 		Assert::same('/dist/asset.js', $latte->renderToString('{webpack asset.js}'));
 	}
+
 }
 
 (new WebpackMacrosTest())->run();

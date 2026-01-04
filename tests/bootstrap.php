@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests;
 
+use Contributte\Tester\Environment;
 use Contributte\Webpack\AssetLocator;
 use Contributte\Webpack\AssetNameResolver\AssetNameResolverInterface;
 use Contributte\Webpack\AssetNameResolver\CannotResolveAssetNameException;
@@ -10,15 +11,15 @@ use Contributte\Webpack\BuildDirectoryProvider;
 use Contributte\Webpack\DevServer\DevServer;
 use Contributte\Webpack\DevServer\Http\MockClient;
 use Contributte\Webpack\PublicPathProvider;
-use Tester\Environment;
-use Tester\Helpers;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+if (@!include __DIR__ . '/../vendor/autoload.php') {
+	echo 'Install Nette Tester using `composer update --dev`';
+	exit(1);
+}
 
-Environment::setup();
-\date_default_timezone_set('Europe/Prague');
-\define('TEMP_DIR', __DIR__ . '/temp/' . (isset($_SERVER['argv']) ? \md5(\serialize($_SERVER['argv'])) : \getmypid()));
-Helpers::purge(TEMP_DIR);
+Environment::setup(__DIR__);
+
+define('TEMP_DIR', Environment::getTestDir());
 
 function createBuildDirectoryProvider(string $directory): BuildDirectoryProvider
 {
@@ -27,7 +28,8 @@ function createBuildDirectoryProvider(string $directory): BuildDirectoryProvider
 
 function createBasePathProvider(string $basePath): BasePathProvider
 {
-	return new class($basePath) implements BasePathProvider {
+	return new class ($basePath) implements BasePathProvider {
+
 		private string $basePath;
 
 		public function __construct(string $basePath)
@@ -39,6 +41,7 @@ function createBasePathProvider(string $basePath): BasePathProvider
 		{
 			return $this->basePath;
 		}
+
 	};
 }
 
@@ -62,7 +65,8 @@ function createEnabledDevServer(bool $isAvailable): DevServer
  */
 function createAssetNameResolver(array $mapping): AssetNameResolverInterface
 {
-	return new class($mapping) implements AssetNameResolverInterface {
+	return new class ($mapping) implements AssetNameResolverInterface {
+
 		/** @var array<string, string> */
 		private array $mapping;
 
@@ -76,12 +80,13 @@ function createAssetNameResolver(array $mapping): AssetNameResolverInterface
 
 		public function resolveAssetName(string $asset): string
 		{
-			if (!\array_key_exists($asset, $this->mapping)) {
+			if (!array_key_exists($asset, $this->mapping)) {
 				throw new CannotResolveAssetNameException();
 			}
 
 			return $this->mapping[$asset];
 		}
+
 	};
 }
 

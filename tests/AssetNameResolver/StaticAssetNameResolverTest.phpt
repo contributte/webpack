@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\AssetNameResolver;
 
@@ -16,6 +14,7 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class StaticAssetNameResolverTest extends TestCase
 {
+
 	public function testResolver(): void
 	{
 		$resolver = new StaticAssetNameResolver([
@@ -35,6 +34,7 @@ final class StaticAssetNameResolverTest extends TestCase
 			$resolver->resolveAssetName('unknownAsset.js');
 		}, CannotResolveAssetNameException::class);
 	}
+
 }
 
 (new StaticAssetNameResolverTest())->run();

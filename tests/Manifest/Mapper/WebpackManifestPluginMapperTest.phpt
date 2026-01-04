@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\Manifest\Mapper;
 
@@ -15,6 +13,7 @@ require_once __DIR__ . '/../../bootstrap.php';
  */
 final class WebpackManifestPluginMapperTest extends TestCase
 {
+
 	public function testMapper(): void
 	{
 		$mapper = new WebpackManifestPluginMapper();
@@ -27,6 +26,7 @@ final class WebpackManifestPluginMapperTest extends TestCase
 			'asset.js' => 'resolved.asset.js',
 		], $result);
 	}
+
 }
 
 (new WebpackManifestPluginMapperTest())->run();

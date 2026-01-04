@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\DI;
 
@@ -22,6 +20,7 @@ use Tester\Assert;
 use Tester\TestCase;
 use Tracy\Bar;
 use function Contributte\Webpack\Tests\createEnabledDevServer;
+use function putenv;
 
 require_once __DIR__ . '/../bootstrap.php';
 
@@ -30,15 +29,17 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class WebpackExtensionTest extends TestCase
 {
+
 	public function testBasic(): void
 	{
 		$container = $this->createContainer('basic');
 
 		Assert::type(DebuggerAwareAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 		Assert::type(PublicPathProvider::class, $container->getByType(PublicPathProvider::class));
-		Assert::type(DevServer::class, $devServer = $container->getByType(DevServer::class));
-
 		/** @var DevServer $devServer */
+		$devServer = $container->getByType(DevServer::class);
+		Assert::type(DevServer::class, $devServer);
+
 		Assert::true($devServer->isEnabled());
 
 		/** @var Bar $bar */
@@ -52,9 +53,10 @@ final class WebpackExtensionTest extends TestCase
 
 		Assert::type(IdentityAssetNameResolver::class, $container->getByType(AssetNameResolverInterface::class));
 		Assert::type(PublicPathProvider::class, $container->getByType(PublicPathProvider::class));
-		Assert::type(DevServer::class, $devServer = $container->getByType(DevServer::class));
+		/** @var DevServer $devServer */
+		$devServer = $container->getByType(DevServer::class);
+		Assert::type(DevServer::class, $devServer);
 
-		/** @var \Contributte\Webpack\DevServer\DevServer $devServer */
 		Assert::false($devServer->isEnabled());
 
 		/** @var Bar $bar */
@@ -91,7 +93,7 @@ final class WebpackExtensionTest extends TestCase
 
 	public function testOptimizedManifest(): void
 	{
-		\putenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST=1');
+		putenv('CONTRIBUTTE_WEBPACK_OPTIMIZE_MANIFEST=1');
 		$container = $this->createContainer('optimizedManifest');
 		$resolver = $container->getByType(AssetNameResolverInterface::class);
 
@@ -147,6 +149,7 @@ final class WebpackExtensionTest extends TestCase
 
 		return $configurator->createContainer();
 	}
+
 }
 
 (new WebpackExtensionTest())->run();
