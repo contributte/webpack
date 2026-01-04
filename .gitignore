@@ -1,5 +1,14 @@
-tests/**/output/*.actual
-tests/**/output/*.expected
-vendor/
-composer.lock
-coverage.*
+# IDE
+/.idea
+
+# Composer
+/vendor
+/composer.lock
+
+# Tests
+/tests/tmp
+/coverage.*
+/tests/**/*.log
+/tests/**/*.html
+/tests/**/*.expected
+/tests/**/*.actual

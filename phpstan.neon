@@ -1,3 +1,23 @@
+includes:
+	- vendor/contributte/phpstan/phpstan.neon
+
 parameters:
+	level: 8
+	phpVersion: 80200
+
+	scanDirectories:
+		- src
+
+	fileExtensions:
+		- php
+
+	paths:
+		- src
+
 	excludePaths:
 		- src/Latte/WebpackMacros.php # latte 2 compatibility
+
+	ignoreErrors:
+		- identifier: if.condNotBoolean
+		- identifier: booleanAnd.leftNotBoolean
+		- identifier: booleanNot.exprNotBoolean
