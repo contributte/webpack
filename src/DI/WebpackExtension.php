@@ -14,7 +14,6 @@ use Contributte\Webpack\Manifest\ManifestLoader;
 use Contributte\Webpack\Manifest\ManifestMapper;
 use Contributte\Webpack\Manifest\Mapper\WebpackManifestPluginMapper;
 use Contributte\Webpack\PublicPathProvider;
-use Latte\Engine;
 use Nette\Bridges\ApplicationLatte\LatteFactory;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Definitions\FactoryDefinition;
@@ -27,7 +26,6 @@ use Tracy;
 use function assert;
 use function getenv;
 use function interface_exists;
-use function version_compare;
 use const PHP_SAPI;
 
 /**
@@ -99,7 +97,7 @@ final class WebpackExtension extends CompilerExtension
 				new Statement(CurlClient::class),
 			]);
 
-		$assetLocator = $builder->addDefinition($this->prefix('assetLocator'), new ServiceDefinition())
+		$builder->addDefinition($this->prefix('assetLocator'), new ServiceDefinition())
 			->setFactory(AssetLocator::class, [
 				'ignoredAssetNames' => $this->config['devServer']['ignoredAssets'],
 			]);
@@ -112,21 +110,14 @@ final class WebpackExtension extends CompilerExtension
 				->setFactory(AssetNameResolver\DebuggerAwareAssetNameResolver::class, [$assetResolver]);
 		}
 
-		// latte macro
+		// latte extension
 		if ($this->config['macros']) {
 			try {
 				$latteFactory = $builder->getDefinitionByType(LatteFactory::class);
 				assert($latteFactory instanceof FactoryDefinition);
 
 				$definition = $latteFactory->getResultDefinition();
-
-				// @phpstan-ignore-next-line latte 2 compatibility
-				if (version_compare(Engine::VERSION, '3', '<')) {
-					$definition->addSetup('?->addProvider(?, ?)', ['@self', 'webpackAssetLocator', $assetLocator]);
-					$definition->addSetup('?->onCompile[] = function ($engine) { Contributte\Webpack\Latte\WebpackMacros::install($engine->getCompiler()); }', ['@self']);
-				} else {
-					$definition->addSetup('addExtension', [new Statement(\Contributte\Webpack\Latte\WebpackExtension::class)]);
-				}
+				$definition->addSetup('addExtension', [new Statement(\Contributte\Webpack\Latte\WebpackExtension::class)]);
 			} catch (MissingServiceException $e) {
 				// ignore
 			}

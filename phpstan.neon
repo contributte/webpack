@@ -14,9 +14,6 @@ parameters:
 	paths:
 		- src
 
-	excludePaths:
-		- src/Latte/WebpackMacros.php # latte 2 compatibility
-
 	ignoreErrors:
 		- identifier: if.condNotBoolean
 		- identifier: booleanAnd.leftNotBoolean
