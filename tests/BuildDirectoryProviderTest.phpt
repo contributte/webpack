@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests;
 
@@ -15,6 +13,7 @@ require_once __DIR__ . '/bootstrap.php';
  */
 final class BuildDirectoryProviderTest extends TestCase
 {
+
 	public function testWithDevServer(): void
 	{
 		$devServer = createEnabledDevServer(true);
@@ -30,6 +29,7 @@ final class BuildDirectoryProviderTest extends TestCase
 		$provider = new BuildDirectoryProvider('dist/', $devServer);
 		Assert::same('dist/', $provider->getBuildDirectory());
 	}
+
 }
 
 (new BuildDirectoryProviderTest())->run();

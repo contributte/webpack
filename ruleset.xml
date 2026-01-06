@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset>
+	<rule ref="./vendor/contributte/qa/ruleset-8.2.xml"/>
+
+	<rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
+		<properties>
+			<property name="rootNamespaces" type="array">
+				<element key="src" value="Contributte\Webpack"/>
+				<element key="tests" value="Contributte\Webpack\Tests"/>
+			</property>
+			<property name="extensions" type="array">
+				<element value="php"/>
+				<element value="phpt"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Allowed for interfaces in this project -->
+	<rule ref="SlevomatCodingStandard.Classes.SuperfluousInterfaceNaming.SuperfluousSuffix">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Test files with side effects are normal for Nette Tester -->
+	<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Allow global helper functions in test bootstrap -->
+	<rule ref="Squiz.Functions.GlobalFunction.Found">
+		<exclude-pattern>tests/bootstrap.php</exclude-pattern>
+	</rule>
+
+	<!-- Skip traversable type hints for methods that inherit from external libraries -->
+	<rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingTraversableTypeHintSpecification">
+		<exclude-pattern>src/Manifest/Mapper/*</exclude-pattern>
+		<exclude-pattern>src/Latte/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification">
+		<exclude-pattern>src/Manifest/Mapper/*</exclude-pattern>
+		<exclude-pattern>src/Latte/*</exclude-pattern>
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+
+	<exclude-pattern>/tests/tmp</exclude-pattern>
+</ruleset>

@@ -22,24 +22,30 @@
   "require": {
     "php": ">=8.2",
     "ext-curl": "*",
-    "nette/di": "^3.0"
+    "nette/di": "^3.2.0"
   },
   "require-dev": {
-    "latte/latte": "^2.4 || ^3.0",
-    "nette/application": "^3.0",
-    "nette/bootstrap": "^3.0",
-    "nette/tester": "^2.0",
-    "phpstan/phpstan": "^2.0",
-    "symplify/easy-coding-standard": "^12.0",
-    "tracy/tracy": "^2.4"
+    "contributte/phpstan": "^0.2.0",
+    "contributte/qa": "^0.4.0",
+    "contributte/tester": "^0.4.0",
+    "latte/latte": "^3.0.0",
+    "nette/application": "^3.2.0",
+    "nette/bootstrap": "^3.2.0",
+    "nette/neon": "^3.4.0",
+    "tracy/tracy": "^2.10.0"
   },
   "suggest": {
     "tracy/tracy": "to enable asset debugging in the debug bar panel",
-    "latte/latte": "to enable Latte integration via {webpack} macro"
+    "latte/latte": "to enable Latte 3 integration via {webpack} tag"
   },
   "autoload": {
     "psr-4": {
       "Contributte\\Webpack\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
     }
   },
   "prefer-stable": true,

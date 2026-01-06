@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests;
 
@@ -15,6 +13,7 @@ require_once __DIR__ . '/bootstrap.php';
  */
 final class PublicPathProviderTest extends TestCase
 {
+
 	public function testWithDevServer(): void
 	{
 		$basePathProvider = createBasePathProvider('/');
@@ -32,6 +31,7 @@ final class PublicPathProviderTest extends TestCase
 		$provider = new PublicPathProvider('dist/', $basePathProvider, $devServer);
 		Assert::same('/dist', $provider->getPublicPath());
 	}
+
 }
 
 (new PublicPathProviderTest())->run();

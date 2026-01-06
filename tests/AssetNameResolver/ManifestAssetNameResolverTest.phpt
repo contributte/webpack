@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\AssetNameResolver;
 
@@ -19,6 +17,7 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class ManifestAssetNameResolverTest extends TestCase
 {
+
 	public function testResolver(): void
 	{
 		$manifestLoader = new ManifestLoader(
@@ -50,6 +49,7 @@ final class ManifestAssetNameResolverTest extends TestCase
 			$resolver->resolveAssetName('asset.js');
 		}, CannotResolveAssetNameException::class);
 	}
+
 }
 
 (new ManifestAssetNameResolverTest())->run();

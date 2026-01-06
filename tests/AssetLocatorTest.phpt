@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests;
 
@@ -15,6 +13,7 @@ require_once __DIR__ . '/bootstrap.php';
  */
 final class AssetLocatorTest extends TestCase
 {
+
 	public function testLocateInBuildDirectory(): void
 	{
 		$directoryProvider = createBuildDirectoryProvider('/home/user');
@@ -58,6 +57,7 @@ final class AssetLocatorTest extends TestCase
 		Assert::same('//localhost/foo2.js', $assetLocator->locateInBuildDirectory('foo2.js'));
 		Assert::same('//localhost/foo2.js', $assetLocator->locateInPublicPath('foo2.js'));
 	}
+
 }
 
 (new AssetLocatorTest())->run();

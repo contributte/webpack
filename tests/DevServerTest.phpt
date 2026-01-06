@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests;
 
@@ -16,6 +14,7 @@ require_once __DIR__ . '/bootstrap.php';
  */
 final class DevServerTest extends TestCase
 {
+
 	public function testDevServer(): void
 	{
 		$devServer = new DevServer(true, 'http://localhost:3000', null, 0.1, new MockClient(true));
@@ -47,6 +46,7 @@ final class DevServerTest extends TestCase
 		Assert::false($devServer->isEnabled());
 		Assert::false($devServer->isAvailable());
 	}
+
 }
 
 (new DevServerTest())->run();

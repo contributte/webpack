@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Manifest\Mapper;
 
@@ -11,8 +9,10 @@ use Contributte\Webpack\Manifest\ManifestMapper;
  */
 final class WebpackManifestPluginMapper extends ManifestMapper
 {
+
 	public function map(array $manifest): array
 	{
 		return $manifest;
 	}
+
 }

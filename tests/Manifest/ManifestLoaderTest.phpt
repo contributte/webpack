@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace Contributte\Webpack\Tests\Manifest;
 
@@ -18,16 +16,20 @@ require_once __DIR__ . '/../bootstrap.php';
  */
 final class ManifestLoaderTest extends TestCase
 {
+
 	public function testLoader(): void
 	{
 		$buildDirProvider = createBuildDirectoryProvider(__DIR__);
 
 		$manifestMapper = new class() extends ManifestMapper {
+
 			public function map(array $manifest): array
 			{
 				Assert::equal(['asset.js' => 'resolved.asset.js'], $manifest);
+
 				return ['asset.js' => 'mapped.asset.js'];
 			}
+
 		};
 
 		$manifestLoader = new ManifestLoader($buildDirProvider, $manifestMapper, 1);
@@ -39,6 +41,7 @@ final class ManifestLoaderTest extends TestCase
 			$manifestLoader->loadManifest('unknown.js');
 		}, CannotLoadManifestException::class);
 	}
+
 }
 
 (new ManifestLoaderTest())->run();
