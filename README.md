@@ -141,12 +141,11 @@ In development environment, this package registers its own debug bar panel into 
 
 ![Debug bar panel](.docs/debug_panel.png)
 
-
 ## Development
 
 See [how to contribute](https://contributte.org/contributing.html) to this package.
 
-This package is currently maintaining by these authors.
+This package is currently maintained by these authors.
 
 <a href="https://github.com/jiripudil">
   <img width="80" height="80" src="https://avatars1.githubusercontent.com/u/1042159?s=150&v=4">
